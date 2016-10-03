@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}Dollar Loan Center{% endblock %}</title>
+        <link rel="stylesheet" href="{{ asset('assets/libs/foundation/css/foundation.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body>
+
+        {% block body %}{% endblock %}
+
+        {% block javascripts %}{% endblock %}
+        <script src="{{ asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/formatter.js/dist/jquery.formatter.min.js') }}"></script>
+        <script src="{{ asset('assets/js/app.js') }}"></script>
+    </body>
+</html>

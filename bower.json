@@ -1,0 +1,21 @@
+{
+  "name": "dollar-loan-center",
+  "description": "dollar-loan-center",
+  "main": "index.js",
+  "authors": [
+    "Robert Cox <rcox@dontbebroke.com>"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "foundation": "^5.5.3",
+    "vue": "^2.0.1"
+  }
+}
