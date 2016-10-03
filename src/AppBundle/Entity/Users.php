@@ -2,13 +2,17 @@
 
 namespace AppBundle\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Class Users
  * @package AppBundle\Entity
  *
  * @ORM\Entity
+ * @UniqueEntity("email_address")
+ * @UniqueEntity("username")
  * @ORM\Table(name="users")
  */
 class Users
@@ -26,7 +30,8 @@ class Users
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=100, unique=true)
+     * @Assert\NotBlank()
      */
     private $username;
 
@@ -34,6 +39,8 @@ class Users
      * @var string
      *
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank()
+     * @Assert\Length(max=4096)
      */
     private $password;
 
@@ -41,13 +48,16 @@ class Users
      * @var string
      *
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank()
      */
     private $user_role;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=100, unique=true)
+     * @Assert\NotBlank()
+     * @Assert\Email()
      */
     private $email_address;
 
@@ -55,6 +65,7 @@ class Users
      * @var object
      *
      * @ORM\Column(type="datetime")
+     * @Assert\NotBlank()
      */
     private $created_at;
 
@@ -62,6 +73,7 @@ class Users
      * @var object
      *
      * @ORM\Column(type="datetime")
+     * @Assert\NotBlank()
      */
     private $updated_at;
 
