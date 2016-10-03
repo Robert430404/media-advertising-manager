@@ -1,6 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
+    <div class="form-wrapper columns large 6 medium-8 small-12 large-offset-3 medium-offset-2 small-offset-0">
+        <form action="/login" class="login-form" id="login-form">
+            <label for="username">Username
+                <input type="text" class="username form-control" id="username" name="username" />
+            </label>
+        </form>
+    </div>
 {% endblock %}
 
