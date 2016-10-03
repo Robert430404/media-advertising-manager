@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -15,7 +16,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @UniqueEntity("username")
  * @ORM\Table(name="users")
  */
-class Users
+class Users implements UserInterface
 {
     /**
      * @var integer
@@ -229,5 +230,34 @@ class Users
     public function getUpdatedAt()
     {
         return $this->updated_at;
+    }
+
+    /**
+     * Stub For Interface Compatibility
+     *
+     * @return (Role|string)[] The user roles
+     */
+    public function getRoles()
+    {
+        return $this->getUserRole();
+    }
+
+    /**
+     * Returns the salt that was originally used to encode the password.
+     * @return string|null The salt
+     */
+    public function getSalt()
+    {
+        return null;
+    }
+
+    /**
+     * Stub For Interface Compatibility
+     *
+     * @return string|null The salt
+     */
+    public function eraseCredentials()
+    {
+        return null;
     }
 }

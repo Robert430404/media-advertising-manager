@@ -46,7 +46,7 @@ class CreateUserCommand extends ContainerAwareCommand
             ''
         ]);
 
-        $helper = $this->getHelper('question');
+        $helper   = $this->getHelper('question');
         $question = new ConfirmationQuestion('Is the user information correct (y/n): ', false);
 
         if (!$helper->ask($input, $output, $question)) {
@@ -54,8 +54,13 @@ class CreateUserCommand extends ContainerAwareCommand
         }
 
         $user = new Users();
+
+        $encoder          = $this->getContainer()->get('security.password_encoder');
+        $password         = $input->getArgument('password');
+        $encoded_password = $encoder->encodePassword($user, $password);
+
         $user->setUsername($input->getArgument('username'));
-        $user->setPassword($input->getArgument('password'));
+        $user->setPassword($encoded_password);
         $user->setEmailAddress($input->getArgument('email'));
         $user->setUserRole($input->getArgument('user_role'));
         $user->setCreatedAt(Carbon::now());

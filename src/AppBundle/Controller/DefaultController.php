@@ -10,12 +10,14 @@ use Symfony\Component\HttpFoundation\Request;
 class DefaultController extends Controller
 {
     /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
      * @Route("/", name="login")
      * @Method({"GET"})
      */
     public function indexAction(Request $request)
     {
-        // Loads The Login View
         return $this->render('login/index.html.twig');
     }
 }
