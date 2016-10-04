@@ -1,0 +1,52 @@
+/**
+ * Color Variables
+ */
+$white: #FFF;
+$off-white: #ECEDEE;
+$lighter-grey: #cbcbcb;
+$grey: #9b9b9b;
+$darker-grey: #6b6b6b;
+$lighter-black: #3b3b3b;
+$black: #000;
+
+$alpha-white: rgba(255,255,255,.85);
+$alpha-black: rgba(00,00,00,.35);
+
+$highlight-light: #C9FFBD;
+$highlight-dark: #0E690F;
+
+/**
+ * CSS Value Variables
+ */
+$border-radius: 4px;
+$wsHeight: 60px;
+$shadowSize: 25px;
+
+/**
+ * Global Styles
+ */
+body {
+  background: $lighter-grey url('/assets/img/background.png');
+  font-family: 'Segoe UI', 'Helveitca Neue', 'Arial', 'Helvetica', sans-serif;
+}
+
+hr {
+  margin: 0 -30px 15px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: 32px;
+  font-weight: 300;
+  line-height: 1;
+  margin: 0 0 15px;
+}
+
+/**
+ * Imports
+ */
+@import "frontend/forms";

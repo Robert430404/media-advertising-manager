@@ -1,0 +1,84 @@
+/**
+ * Color Variables
+ */
+/**
+ * CSS Value Variables
+ */
+/**
+ * Global Styles
+ */
+body {
+  background: #cbcbcb url("/assets/img/background.png");
+  font-family: 'Segoe UI', 'Helveitca Neue', 'Arial', 'Helvetica', sans-serif; }
+
+hr {
+  margin: 0 -30px 15px; }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: 32px;
+  font-weight: 300;
+  line-height: 1;
+  margin: 0 0 15px; }
+
+/**
+ * Imports
+ */
+.form-wrapper .form-title-wrapper {
+  background: #0E690F;
+  text-align: center;
+  margin: -15px -30px 15px;
+  padding: 15px;
+  text-transform: uppercase; }
+  .form-wrapper .form-title-wrapper .form-title {
+    color: #FFF;
+    margin: 0; }
+
+.form-wrapper .login-form {
+  background: rgba(255, 255, 255, 0.85);
+  padding: 15px 30px;
+  border-radius: 4px;
+  margin: 60px 0;
+  box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.35);
+  overflow: hidden; }
+
+.form-wrapper label {
+  text-transform: uppercase;
+  color: #000;
+  font-size: 14px;
+  font-weight: 300;
+  margin: 0 0 15px 0; }
+
+.form-wrapper .form-control {
+  margin: 5px 0 0 0;
+  box-shadow: none;
+  border: 1px solid #cbcbcb;
+  border-radius: 4px;
+  background: #FFF;
+  color: #0E690F; }
+  .form-wrapper .form-control:focus {
+    border: 1px solid #0E690F;
+    box-shadow: 0 0 10px 0 #C9FFBD;
+    background: #FFF; }
+
+.form-wrapper .form-button {
+  width: 100%;
+  display: block;
+  background: #0E690F;
+  color: #FFF;
+  padding: 10px;
+  line-height: 1;
+  text-transform: uppercase;
+  font-size: 16px;
+  cursor: pointer;
+  border: 2px solid #0E690F;
+  outline: none;
+  border-radius: 4px;
+  transition: all .3s; }
+  .form-wrapper .form-button:hover {
+    background: #FFF;
+    color: #0E690F; }

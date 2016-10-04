@@ -1,0 +1,60 @@
+.form-wrapper {
+  .form-title-wrapper {
+    background: $highlight-dark;
+    text-align: center;
+    margin: -15px -30px 15px;
+    padding: 15px;
+    text-transform: uppercase;
+    .form-title {
+      color: $white;
+      margin: 0;
+    }
+  }
+  .login-form {
+    background: $alpha-white;
+    padding: 15px 30px;
+    border-radius: $border-radius;
+    margin: $wsHeight 0;
+    box-shadow: 0 0 $shadowSize 0 $alpha-black;
+    overflow: hidden;
+  }
+  label {
+    text-transform: uppercase;
+    color: $black;
+    font-size: 14px;
+    font-weight: 300;
+    margin: 0 0 15px 0;
+  }
+  .form-control {
+    margin: 5px 0 0 0;
+    box-shadow: none;
+    border: 1px solid $lighter-grey;
+    border-radius: $border-radius;
+    background: $white;
+    color: $highlight-dark;
+    &:focus {
+      border: 1px solid $highlight-dark;
+      box-shadow: 0 0 10px 0 $highlight-light;
+      background: $white;
+    }
+  }
+  .form-button {
+    width: 100%;
+    display: block;
+    background: $highlight-dark;
+    color: $white;
+    padding: 10px;
+    line-height: 1;
+    text-transform: uppercase;
+    font-size: 16px;
+    cursor: pointer;
+    border: 2px solid $highlight-dark;
+    outline: none;
+    border-radius: $border-radius;
+    transition: all .3s;
+    &:hover {
+      background: $white;
+      color: $highlight-dark;
+    }
+  }
+}
