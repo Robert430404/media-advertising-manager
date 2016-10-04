@@ -13,7 +13,7 @@ class DashboardController extends Controller
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      *
-     * @Route("/dashboard", name="dashboard")
+     * @Route("/", name="dashboard")
      * @Method({"GET"})
      */
     public function indexAction(Request $request)

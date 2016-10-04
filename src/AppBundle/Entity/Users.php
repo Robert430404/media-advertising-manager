@@ -15,8 +15,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @UniqueEntity("email_address")
  * @UniqueEntity("username")
  * @ORM\Table(name="users")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\UsersRepository")
  */
-class Users implements UserInterface
+class Users implements UserInterface, \Serializable
 {
     /**
      * @var integer
@@ -157,7 +158,9 @@ class Users implements UserInterface
      */
     public function getUserRole()
     {
-        return $this->user_role;
+        $role = [$this->user_role];
+
+        return $role;
     }
 
     /**
@@ -259,5 +262,29 @@ class Users implements UserInterface
     public function eraseCredentials()
     {
         return null;
+    }
+
+    /**
+     * @return string
+     */
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->username,
+            $this->password,
+        ));
+    }
+
+    /**
+     * @param string $serialized
+     */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->username,
+            $this->password,
+            ) = unserialize($serialized);
     }
 }

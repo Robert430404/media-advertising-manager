@@ -4,6 +4,3 @@ parameters:
 #    parameter_name: value
 
 services:
-#  app.users:
-#    class: AppBundle\Entity\Users
-#    arguments: []
