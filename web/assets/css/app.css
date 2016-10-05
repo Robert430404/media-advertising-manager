@@ -52,7 +52,9 @@ body {
     color: #FFF;
     text-align: center;
     padding: 15px;
-    margin: -15px -15px 15px; }
+    margin: -15px -15px 15px;
+    font-size: 28px;
+    text-transform: uppercase; }
   .primary-content .widget-title {
     font-size: 24px;
     text-transform: uppercase;
@@ -95,6 +97,29 @@ body {
       line-height: 1;
       text-align: center;
       display: block; }
+  .primary-content .region-list {
+    display: block;
+    overflow: hidden;
+    margin: 0;
+    text-align: center; }
+    .primary-content .region-list li {
+      display: inline-block;
+      list-style: none;
+      text-align: center;
+      width: 32%;
+      margin: 0 0 15px;
+      border-radius: 4px;
+      color: #FFF;
+      background: #0E690F;
+      cursor: pointer;
+      font-size: 14px;
+      text-transform: uppercase;
+      padding: 5px 10px;
+      border: 2px solid #0E690F;
+      transition: all .3s; }
+      .primary-content .region-list li:hover {
+        background: #FFF;
+        color: #0E690F; }
 
 .button {
   border-radius: 4px;

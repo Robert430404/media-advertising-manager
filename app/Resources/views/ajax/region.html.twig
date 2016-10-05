@@ -1,0 +1,15 @@
+<h1 class="content-title">{{ organization_name }} Regions</h1>
+
+{% if regions is empty %}
+    <p class="align-center">There Are No Regions</p>
+{% else %}
+    <ul class="region-list">
+        {% for region in regions %}
+            <li data-id="{{ region.id }}">{{ region.name }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<hr />
+
+<div class="region-information"></div>

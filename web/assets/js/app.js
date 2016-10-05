@@ -91,8 +91,6 @@ var ViewOrganizations = function () {
     function ViewOrganizations() {
         _classCallCheck(this, ViewOrganizations);
 
-        $.views.settings.delimiters('{$', '$}');
-
         this.callOrganizationLoad();
 
         this.regions = new Regions();
@@ -102,17 +100,18 @@ var ViewOrganizations = function () {
         key: 'callOrganizationLoad',
         value: function callOrganizationLoad() {
             var object = this;
-            var template = $.templates('Name {$:[0]$}');
+            var targets = document.querySelectorAll('.organization-list li label');
+            var container = document.querySelector('.region-information');
 
-            $('.organization-list li label').click(function () {
-                var organization = $(this).attr('data-id');
+            for (var i = 0; i < targets.length; i++) {
+                targets[i].onclick = function () {
+                    var organization = this.dataset.id;
 
-                object.regions.loadRegionData(organization).then(function (resp) {
-                    var html = template.render(resp);
-
-                    console.log(html);
-                });
-            });
+                    object.regions.loadRegionData(organization).then(function (resp) {
+                        container.innerHTML = resp.markup;
+                    });
+                };
+            }
         }
     }]);
 

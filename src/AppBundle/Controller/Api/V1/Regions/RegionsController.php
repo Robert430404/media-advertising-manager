@@ -21,53 +21,34 @@ class RegionsController extends Controller
      */
     public function indexAction(Request $request, $organization)
     {
+        $organization = $this->getDoctrine()
+            ->getRepository('AppBundle:Organizations')
+            ->find($organization);
         $regions  = $this->getDoctrine()
             ->getRepository('AppBundle:Regions')
             ->findByOrganizationId($organization);
-        $response = [];
+        $data = [];
 
         foreach($regions as $key => $region)
         {
-            $response[$key] = [
-                'id'           => $region->getId(),
-                'name'         => $region->getName(),
-                'organization' => $region->getOrganizationId(),
-                'created_at'   => $region->getCreatedAt(),
-                'updated_at'   => $region->getUpdatedAt(),
+            $data[$key] = [
+                'id'              => $region->getId(),
+                'name'            => $region->getName(),
+                'organization_id' => $region->getOrganizationId(),
+                'created_at'      => $region->getCreatedAt(),
+                'updated_at'      => $region->getUpdatedAt(),
             ];
         }
 
+        $view = $this->renderView('ajax/region.html.twig', [
+            'regions'           => $data,
+            'organization_name' => $organization->getName(),
+        ]);
 
-        $view = $this->renderView('ajax/region.html.twig');
-        $data = [
+        $response = [
             'markup' => trim($view),
         ];
-        return $this->json($data);
-    }
 
-    /**
-     * Inserts the new region in the database
-     *
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     *
-     * @Route("/region/add", name="region-add")
-     * @Method({"POST"})
-     */
-    public function insertAction(Request $request)
-    {
-        $data = $request->request->all();
-
-        $region = new Regions();
-        $region->setName($data['region_name']);
-        $region->setOrganizationId($data['organization_id']);
-        $region->setCreatedAt(Carbon::now());
-        $region->setUpdatedAt(Carbon::now());
-
-        $orm = $this->get('doctrine')->getEntityManager();
-        $orm->persist($region);
-        $orm->flush();
-
-        return $this->redirect('/region/' . $data['organization_id'], 302);
+        return $this->json($response);
     }
 }
