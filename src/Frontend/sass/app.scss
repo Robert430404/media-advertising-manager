@@ -29,6 +29,7 @@ $shadowSize: 25px;
 body {
   background: $lighter-grey url('/assets/img/background.png');
   font-family: 'Segoe UI', 'Helveitca Neue', 'Arial', 'Helvetica', sans-serif;
+  padding: 50px 0 0 ;
 }
 
 .site-content {
@@ -65,6 +66,10 @@ body {
 /**
  * Imports
  */
+@import "frontend/spotTypes";
+@import "frontend/regions";
+@import "frontend/organizations";
+@import "frontend/nav";
 @import "frontend/primary";
 @import "frontend/widgets";
 @import "frontend/sidebar";

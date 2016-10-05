@@ -16,7 +16,7 @@ class RegionsController extends Controller
      * @param integer $organization
      * @return \Symfony\Component\HttpFoundation\Response
      *
-     * @Route("/api/v1/region/{organization}", name="api-region")
+     * @Route("/api/v1/regions/{organization}", name="api-region")
      * @Method({"GET"})
      */
     public function indexAction(Request $request, $organization)

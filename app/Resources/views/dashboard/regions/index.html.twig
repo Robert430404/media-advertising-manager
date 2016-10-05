@@ -4,29 +4,33 @@
     <div class="container row">
         <div class="columns large-12 medium-12 small-12">
             <div class="primary-content">
+                <h1 class="content-title">{{ organization.name }} Regions</h1>
                 <div class="row">
-                    <div class="columns large-6 medium-6 small-12">
+                    <div class="columns large-12 medium-12 small-12">
                         <div class="current-regions">
                             {% if regions is empty %}
                                 <p>There are currently no regions. Add a new one below.</p>
                             {% else %}
                                 <ul>
                                     {% for region in regions %}
-                                        <li>{{ region.name }}</li>
+                                        <li>
+                                            <span class="region-name">{{ region.name }}</span>
+                                            <a href="/regions/delete/{{ region.id }}" class="action">Delete Region</a>
+                                        </li>
                                     {% endfor %}
                                 </ul>
                             {% endif %}
                             <div class="form-wrapper">
-                                <form action="/region/add" method="post" class="region-form" id="region-form">
+                                <form action="/regions/add" method="post" class="region-form" id="region-form">
                                     <label for="region-name">Region Name *
                                         <input type="text" class="form-control region-name"
                                                id="region-name" name="region_name"/>
                                     </label>
                                     <input type="hidden" class="organization-id" id="organization-id"
-                                           name="organization_id" value="{{ organization }}"/>
+                                           name="organization_id" value="{{ organization.id }}"/>
                                     <div class="form-group row">
                                         <div class="column large-12 medium-12 small-12">
-                                            <input type="submit" class="submit form-button" id="submit" value="submit"
+                                            <input type="submit" class="submit form-button" id="submit" value="Add New Region"
                                                    name="submit"/>
                                         </div>
                                     </div>

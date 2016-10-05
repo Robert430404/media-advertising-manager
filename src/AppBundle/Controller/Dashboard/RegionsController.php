@@ -13,17 +13,20 @@ class RegionsController extends Controller
 {
     /**
      * @param Request $request
-     * @param integer $organization
+     * @param integer $organization_id
      * @return \Symfony\Component\HttpFoundation\Response
      *
-     * @Route("/region/{organization}", name="region")
+     * @Route("/regions/{organization_id}", name="region")
      * @Method({"GET"})
      */
-    public function indexAction(Request $request, $organization)
+    public function indexAction(Request $request, $organization_id)
     {
+        $organization = $this->getDoctrine()
+            ->getRepository('AppBundle:Organizations')
+            ->find($organization_id);
         $regions = $this->getDoctrine()
             ->getRepository('AppBundle:Regions')
-            ->findByOrganizationId($organization);
+            ->findByOrganizationId($organization_id);
 
         return $this->render('dashboard/regions/index.html.twig', [
             'organization' => $organization,
@@ -37,7 +40,7 @@ class RegionsController extends Controller
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      *
-     * @Route("/region/add", name="region-add")
+     * @Route("/regions/add", name="region-add")
      * @Method({"POST"})
      */
     public function insertAction(Request $request)
@@ -54,6 +57,28 @@ class RegionsController extends Controller
         $orm->persist($region);
         $orm->flush();
 
-        return $this->redirect('/region/' . $data['organization_id'], 302);
+        return $this->redirect('/regions/' . $data['organization_id'], 302);
+    }
+
+    /**
+     * @param Request $request
+     * @param integer $region_id
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/regions/delete/{region_id}", name="region-delete")
+     * @Method({"GET"})
+     */
+    public function deleteAction(Request $request, $region_id)
+    {
+        $region = $this->getDoctrine()
+            ->getRepository('AppBundle:Regions')
+            ->find($region_id);
+        $organization_id = $region->getOrganizationId();
+
+        $orm = $this->get('doctrine')->getEntityManager();
+        $orm->remove($region);
+        $orm->flush();
+
+        return $this->redirect('/regions/' . $organization_id, 302);
     }
 }

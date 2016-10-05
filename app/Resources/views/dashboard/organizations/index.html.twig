@@ -4,15 +4,19 @@
     <div class="container row">
         <div class="columns large-12 medium-12 small-12">
             <div class="primary-content">
+                <h1 class="content-title">Current Organizations</h1>
                 <div class="row">
-                    <div class="columns large-6 medium-6 small-12">
+                    <div class="columns large-12 medium-12 small-12">
                         <div class="current-organizations">
                             {% if organizations is empty %}
                                 <p>There are currently no organizations. Add a new one below.</p>
                             {% else %}
                                 <ul>
                                     {% for organization in organizations %}
-                                        <li>{{ organization.name }}</li>
+                                        <li>
+                                            <span class="organization-name">{{ organization.name }}</span>
+                                            <a class="action" href="/regions/{{ organization.id }}">Edit Regions</a>
+                                        </li>
                                     {% endfor %}
                                 </ul>
                             {% endif %}
@@ -24,7 +28,7 @@
                                     </label>
                                     <div class="form-group row">
                                         <div class="column large-12 medium-12 small-12">
-                                            <input type="submit" class="submit form-button" id="submit" value="submit" name="submit" />
+                                            <input type="submit" class="submit form-button" id="submit" value="Add New Organization" name="submit" />
                                         </div>
                                     </div>
                                 </form>

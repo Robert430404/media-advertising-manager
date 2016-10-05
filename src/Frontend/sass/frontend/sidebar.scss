@@ -21,7 +21,7 @@
   .organization-list {
     list-style: none;
     text-transform: uppercase;
-    margin: 0 0 15px;
+    margin: 0;
     padding: 0;
     line-height: 1;
     overflow: hidden;
@@ -32,7 +32,7 @@
         margin: 0;
         padding: 15px;
         line-height: 1;
-        background: $lighter-grey;
+        background: $off-white;
         color: $black;
         cursor: pointer;
         border-bottom: 1px solid $grey;
@@ -76,7 +76,7 @@
   .spot-type-list {
     list-style: none;
     text-transform: uppercase;
-    margin: 0 0 15px;
+    margin: 0;
     padding: 0;
     line-height: 1;
     overflow: hidden;
@@ -87,7 +87,7 @@
         margin: 0;
         padding: 15px;
         line-height: 1;
-        background: $lighter-grey;
+        background: $off-white;
         color: $black;
         cursor: pointer;
         border-bottom: 1px solid $grey;

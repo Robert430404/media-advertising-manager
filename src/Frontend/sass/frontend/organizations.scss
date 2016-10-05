@@ -1,0 +1,27 @@
+.current-organizations {
+  margin: 0;
+  padding: 0;
+  ul {
+    list-style: none;
+    margin: -15px 0 15px;
+    li {
+      padding: 10px 15px;
+      margin: 0 -15px;
+      background: $off-white;
+      border-bottom: 1px solid $lighter-grey;
+      .action {
+        float: right;
+        background: $highlight-dark;
+        color: $white;
+        text-transform: uppercase;
+        border-radius: $border-radius;
+        font-weight: 300;
+        font-size: 14px;
+        padding: 3px 7px;
+      }
+      &:nth-child(even) {
+        background: $white;
+      }
+    }
+  }
+}

@@ -4,20 +4,24 @@
     <div class="container row">
         <div class="columns large-12 medium-12 small-12">
             <div class="primary-content">
+                <h1 class="content-title">Current Spot Types</h1>
                 <div class="row">
-                    <div class="columns large-6 medium-6 small-12">
-                        <div class="current-buy-types">
+                    <div class="columns large-12 medium-12 small-12">
+                        <div class="current-spot-types">
                             {% if types is empty %}
                                 <p>There are currently no spot types. Add a new one below.</p>
                             {% else %}
                                 <ul>
                                     {% for type in types %}
-                                        <li>{{ type.name }}</li>
+                                        <li>
+                                            <span class="spot-type-name">{{ type.name }}</span>
+                                            <a href="/spot-types/delete/{{ type.id }}" class="action">Delete Type</a>
+                                        </li>
                                     {% endfor %}
                                 </ul>
                             {% endif %}
                             <div class="form-wrapper">
-                                <form action="/spot-type/add" method="post" class="spot-type-form"
+                                <form action="/spot-types/add" method="post" class="spot-type-form"
                                       id="spot-type-form">
                                     <label for="spot_type_name">Spot Types *
                                         <input type="text" class="form-control spot-type-name"
@@ -25,7 +29,7 @@
                                     </label>
                                     <div class="form-group row">
                                         <div class="column large-12 medium-12 small-12">
-                                            <input type="submit" class="submit form-button" id="submit" value="submit"
+                                            <input type="submit" class="submit form-button" id="submit" value="Add New Spot Type"
                                                    name="submit"/>
                                         </div>
                                     </div>

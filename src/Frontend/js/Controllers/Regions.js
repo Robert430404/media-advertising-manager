@@ -6,7 +6,7 @@ class Regions {
         return new Promise(function (resolve, reject) {
             let request = new XMLHttpRequest();
 
-            request.open('GET', '/api/v1/region/' + organization);
+            request.open('GET', '/api/v1/regions/' + organization);
 
             request.onload = function () {
                 if (request.status === 200) {

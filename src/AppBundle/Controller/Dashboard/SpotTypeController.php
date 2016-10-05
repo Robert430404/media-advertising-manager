@@ -16,7 +16,7 @@ class SpotTypeController extends Controller
      * @param integer $organization
      * @return \Symfony\Component\HttpFoundation\Response
      *
-     * @Route("/spot-type", name="spot-type")
+     * @Route("/spot-types", name="spot-type")
      * @Method({"GET"})
      */
     public function indexAction(Request $request)
@@ -36,7 +36,7 @@ class SpotTypeController extends Controller
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      *
-     * @Route("/spot-type/add", name="spot-type-add")
+     * @Route("/spot-types/add", name="spot-type-add")
      * @Method({"POST"})
      */
     public function insertAction(Request $request)
@@ -50,6 +50,28 @@ class SpotTypeController extends Controller
 
         $orm = $this->get('doctrine')->getEntityManager();
         $orm->persist($type);
+        $orm->flush();
+
+        return $this->redirectToRoute('spot-type');
+    }
+
+    /**
+     * Deletes the selected spot type in the database
+     *
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @Route("/spot-types/delete/{spot_id}", name="spot-type-delete")
+     * @Method({"GET"})
+     */
+    public function deleteAction(Request $request, $spot_id)
+    {
+        $type = $this->getDoctrine()
+            ->getRepository('AppBundle:SpotTypes')
+            ->find($spot_id);
+
+        $orm = $this->get('doctrine')->getEntityManager();
+        $orm->remove($type);
         $orm->flush();
 
         return $this->redirectToRoute('spot-type');
