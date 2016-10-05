@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container row">
+        <div class="columns large-12 medium-12 small-12">
+            <div class="primary-content">
+                <div class="row">
+                    <div class="columns large-6 medium-6 small-12">
+                        <div class="current-regions">
+                            {% if regions is empty %}
+                                <p>There are currently no regions. Add a new one below.</p>
+                            {% else %}
+                                <ul>
+                                    {% for region in regions %}
+                                        <li>{{ region.name }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                            <div class="form-wrapper">
+                                <form action="/region/add" method="post" class="region-form" id="region-form">
+                                    <label for="region-name">Region Name *
+                                        <input type="text" class="form-control region-name"
+                                               id="region-name" name="region_name"/>
+                                    </label>
+                                    <input type="hidden" class="organization-id" id="organization-id"
+                                           name="organization_id" value="{{ organization }}"/>
+                                    <div class="form-group row">
+                                        <div class="column large-12 medium-12 small-12">
+                                            <input type="submit" class="submit form-button" id="submit" value="submit"
+                                                   name="submit"/>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

@@ -1,0 +1,27 @@
+.button {
+  border-radius: $border-radius;
+  background: $highlight-dark;
+  display: block;
+  line-height: 1;
+  text-transform: uppercase;
+  padding: 13px 5px;
+  border: 2px solid $highlight-dark;
+  transition: all .3s;
+  margin: 0;
+  &:hover,
+  &:active,
+  &:focus {
+    background: $white;
+    color: $highlight-dark;
+  }
+  &.region-button {
+    padding: 5px 10px;
+    margin: 0 0 5px;
+    font-size: 14px;
+    font-weight: 400;
+    display: inline-block;
+    &:hover {
+      background: $off-white;
+    }
+  }
+}

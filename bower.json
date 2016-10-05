@@ -16,6 +16,8 @@
   ],
   "dependencies": {
     "foundation": "^5.5.3",
-    "vue": "^2.0.1"
+    "vue": "^2.0.1",
+    "font-awesome": "fontawesome#^4.6.3",
+    "jsrender": "^0.9.81"
   }
 }

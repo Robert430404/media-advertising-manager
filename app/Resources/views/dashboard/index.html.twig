@@ -2,27 +2,60 @@
 
 {% block body %}
     <div class="container row">
-        <div class="columns large-3 medium-4 small-12">
+        <div class="columns large-4 medium-4 small-12">
             <div class="sidebar">
-                <h2 class="sidebar-title">Organizations</h2>
+                <div class="section">
+                    <h2 class="sidebar-title">Organizations</h2>
+                    <div class="actionable">
+                        {% if organizations is empty %}
+                            <p>There are no organizations</p>
+                        {% else %}
+                            <ul class="organization-list">
+                                {% for organization in organizations %}
+                                    <li><label data-id="{{ organization.id }}">{{ organization.name }} <i class="fa fa-chevron-right"></i></label></li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        <hr/>
+                        <a href="/organizations" class="button button-primary">Add New Organization</a>
+                    </div>
+                </div>
+                <div class="section">
+                    <h2 class="sidebar-title">Spot Types</h2>
+                    <div class="actionable">
+                        <ul class="spot-type-list">
+                            {% for type in types %}
+                                <li><label>{{ type.name }} <i
+                                                class="fa fa-chevron-right"></i></label></li>
+                            {% endfor %}
+                        </ul>
+                        <hr/>
+                        <a href="/spot-type" class="button button-primary">Add New Spot Type</a>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="columns large-9 medium-8 small-12">
+        <div class="columns large-8 medium-8 small-12">
             <div class="primary-content">
+                <h1 class="content-title">Advertising Overview Overview</h1>
                 <div class="row">
                     <div class="columns large-6 medium-6 small-12">
+                        <h3 class="widget-title">Bad Spots</h3>
                         <div class="misaligned-spots">
-                            <span class="number">
-                                0
-                            </span> Spots
+                            <span class="number">0</span>
                         </div>
                     </div>
                     <div class="columns large-6 medium-6 small-12">
+                        <h3 class="widget-title">Active Buys</h3>
                         <div class="active-buys">
-                            <span class="number">
-                                12
-                            </span> Active Buys
+                            <span class="number">12</span>
                         </div>
+                    </div>
+                </div>
+                <hr/>
+                <div class="row">
+                    <div class="region-information">
+                        <p class="align-center">Select An Organization</p>
                     </div>
                 </div>
             </div>

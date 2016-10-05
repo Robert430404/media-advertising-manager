@@ -29,13 +29,6 @@ class SpotTypes
     private $name;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="region_id", type="integer")
-     */
-    private $regionId;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -82,30 +75,6 @@ class SpotTypes
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Set regionId
-     *
-     * @param integer $regionId
-     *
-     * @return SpotTypes
-     */
-    public function setRegionId($regionId)
-    {
-        $this->regionId = $regionId;
-
-        return $this;
-    }
-
-    /**
-     * Get regionId
-     *
-     * @return int
-     */
-    public function getRegionId()
-    {
-        return $this->regionId;
     }
 
     /**

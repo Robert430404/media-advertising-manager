@@ -1,0 +1,115 @@
+.sidebar {
+  .section {
+    background: $alpha-white;
+    padding: 15px;
+    margin: 0 0 30px;
+    border-radius: $border-radius;
+    box-shadow: 0 0 $shadowSize 0 $alpha-black;
+    overflow: hidden;
+    &:first-child {
+      margin: $wsHeight 0 30px;
+    }
+  }
+  .sidebar-title {
+    font-size: 28px;
+    text-transform: uppercase;
+    background: $highlight-dark;
+    color: $white;
+    margin: -15px -15px 15px;
+    padding: 15px;
+  }
+  .organization-list {
+    list-style: none;
+    text-transform: uppercase;
+    margin: 0 0 15px;
+    padding: 0;
+    line-height: 1;
+    overflow: hidden;
+    border: 1px solid $grey;
+    border-radius: $border-radius;
+    li {
+      label {
+        margin: 0;
+        padding: 15px;
+        line-height: 1;
+        background: $lighter-grey;
+        color: $black;
+        cursor: pointer;
+        border-bottom: 1px solid $grey;
+        transition: all .3s;
+        &:hover {
+          background: $highlight-light;
+        }
+        i {
+          font-size: 12px;
+          line-height: 18px;
+          float: right;
+        }
+      }
+      .region-list {
+        background: $off-white;
+        list-style: none;
+        padding: 10px 15px;
+        margin: 0;
+        display: none;
+        border-bottom: 1px solid $grey;
+        hr {
+          margin: 10px -15px 15px;
+        }
+        li {
+          margin: 0 -15px;
+          padding: 5px 15px;
+          cursor: pointer;
+        }
+      }
+      &:last-child {
+        label {
+          border-bottom: 0;
+        }
+        .region-list {
+          border-top: 1px solid $grey;
+          border-bottom: 0;
+        }
+      }
+    }
+  }
+  .spot-type-list {
+    list-style: none;
+    text-transform: uppercase;
+    margin: 0 0 15px;
+    padding: 0;
+    line-height: 1;
+    overflow: hidden;
+    border: 1px solid $grey;
+    border-radius: $border-radius;
+    li {
+      label {
+        margin: 0;
+        padding: 15px;
+        line-height: 1;
+        background: $lighter-grey;
+        color: $black;
+        cursor: pointer;
+        border-bottom: 1px solid $grey;
+        transition: all .3s;
+        &:hover {
+          background: $highlight-light;
+        }
+        i {
+          font-size: 12px;
+          line-height: 18px;
+          float: right;
+        }
+      }
+      &:last-child {
+        label {
+          border-bottom: 0;
+        }
+        .region-list {
+          border-top: 1px solid $grey;
+          border-bottom: 0;
+        }
+      }
+    }
+  }
+}

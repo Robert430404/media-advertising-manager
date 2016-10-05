@@ -11,7 +11,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @package AppBundle\Entity
  *
  * @ORM\Entity
- * @UniqueEntity("name")
  * @ORM\Table(name="regions")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\RegionsRepository")
  */
@@ -29,7 +28,7 @@ class Regions
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, unique=true)
+     * @ORM\Column(name="name", type="string", length=255)
      * @Assert\NotBlank()
      */
     private $name;

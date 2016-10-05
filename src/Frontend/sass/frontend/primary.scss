@@ -1,0 +1,62 @@
+.primary-content {
+  background: $alpha-white;
+  padding: 15px;
+  margin: $wsHeight 0;
+  border-radius: $border-radius;
+  box-shadow: 0 0 $shadowSize 0 $alpha-black;
+  overflow: hidden;
+  .content-title {
+    background: $highlight-dark;
+    color: $white;
+    text-align: center;
+    padding: 15px;
+    margin: -15px -15px 15px;
+  }
+  .widget-title {
+    font-size: 24px;
+    text-transform: uppercase;
+    text-align: center;
+  }
+  .misaligned-spots {
+    position: relative;
+    background: $alpha-black;
+    text-align: left;
+    border-radius: $border-radius;
+    color: $white;
+    overflow: hidden;
+    vertical-align: bottom;
+    padding: 15px 0;
+    margin: 0 0 15px;
+    .number {
+      font-size: 107px;
+      color: $highlight-light-error;
+      padding: 0;
+      margin: 0;
+      letter-spacing: 0;
+      line-height: 1;
+      text-align: center;
+      display: block;
+    }
+  }
+  .active-buys {
+    position: relative;
+    background: $alpha-black;
+    text-align: left;
+    border-radius: $border-radius;
+    color: $white;
+    overflow: hidden;
+    vertical-align: bottom;
+    padding: 15px 0;
+    margin: 0 0 15px;
+    .number {
+      font-size: 107px;
+      color: $highlight-light;
+      padding: 0;
+      margin: 0;
+      letter-spacing: 0;
+      line-height: 1;
+      text-align: center;
+      display: block;
+    }
+  }
+}

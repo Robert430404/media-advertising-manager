@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container row">
+        <div class="columns large-12 medium-12 small-12">
+            <div class="primary-content">
+                <div class="row">
+                    <div class="columns large-6 medium-6 small-12">
+                        <div class="current-organizations">
+                            {% if organizations is empty %}
+                                <p>There are currently no organizations. Add a new one below.</p>
+                            {% else %}
+                                <ul>
+                                    {% for organization in organizations %}
+                                        <li>{{ organization.name }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                            <div class="form-wrapper">
+                                <form action="/organizations/add" method="post" class="organization-form" id="organization-form">
+                                    <label for="organization-name">Organization Name *
+                                        <input type="text" class="form-control organization-name"
+                                               id="organization-name" name="organization_name" />
+                                    </label>
+                                    <div class="form-group row">
+                                        <div class="column large-12 medium-12 small-12">
+                                            <input type="submit" class="submit form-button" id="submit" value="submit" name="submit" />
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
