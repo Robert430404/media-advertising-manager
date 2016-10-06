@@ -23,44 +23,24 @@ var Sidebar = function () {
 
     return Sidebar;
 }();
-"use strict";
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Organizations = function () {
-    function Organizations() {
-        _classCallCheck(this, Organizations);
-
-        this.loadOrganizationData();
-    }
-
-    _createClass(Organizations, [{
-        key: "loadOrganizationData",
-        value: function loadOrganizationData() {}
-    }]);
-
-    return Organizations;
-}();
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Regions = function () {
-    function Regions() {
-        _classCallCheck(this, Regions);
+var AjaxHelpers = function () {
+    function AjaxHelpers() {
+        _classCallCheck(this, AjaxHelpers);
     }
 
-    _createClass(Regions, [{
-        key: 'loadRegionData',
-        value: function loadRegionData(organization) {
+    _createClass(AjaxHelpers, [{
+        key: 'getCall',
+        value: function getCall(url) {
             return new Promise(function (resolve, reject) {
                 var request = new XMLHttpRequest();
 
-                request.open('GET', '/api/v1/regions/' + organization);
+                request.open('GET', url);
 
                 request.onload = function () {
                     if (request.status === 200) {
@@ -79,7 +59,7 @@ var Regions = function () {
         }
     }]);
 
-    return Regions;
+    return AjaxHelpers;
 }();
 'use strict';
 
@@ -91,24 +71,61 @@ var ViewOrganizations = function () {
     function ViewOrganizations() {
         _classCallCheck(this, ViewOrganizations);
 
-        this.callOrganizationLoad();
+        this.loadDashboardRegions();
+        this.loadCampaignRegions();
 
-        this.regions = new Regions();
+        this.AjaxHelpers = new AjaxHelpers();
     }
 
     _createClass(ViewOrganizations, [{
-        key: 'callOrganizationLoad',
-        value: function callOrganizationLoad() {
+        key: 'loadDashboardRegions',
+        value: function loadDashboardRegions() {
             var object = this;
             var targets = document.querySelectorAll('.organization-list li label');
-            var container = document.querySelector('.region-information');
+            var container = $('.region-information');
 
             for (var i = 0; i < targets.length; i++) {
                 targets[i].onclick = function () {
                     var organization = this.dataset.id;
+                    var organizationName = this.dataset.name;
+                    var endpoint = '/api/v1/regions/' + organization;
 
-                    object.regions.loadRegionData(organization).then(function (resp) {
-                        container.innerHTML = resp.markup;
+                    object.AjaxHelpers.getCall(endpoint).then(function (resp) {
+                        container.empty().append('<h1 class="content-title">' + organizationName + ' Regions</h1>');
+                        container.append('<ul class="region-list"></ul>');
+
+                        if (resp.length > 0) {
+                            for (var i = 0; i < resp.length; i++) {
+                                container.find('.region-list').append('<li data-id="' + resp[i].id + '">' + resp[i].name + '</li>');
+                            }
+                        } else {
+                            container.append('<p class="align-center">There Are No Regions</p>');
+                        }
+
+                        container.append('<hr />');
+                        container.append('<div class="region-information"></div>');
+                    });
+                };
+            }
+        }
+    }, {
+        key: 'loadCampaignRegions',
+        value: function loadCampaignRegions() {
+            var object = this;
+            var target = document.querySelector('#campaign-organization');
+            var container = $('#campaign-region');
+
+            if (target) {
+                target.onchange = function () {
+                    var value = this.value;
+                    var endpoint = '/api/v1/regions/' + value;
+
+                    container.empty();
+
+                    object.AjaxHelpers.getCall(endpoint).then(function (resp) {
+                        for (var i = 0; i < resp.length; i++) {
+                            container.append('<option value="' + resp[i].id + '">' + resp[i].name + '</option>');
+                        }
                     });
                 };
             }

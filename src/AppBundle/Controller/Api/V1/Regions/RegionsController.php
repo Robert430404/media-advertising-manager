@@ -27,6 +27,7 @@ class RegionsController extends Controller
         $regions  = $this->getDoctrine()
             ->getRepository('AppBundle:Regions')
             ->findByOrganizationId($organization);
+
         $data = [];
 
         foreach($regions as $key => $region)
@@ -40,15 +41,6 @@ class RegionsController extends Controller
             ];
         }
 
-        $view = $this->renderView('ajax/region.html.twig', [
-            'regions'           => $data,
-            'organization_name' => $organization->getName(),
-        ]);
-
-        $response = [
-            'markup' => trim($view),
-        ];
-
-        return $this->json($response);
+        return $this->json($data);
     }
 }

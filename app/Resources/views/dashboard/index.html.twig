@@ -12,7 +12,7 @@
                         {% else %}
                             <ul class="organization-list">
                                 {% for organization in organizations %}
-                                    <li><label data-id="{{ organization.id }}">{{ organization.name }} <i class="fa fa-chevron-right"></i></label></li>
+                                    <li><label data-id="{{ organization.id }}" data-name="{{ organization.name }}">{{ organization.name }} <i class="fa fa-chevron-right"></i></label></li>
                                 {% endfor %}
                             </ul>
                         {% endif %}

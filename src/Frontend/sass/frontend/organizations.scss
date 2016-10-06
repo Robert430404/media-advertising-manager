@@ -18,6 +18,11 @@
         font-weight: 300;
         font-size: 14px;
         padding: 3px 7px;
+        transition: all .3s;
+        &:hover {
+          background: $white;
+          color: $highlight-dark;
+        }
       }
       &:nth-child(even) {
         background: $white;

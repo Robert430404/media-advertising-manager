@@ -60,7 +60,11 @@ body {
         border-radius: 4px;
         font-weight: 300;
         font-size: 14px;
-        padding: 3px 7px; }
+        padding: 3px 7px;
+        transition: all .3s; }
+        .current-spot-types ul li .action:hover {
+          background: #FFF;
+          color: #0E690F; }
       .current-spot-types ul li:nth-child(even) {
         background: #FFF; }
 
@@ -83,7 +87,11 @@ body {
         border-radius: 4px;
         font-weight: 300;
         font-size: 14px;
-        padding: 3px 7px; }
+        padding: 3px 7px;
+        transition: all .3s; }
+        .current-regions ul li .action:hover {
+          background: #FFF;
+          color: #0E690F; }
       .current-regions ul li:nth-child(even) {
         background: #FFF; }
 
@@ -106,7 +114,11 @@ body {
         border-radius: 4px;
         font-weight: 300;
         font-size: 14px;
-        padding: 3px 7px; }
+        padding: 3px 7px;
+        transition: all .3s; }
+        .current-organizations ul li .action:hover {
+          background: #FFF;
+          color: #0E690F; }
       .current-organizations ul li:nth-child(even) {
         background: #FFF; }
 
@@ -120,11 +132,12 @@ body {
   padding: 0 30px;
   background: #FFF;
   margin: 0;
-  box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.35); }
+  box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.35);
+  text-align: center; }
   .masthead li {
     display: inline-block;
     list-style: none;
-    margin: 0 20px 0 0; }
+    margin: 0 5px 0; }
     .masthead li .link {
       line-height: 30px;
       height: 30px;

@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container row">
+        <div class="columns large-12 medium-12 small-12">
+            <div class="primary-content">
+                <h1 class="content-title">Current Campaigns</h1>
+                <div class="row">
+                    <div class="columns large-12 medium-12 small-12">
+                        <div class="current-spot-types">
+                            {% if campaigns is empty %}
+                                <p>There are currently no campaigns. Add a new one below.</p>
+                            {% else %}
+                                <ul>
+                                    {% for campaign in campaigns %}
+                                        <li>
+                                            <span class="spot-type-name">{{ campaign.name }}</span>
+                                            <a href="/spot-types/delete/{{ campaign.id }}" class="action">Delete Type</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                            <div class="form-wrapper">
+                                <form action="/campaigns/add" method="post" class="campaign-form" id="campaign-form">
+                                    <div class="form-group row">
+                                        <div class="columns large-4 medium-4 small-12">
+                                            <label for="campaign_name">Campaign Name *
+                                                <input type="text" class="form-control campaign-name" id="campaign-name" name="campaign_name"/>
+                                            </label>
+                                        </div>
+                                        <div class="columns large-4 medium-4 small-12">
+                                            <label for="campaign_organization">Select Your Organization *
+                                                <select name="campaign_organization" id="campaign-organization">
+                                                    <option value="">Select Organization</option>
+                                                    {% for organization in organizations %}
+                                                        <option value="{{ organization.id }}">{{ organization.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </label>
+                                        </div>
+                                        <div class="columns large-4 medium-4 small-12">
+                                            <label for="campaign_region">Campaign Region *
+                                                <select name="campaign_region" id="campaign-region">
+                                                    <option value="">Select Organization</option>
+                                                </select>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="column large-12 medium-12 small-12">
+                                            <input type="submit" class="submit form-button" id="submit" value="Add New Campaign"
+                                                   name="submit"/>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

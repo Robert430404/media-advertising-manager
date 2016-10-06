@@ -9,10 +9,11 @@
   background: $white;
   margin: 0;
   box-shadow: 0 0 $shadowSize 0 $alpha-black;
+  text-align: center;
   li {
     display: inline-block;
     list-style: none;
-    margin: 0 20px 0 0;
+    margin: 0 5px 0;
     .link {
       line-height: 30px;
       height: 30px;

@@ -1,12 +1,13 @@
-class Regions {
+class AjaxHelpers {
     constructor() {
+
     }
 
-    loadRegionData(organization) {
+    getCall(url) {
         return new Promise(function (resolve, reject) {
             let request = new XMLHttpRequest();
 
-            request.open('GET', '/api/v1/regions/' + organization);
+            request.open('GET', url);
 
             request.onload = function () {
                 if (request.status === 200) {
