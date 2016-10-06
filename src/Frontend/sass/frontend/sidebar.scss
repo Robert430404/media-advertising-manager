@@ -2,12 +2,12 @@
   .section {
     background: $alpha-white;
     padding: 15px;
-    margin: 0 0 30px;
+    margin: 0 0 15px;
     border-radius: $border-radius;
     box-shadow: 0 0 $shadowSize 0 $alpha-black;
     overflow: hidden;
     &:first-child {
-      margin: $wsHeight 0 30px;
+      margin: 15px 0;
     }
   }
   .sidebar-title {

@@ -55,7 +55,8 @@ class ViewCampaigns {
 
             if (startVal.length > 9 && endVal.length > 9) {
                 var diff = object.CampaignsController.calculateFlightLength(startVal, endVal);
-                display.value = diff;
+
+                display.value = diff + ' Weeks';
             }
         };
 
@@ -65,7 +66,8 @@ class ViewCampaigns {
 
             if (startVal.length > 9 && endVal.length > 9) {
                 var diff = object.CampaignsController.calculateFlightLength(startVal, endVal);
-                display.value = diff;
+
+                display.value = diff + ' Weeks';
             }
         };
     }

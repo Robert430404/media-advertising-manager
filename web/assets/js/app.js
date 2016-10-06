@@ -149,7 +149,8 @@ var ViewCampaigns = function () {
 
                 if (startVal.length > 9 && endVal.length > 9) {
                     var diff = object.CampaignsController.calculateFlightLength(startVal, endVal);
-                    display.value = diff;
+
+                    display.value = diff + ' Weeks';
                 }
             };
 
@@ -159,7 +160,8 @@ var ViewCampaigns = function () {
 
                 if (startVal.length > 9 && endVal.length > 9) {
                     var diff = object.CampaignsController.calculateFlightLength(startVal, endVal);
-                    display.value = diff;
+
+                    display.value = diff + ' Weeks';
                 }
             };
         }

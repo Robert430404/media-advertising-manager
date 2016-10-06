@@ -12,22 +12,23 @@
 
         <div class="site-content">
             {% if is_granted('ROLE_USER') %}
-            <div class="masthead" id="masthead">
-                <ul class="nav row" id="mav">
-                    <li class="link-container">
-                        <a href="/" class="link">Dashboard</a>
-                    </li>
-                    <li class="link-container">
-                        <a href="/organizations" class="link">Manage Organizations</a>
-                    </li>
-                    <li class="link-container">
-                        <a href="/spot-types" class="link">Manage Spot Types</a>
-                    </li>
-                    <li class="link-container">
-                        <a href="/campaigns" class="link">Manage Campaigns</a>
-                    </li>
-                </ul>
-            </div>
+                <div class="masthead" id="masthead">
+                    <h1 class="masthead-title">Application Sections</h1>
+                    <ul class="nav row" id="mav">
+                        <li class="link-container">
+                            <a href="/" class="link">Application Dashboard</a>
+                        </li>
+                        <li class="link-container">
+                            <a href="/organizations" class="link">Manage Organizations</a>
+                        </li>
+                        <li class="link-container">
+                            <a href="/spot-types" class="link">Manage Spot Types</a>
+                        </li>
+                        <li class="link-container">
+                            <a href="/campaigns" class="link">Manage Campaigns</a>
+                        </li>
+                    </ul>
+                </div>
             {% endif %}
             {% block body %}{% endblock %}
         </div>

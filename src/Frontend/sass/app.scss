@@ -29,10 +29,13 @@ $shadowSize: 25px;
 body {
   background: $lighter-grey url('/assets/img/background.png');
   font-family: 'Segoe UI', 'Helveitca Neue', 'Arial', 'Helvetica', sans-serif;
-  padding: 50px 0 0 ;
+  padding: 0 0 0 300px;
 }
 
 .site-content {
+  .row {
+    max-width: none;
+  }
   hr {
     margin: 0 -30px 15px;
   }
@@ -66,6 +69,7 @@ body {
 /**
  * Imports
  */
+@import "frontend/campaigns";
 @import "frontend/spotTypes";
 @import "frontend/regions";
 @import "frontend/organizations";

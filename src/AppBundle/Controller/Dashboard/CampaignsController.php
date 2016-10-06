@@ -3,7 +3,6 @@
 namespace AppBundle\Controller\Dashboard;
 
 use AppBundle\Entity\Campaigns;
-use AppBundle\Entity\Organizations;
 use Carbon\Carbon;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -62,6 +61,28 @@ class CampaignsController extends Controller
 
         $orm = $this->get('doctrine')->getEntityManager();
         $orm->persist($campaign);
+        $orm->flush();
+
+        return $this->redirectToRoute('campaigns');
+    }
+
+    /**
+     * Deletes the selected campaign from the database
+     *
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @Route("/campaigns/delete/{campaign_id}", name="campaign-delete")
+     * @Method({"GET"})
+     */
+    public function deleteAction(Request $request, $campaign_id)
+    {
+        $campaign = $this->getDoctrine()
+            ->getRepository('AppBundle:Campaigns')
+            ->find($campaign_id);
+
+        $orm = $this->get('doctrine')->getEntityManager();
+        $orm->remove($campaign);
         $orm->flush();
 
         return $this->redirectToRoute('campaigns');
