@@ -25,17 +25,29 @@
     font-weight: 300;
     margin: 0 0 15px 0;
   }
-  .form-control {
+  .form-control,
+  select{
     margin: 5px 0 0 0;
     box-shadow: none;
     border: 1px solid $lighter-grey;
     border-radius: $border-radius;
     background: $white;
     color: $highlight-dark;
+    outline: none;
+    transition: all .3s;
     &:focus {
       border: 1px solid $highlight-dark;
       box-shadow: 0 0 10px 0 $highlight-light;
       background: $white;
+    }
+    &[readonly] {
+      background: $off-white;
+      box-shadow: none;
+      border: 1px solid $lighter-grey;
+      &:focus {
+        box-shadow: none;
+        background: $off-white;
+      }
     }
   }
   .form-button {

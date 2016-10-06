@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Dashboard;
 
+use AppBundle\Entity\Campaigns;
 use AppBundle\Entity\Organizations;
 use Carbon\Carbon;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -34,29 +35,35 @@ class CampaignsController extends Controller
     }
 
     /**
-     * Inserts the new organization in the database
+     * Inserts the new campaign in the database
      *
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      *
-     * @Route("/organizations/add", name="organizations-add")
+     * @Route("/campaigns/add", name="campaigns-add")
      * @Method({"POST"})
      */
     public function insertAction(Request $request)
     {
-        $data = $request->request->all();
-        $user = $this->getUser();
+        $data  = $request->request->all();
+        $start = Carbon::parse($data['flight_start']);
+        $end   = Carbon::parse($data['flight_end']);
+        $weeks = $start->diffInWeeks($end);
 
-        $organization = new Organizations();
-        $organization->setName($data['organization_name']);
-        $organization->setUserId($user->getId());
-        $organization->setCreatedAt(Carbon::now());
-        $organization->setUpdatedAt(Carbon::now());
+        $campaign = new Campaigns();
+        $campaign->setName($data['campaign_name']);
+        $campaign->setOrganizationId($data['campaign_organization']);
+        $campaign->setRegionId($data['campaign_region']);
+        $campaign->setFlightStartDate($start);
+        $campaign->setFlightEndDate($end);
+        $campaign->setFlightLength($weeks);
+        $campaign->setCreatedAt(Carbon::now());
+        $campaign->setUpdatedAt(Carbon::now());
 
         $orm = $this->get('doctrine')->getEntityManager();
-        $orm->persist($organization);
+        $orm->persist($campaign);
         $orm->flush();
 
-        return $this->redirectToRoute('organizations');
+        return $this->redirectToRoute('campaigns');
     }
 }

@@ -18,6 +18,8 @@
     "foundation": "^5.5.3",
     "vue": "^2.0.1",
     "font-awesome": "fontawesome#^4.6.3",
-    "jsrender": "^0.9.81"
+    "jsrender": "^0.9.81",
+    "moment": "^2.15.1",
+    "formatter.js": "formatter#^0.1.5"
   }
 }

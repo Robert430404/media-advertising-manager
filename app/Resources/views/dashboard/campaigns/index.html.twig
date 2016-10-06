@@ -14,8 +14,8 @@
                                 <ul>
                                     {% for campaign in campaigns %}
                                         <li>
-                                            <span class="spot-type-name">{{ campaign.name }}</span>
-                                            <a href="/spot-types/delete/{{ campaign.id }}" class="action">Delete Type</a>
+                                            <span class="campaign-name">{{ campaign.name }}</span>
+                                            <a href="/campaigns/delete/{{ campaign.id }}" class="action">Delete Type</a>
                                         </li>
                                     {% endfor %}
                                 </ul>
@@ -43,6 +43,23 @@
                                                 <select name="campaign_region" id="campaign-region">
                                                     <option value="">Select Organization</option>
                                                 </select>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="columns large-4 medium-4 small-12">
+                                            <label for="flight_start">Flight Start Date *
+                                                <input type="text" class="flight-start form-control" id="flight-start" name="flight_start" placeholder="YYYY-MM-DD" />
+                                            </label>
+                                        </div>
+                                        <div class="columns large-4 medium-4 small-12">
+                                            <label for="flight_end">Flight End Date *
+                                                <input type="text" class="flight-end form-control" id="flight-end" name="flight_end" placeholder="YYYY-MM-DD" />
+                                            </label>
+                                        </div>
+                                        <div class="columns large-4 medium-4 small-12">
+                                            <label for="flight_length">Flight Length
+                                                <input type="text" class="flight-length form-control" id="flight-length" name="flight_length" readonly>
                                             </label>
                                         </div>
                                     </div>

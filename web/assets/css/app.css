@@ -372,17 +372,30 @@ body {
   font-weight: 300;
   margin: 0 0 15px 0; }
 
-.form-wrapper .form-control {
+.form-wrapper .form-control,
+.form-wrapper select {
   margin: 5px 0 0 0;
   box-shadow: none;
   border: 1px solid #cbcbcb;
   border-radius: 4px;
   background: #FFF;
-  color: #0E690F; }
-  .form-wrapper .form-control:focus {
+  color: #0E690F;
+  outline: none;
+  transition: all .3s; }
+  .form-wrapper .form-control:focus,
+  .form-wrapper select:focus {
     border: 1px solid #0E690F;
     box-shadow: 0 0 10px 0 #C9FFBD;
     background: #FFF; }
+  .form-wrapper .form-control[readonly],
+  .form-wrapper select[readonly] {
+    background: #ECEDEE;
+    box-shadow: none;
+    border: 1px solid #cbcbcb; }
+    .form-wrapper .form-control[readonly]:focus,
+    .form-wrapper select[readonly]:focus {
+      box-shadow: none;
+      background: #ECEDEE; }
 
 .form-wrapper .form-button {
   width: 100%;

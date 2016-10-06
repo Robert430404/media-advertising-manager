@@ -11,6 +11,7 @@
     <body>
 
         <div class="site-content">
+            {% if is_granted('ROLE_USER') %}
             <div class="masthead" id="masthead">
                 <ul class="nav row" id="mav">
                     <li class="link-container">
@@ -27,12 +28,14 @@
                     </li>
                 </ul>
             </div>
-
+            {% endif %}
             {% block body %}{% endblock %}
         </div>
 
         {% block javascripts %}{% endblock %}
         <script src="{{ asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/moment/min/moment-with-locales.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/formatter.js/dist/jquery.formatter.min.js') }}"></script>
         <script src="{{ asset('assets/libs/jsrender/jsrender.min.js') }}"></script>
         <script src="{{ asset('assets/js/app.js') }}"></script>
     </body>
