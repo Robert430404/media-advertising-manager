@@ -9,6 +9,16 @@
       margin: 0 -15px;
       background: $off-white;
       border-bottom: 1px solid $lighter-grey;
+      .actions,
+      .tags {
+        float: right;
+        label {
+          display: inline;
+          font-size: 14px;
+          line-height: 28px;
+          text-transform: uppercase;
+        }
+      }
       .action {
         margin-left: 10px;
         float: right;
@@ -25,8 +35,263 @@
           color: $highlight-dark;
         }
       }
+      .tag {
+        margin-left: 10px;
+        float: right;
+        background: $highlight-light;
+        color: $highlight-dark;
+        text-transform: uppercase;
+        border-radius: $border-radius;
+        font-weight: 300;
+        font-size: 14px;
+        padding: 3px 7px;
+        transition: all .3s;
+      }
+      .divider {
+        height: 28px;
+        width: 1px;
+        displaY: block;
+        float: right;
+        background: $lighter-grey;
+        margin: 0 10px;
+      }
       &:nth-child(even) {
         background: $white;
+      }
+    }
+  }
+}
+
+.current-worksheets{
+  margin: 0;
+  padding: 0;
+  ul {
+    list-style: none;
+    margin: -15px 0 15px;
+    li {
+      .identifier-bar {
+        padding: 10px 15px;
+        margin: 0 -15px;
+        background: $off-white;
+        border-bottom: 1px solid $lighter-grey;
+      }
+      .worksheet-name {
+        position: relative;
+        top: 3px;
+        text-transform: uppercase;
+        font-size: 24px;
+        margin: 0;
+        display: inline-block;
+        line-height: 19px;
+      }
+      .week-information {
+        border-bottom: 1px solid $lighter-grey;
+        margin: 0 -15px;
+        padding: 15px;
+        .week-title {
+          font-size: 20px;
+          font-weight: 400;
+          text-transform: uppercase;
+        }
+        .sub-title {
+          font-size: 16px;
+          text-transform: uppercase;
+        }
+        .info-inner {
+          background: $off-white;
+          border-radius: $border-radius;
+          overflow: hidden;
+          overflow-x: scroll;
+          .spot-column {
+            float: left;
+            width: 170px;
+            padding: 10px;
+            .spot-count-heading {
+              background: $highlight-light;
+              text-align: center;
+              margin: -10px;
+              padding: 10px;
+            }
+            .spot-date-heading {
+              background: $alpha-black;
+              color: $white;
+              text-align: center;
+              margin: -10px;
+              padding: 10px;
+            }
+            &:nth-child(even) {
+              background: $lighter-grey;
+            }
+          }
+        }
+      }
+      .actions,
+      .tags {
+        float: right;
+        label {
+          display: inline;
+          font-size: 14px;
+          line-height: 28px;
+          text-transform: uppercase;
+        }
+      }
+      .action {
+        margin-left: 10px;
+        float: right;
+        background: $highlight-dark;
+        color: $white;
+        text-transform: uppercase;
+        border-radius: $border-radius;
+        font-weight: 300;
+        font-size: 14px;
+        padding: 3px 7px;
+        transition: all .3s;
+        &:hover {
+          background: $white;
+          color: $highlight-dark;
+        }
+      }
+      .tag {
+        margin-left: 10px;
+        float: right;
+        background: $highlight-light;
+        color: $highlight-dark;
+        text-transform: uppercase;
+        border-radius: $border-radius;
+        font-weight: 300;
+        font-size: 14px;
+        padding: 3px 7px;
+        transition: all .3s;
+      }
+      .divider {
+        height: 28px;
+        width: 1px;
+        displaY: block;
+        float: right;
+        background: $lighter-grey;
+        margin: 0 10px;
+      }
+    }
+  }
+}
+
+.current-programs{
+  margin: 0;
+  padding: 0;
+  ul {
+    list-style: none;
+    margin: -15px 0 15px;
+    li {
+      padding: 10px 15px;
+      margin: 0 -15px;
+      background: $off-white;
+      border-bottom: 1px solid $lighter-grey;
+      .actions,
+      .tags {
+        float: right;
+        label {
+          display: inline;
+          font-size: 14px;
+          line-height: 28px;
+          text-transform: uppercase;
+        }
+      }
+      .action {
+        margin-left: 10px;
+        float: right;
+        background: $highlight-dark;
+        color: $white;
+        text-transform: uppercase;
+        border-radius: $border-radius;
+        font-weight: 300;
+        font-size: 14px;
+        padding: 3px 7px;
+        transition: all .3s;
+        &:hover {
+          background: $white;
+          color: $highlight-dark;
+        }
+      }
+      .tag {
+        margin-left: 10px;
+        float: right;
+        background: $highlight-light;
+        color: $highlight-dark;
+        text-transform: uppercase;
+        border-radius: $border-radius;
+        font-weight: 300;
+        font-size: 14px;
+        padding: 3px 7px;
+        transition: all .3s;
+      }
+      .divider {
+        height: 28px;
+        width: 1px;
+        displaY: block;
+        float: right;
+        background: $lighter-grey;
+        margin: 0 10px;
+      }
+      &:nth-child(even) {
+        background: $white;
+      }
+      .info {
+        margin-bottom: 15px;
+        overflow: hidden;
+        span {
+          font-size: 14px;
+          color: $black;
+          &.program-name {
+            text-transform: uppercase;
+            float: left;
+            padding: 5px 0;
+            display: block;
+            line-height: 1;
+            margin: 5px 0 0 0;
+          }
+          &.day-part,
+          &.station,
+          &.network,
+          &.program,
+          &.times,
+          &.length,
+          &.rate{
+            float: right;
+            background: $highlight-dark;
+            color: $off-white;
+            padding: 5px 7px;
+            display: block;
+            line-height: 1;
+            margin: 5px 0 0 10px;
+            border-radius: $border-radius;
+            .divider {
+              height: 10px;
+              width: 1px;
+              displaY: inline-block;
+              float: none;
+              background: $highlight-light;
+              margin: 0;
+            }
+            span {
+              color: $off-white;
+            }
+          }
+        }
+      }
+      .comments {
+        background: $highlight-light;
+        border-radius: $border-radius;
+        padding: 10px;
+        .comments-title {
+          text-transform: uppercase;
+          font-size: 24px;
+          color: $black;
+        }
+        p {
+          margin: 0;
+          color: $highlight-dark;
+          font-size: 14px;
+        }
       }
     }
   }

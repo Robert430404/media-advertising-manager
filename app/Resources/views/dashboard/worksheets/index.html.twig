@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container row">
+        <div class="columns large-12 medium-12 small-12">
+            <div class="primary-content">
+                <h1 class="content-title">Current worksheets for {{ campaign.name }}</h1>
+                <div class="row">
+                    <div class="columns large-12 medium-12 small-12">
+                        <div class="current-worksheets">
+                            {% if worksheets is empty %}
+                                <p>There are currently no worksheets. Add a new one below.</p>
+                            {% else %}
+                                <ul>
+                                    {% for worksheet in worksheets %}
+                                        <li>
+                                            <div class="identifier-bar">
+                                                <span class="worksheet-name">{{ worksheet.name }}</span>
+                                                <div class="actions">
+                                                    <label>Actions: </label><a href="/campaigns/worksheets/programs/{{ worksheet.id }}" class="action">Manage Programs</a>
+                                                </div>
+                                                <span class="divider"></span>
+                                                <div class="tags">
+                                                    <label>Type: </label><span class="tag">{{ worksheet.spotType }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="week-information">
+                                                <h3 class="week-title">
+                                                    Weekly Spot Breakdown
+                                                </h3>
+                                                <h4 class="sub-title">
+                                                    Length: <strong>{{ worksheet.flightLength }} Weeks</strong>
+                                                    - Start Date: <strong>{{ worksheet.flightStartDate.format("M d, Y") }}</strong>
+                                                    - End Date: <strong>{{ worksheet.flightEndDate.format("M d, Y") }}</strong>
+                                                </h4>
+                                                <div class="div info-inner">
+                                                    <div class="scrollable">
+                                                        <div class="spot-column spot-count">
+                                                            <div class="spot-count-heading">
+                                                                Total Spots Running
+                                                            </div>
+                                                        </div>
+                                                        {% for d in range(worksheet.flightStartDate|date('U'), worksheet.flightEndDate|date('U'), 86400 ) %}
+                                                            {% if d|date('D') == 'Mon' %}
+                                                                <div class="spot-column spot-date-column">
+                                                                    <div class="spot-date-heading">
+                                                                        {{ d|date('m/d/Y l') }}
+                                                                    </div>
+                                                                </div>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                            <div class="form-wrapper">
+                                <form action="/campaigns/worksheets/{{ campaign.id }}/add" method="post" class="worksheet-form" id="worksheet-form">
+                                    <div class="form-group row">
+                                        <div class="columns large-6 medium-6 small-12">
+                                            <label for="campaign_name">Worksheet Name *
+                                                <input type="text" class="form-control worksheet-name" id="worksheet-name" name="worksheet_name"/>
+                                            </label>
+                                        </div>
+                                        <div class="columns large-6 medium-6 small-12">
+                                            <label for="worksheet_spot_type">Select Spot Type *
+                                                <select name="worksheet_spot_type" id="worksheet-spot-type">
+                                                    <option value="">Select Spot Type</option>
+                                                    {% for spot_type in spot_types %}
+                                                        <option value="{{ spot_type.id }}">{{ spot_type.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="worksheet_region" value="{{ campaign.regionId }}" />
+                                    <input type="hidden" name="worksheet_organization" value="{{ campaign.organizationId }}" />
+                                    <div class="form-group row">
+                                        <div class="column large-12 medium-12 small-12">
+                                            <input type="submit" class="submit form-button" id="submit" value="Add New Campaign"
+                                                   name="submit"/>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

@@ -27,9 +27,12 @@ $shadowSize: 25px;
  * Global Styles
  */
 body {
-  background: $lighter-grey url('/assets/img/background.png');
+  background: $lighter-grey url('/assets/img/background.png') fixed;
   font-family: 'Segoe UI', 'Helveitca Neue', 'Arial', 'Helvetica', sans-serif;
-  padding: 0 0 0 300px;
+  padding: 0;
+  &.add-padding {
+    padding: 0 0 0 300px;
+  }
 }
 
 .site-content {

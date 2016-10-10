@@ -8,9 +8,11 @@
  * Global Styles
  */
 body {
-  background: #cbcbcb url("/assets/img/background.png");
+  background: #cbcbcb url("/assets/img/background.png") fixed;
   font-family: 'Segoe UI', 'Helveitca Neue', 'Arial', 'Helvetica', sans-serif;
-  padding: 0 0 0 300px; }
+  padding: 0; }
+  body.add-padding {
+    padding: 0 0 0 300px; }
 
 .site-content .row {
   max-width: none; }
@@ -55,6 +57,15 @@ body {
       margin: 0 -15px;
       background: #ECEDEE;
       border-bottom: 1px solid #cbcbcb; }
+      .current-campaigns ul li .actions,
+      .current-campaigns ul li .tags {
+        float: right; }
+        .current-campaigns ul li .actions label,
+        .current-campaigns ul li .tags label {
+          display: inline;
+          font-size: 14px;
+          line-height: 28px;
+          text-transform: uppercase; }
       .current-campaigns ul li .action {
         margin-left: 10px;
         float: right;
@@ -69,8 +80,218 @@ body {
         .current-campaigns ul li .action:hover {
           background: #FFF;
           color: #0E690F; }
+      .current-campaigns ul li .tag {
+        margin-left: 10px;
+        float: right;
+        background: #C9FFBD;
+        color: #0E690F;
+        text-transform: uppercase;
+        border-radius: 4px;
+        font-weight: 300;
+        font-size: 14px;
+        padding: 3px 7px;
+        transition: all .3s; }
+      .current-campaigns ul li .divider {
+        height: 28px;
+        width: 1px;
+        displaY: block;
+        float: right;
+        background: #cbcbcb;
+        margin: 0 10px; }
       .current-campaigns ul li:nth-child(even) {
         background: #FFF; }
+
+.current-worksheets {
+  margin: 0;
+  padding: 0; }
+  .current-worksheets ul {
+    list-style: none;
+    margin: -15px 0 15px; }
+    .current-worksheets ul li .identifier-bar {
+      padding: 10px 15px;
+      margin: 0 -15px;
+      background: #ECEDEE;
+      border-bottom: 1px solid #cbcbcb; }
+    .current-worksheets ul li .worksheet-name {
+      position: relative;
+      top: 3px;
+      text-transform: uppercase;
+      font-size: 24px;
+      margin: 0;
+      display: inline-block;
+      line-height: 19px; }
+    .current-worksheets ul li .week-information {
+      border-bottom: 1px solid #cbcbcb;
+      margin: 0 -15px;
+      padding: 15px; }
+      .current-worksheets ul li .week-information .week-title {
+        font-size: 20px;
+        font-weight: 400;
+        text-transform: uppercase; }
+      .current-worksheets ul li .week-information .sub-title {
+        font-size: 16px;
+        text-transform: uppercase; }
+      .current-worksheets ul li .week-information .info-inner {
+        background: #ECEDEE;
+        border-radius: 4px;
+        overflow: hidden;
+        overflow-x: scroll; }
+        .current-worksheets ul li .week-information .info-inner .spot-column {
+          float: left;
+          width: 170px;
+          padding: 10px; }
+          .current-worksheets ul li .week-information .info-inner .spot-column .spot-count-heading {
+            background: #C9FFBD;
+            text-align: center;
+            margin: -10px;
+            padding: 10px; }
+          .current-worksheets ul li .week-information .info-inner .spot-column .spot-date-heading {
+            background: rgba(0, 0, 0, 0.35);
+            color: #FFF;
+            text-align: center;
+            margin: -10px;
+            padding: 10px; }
+          .current-worksheets ul li .week-information .info-inner .spot-column:nth-child(even) {
+            background: #cbcbcb; }
+    .current-worksheets ul li .actions,
+    .current-worksheets ul li .tags {
+      float: right; }
+      .current-worksheets ul li .actions label,
+      .current-worksheets ul li .tags label {
+        display: inline;
+        font-size: 14px;
+        line-height: 28px;
+        text-transform: uppercase; }
+    .current-worksheets ul li .action {
+      margin-left: 10px;
+      float: right;
+      background: #0E690F;
+      color: #FFF;
+      text-transform: uppercase;
+      border-radius: 4px;
+      font-weight: 300;
+      font-size: 14px;
+      padding: 3px 7px;
+      transition: all .3s; }
+      .current-worksheets ul li .action:hover {
+        background: #FFF;
+        color: #0E690F; }
+    .current-worksheets ul li .tag {
+      margin-left: 10px;
+      float: right;
+      background: #C9FFBD;
+      color: #0E690F;
+      text-transform: uppercase;
+      border-radius: 4px;
+      font-weight: 300;
+      font-size: 14px;
+      padding: 3px 7px;
+      transition: all .3s; }
+    .current-worksheets ul li .divider {
+      height: 28px;
+      width: 1px;
+      displaY: block;
+      float: right;
+      background: #cbcbcb;
+      margin: 0 10px; }
+
+.current-programs {
+  margin: 0;
+  padding: 0; }
+  .current-programs ul {
+    list-style: none;
+    margin: -15px 0 15px; }
+    .current-programs ul li {
+      padding: 10px 15px;
+      margin: 0 -15px;
+      background: #ECEDEE;
+      border-bottom: 1px solid #cbcbcb; }
+      .current-programs ul li .actions,
+      .current-programs ul li .tags {
+        float: right; }
+        .current-programs ul li .actions label,
+        .current-programs ul li .tags label {
+          display: inline;
+          font-size: 14px;
+          line-height: 28px;
+          text-transform: uppercase; }
+      .current-programs ul li .action {
+        margin-left: 10px;
+        float: right;
+        background: #0E690F;
+        color: #FFF;
+        text-transform: uppercase;
+        border-radius: 4px;
+        font-weight: 300;
+        font-size: 14px;
+        padding: 3px 7px;
+        transition: all .3s; }
+        .current-programs ul li .action:hover {
+          background: #FFF;
+          color: #0E690F; }
+      .current-programs ul li .tag {
+        margin-left: 10px;
+        float: right;
+        background: #C9FFBD;
+        color: #0E690F;
+        text-transform: uppercase;
+        border-radius: 4px;
+        font-weight: 300;
+        font-size: 14px;
+        padding: 3px 7px;
+        transition: all .3s; }
+      .current-programs ul li .divider {
+        height: 28px;
+        width: 1px;
+        displaY: block;
+        float: right;
+        background: #cbcbcb;
+        margin: 0 10px; }
+      .current-programs ul li:nth-child(even) {
+        background: #FFF; }
+      .current-programs ul li .info {
+        margin-bottom: 15px;
+        overflow: hidden; }
+        .current-programs ul li .info span {
+          font-size: 14px;
+          color: #000; }
+          .current-programs ul li .info span.program-name {
+            text-transform: uppercase;
+            float: left;
+            padding: 5px 0;
+            display: block;
+            line-height: 1;
+            margin: 5px 0 0 0; }
+          .current-programs ul li .info span.day-part, .current-programs ul li .info span.station, .current-programs ul li .info span.network, .current-programs ul li .info span.program, .current-programs ul li .info span.times, .current-programs ul li .info span.length, .current-programs ul li .info span.rate {
+            float: right;
+            background: #0E690F;
+            color: #ECEDEE;
+            padding: 5px 7px;
+            display: block;
+            line-height: 1;
+            margin: 5px 0 0 10px;
+            border-radius: 4px; }
+            .current-programs ul li .info span.day-part .divider, .current-programs ul li .info span.station .divider, .current-programs ul li .info span.network .divider, .current-programs ul li .info span.program .divider, .current-programs ul li .info span.times .divider, .current-programs ul li .info span.length .divider, .current-programs ul li .info span.rate .divider {
+              height: 10px;
+              width: 1px;
+              displaY: inline-block;
+              float: none;
+              background: #C9FFBD;
+              margin: 0; }
+            .current-programs ul li .info span.day-part span, .current-programs ul li .info span.station span, .current-programs ul li .info span.network span, .current-programs ul li .info span.program span, .current-programs ul li .info span.times span, .current-programs ul li .info span.length span, .current-programs ul li .info span.rate span {
+              color: #ECEDEE; }
+      .current-programs ul li .comments {
+        background: #C9FFBD;
+        border-radius: 4px;
+        padding: 10px; }
+        .current-programs ul li .comments .comments-title {
+          text-transform: uppercase;
+          font-size: 24px;
+          color: #000; }
+        .current-programs ul li .comments p {
+          margin: 0;
+          color: #0E690F;
+          font-size: 14px; }
 
 .current-spot-types {
   margin: 0;
@@ -192,7 +413,7 @@ body {
 .primary-content {
   background: rgba(255, 255, 255, 0.85);
   padding: 15px;
-  margin: 15px 0;
+  margin: 30px 15px;
   border-radius: 4px;
   box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.35);
   overflow: hidden; }
@@ -326,6 +547,8 @@ body {
     background: #ECEDEE;
     color: #000;
     cursor: pointer;
+    font-size: 14px;
+    line-height: 18px;
     border-bottom: 1px solid #9b9b9b;
     transition: all .3s; }
     .sidebar .organization-list li label:hover {
@@ -365,10 +588,11 @@ body {
   .sidebar .spot-type-list li label {
     margin: 0;
     padding: 15px;
-    line-height: 1;
     background: #ECEDEE;
     color: #000;
     cursor: pointer;
+    font-size: 14px;
+    line-height: 18px;
     border-bottom: 1px solid #9b9b9b;
     transition: all .3s; }
     .sidebar .spot-type-list li label:hover {
@@ -391,6 +615,21 @@ body {
   text-transform: uppercase; }
   .form-wrapper .form-title-wrapper .form-title {
     color: #FFF;
+    margin: 0; }
+
+.form-wrapper .input-group {
+  margin-bottom: 5px;
+  overflow: hidden; }
+  .form-wrapper .input-group label {
+    background: #ECEDEE;
+    border-radius: 4px;
+    float: left;
+    margin: 0 10px 10px 0;
+    padding: 10px 10px 8px;
+    line-height: 1px; }
+  .form-wrapper .input-group input {
+    position: relative;
+    top: -1px;
     margin: 0; }
 
 .form-wrapper .login-form {

@@ -3,6 +3,7 @@ class ViewCampaigns {
         this.setCampaignRegions();
         this.setFlightFieldFormats();
         this.setFlightWeeks();
+        this.setInnerOverflow();
 
         this.CampaignsController = new CampaignsController();
     }
@@ -49,26 +50,46 @@ class ViewCampaigns {
         var end = document.querySelector('#flight-end');
         var display = document.querySelector('#flight-length');
 
-        start.onkeyup = function () {
-            var startVal = start.value;
-            var endVal = end.value;
+        if (start !== null) {
+            start.onkeyup = function () {
+                var startVal = start.value;
+                var endVal = end.value;
 
-            if (startVal.length > 9 && endVal.length > 9) {
-                var diff = object.CampaignsController.calculateFlightLength(startVal, endVal);
+                if (startVal.length > 9 && endVal.length > 9) {
+                    var diff = object.CampaignsController.calculateFlightLength(startVal, endVal);
 
-                display.value = diff + ' Weeks';
-            }
-        };
+                    display.value = diff + ' Weeks';
+                }
+            };
+        }
 
-        end.onkeyup = function () {
-            var startVal = start.value;
-            var endVal = end.value;
+        if (end !== null) {
+            end.onkeyup = function () {
+                var startVal = start.value;
+                var endVal = end.value;
 
-            if (startVal.length > 9 && endVal.length > 9) {
-                var diff = object.CampaignsController.calculateFlightLength(startVal, endVal);
+                if (startVal.length > 9 && endVal.length > 9) {
+                    var diff = object.CampaignsController.calculateFlightLength(startVal, endVal);
 
-                display.value = diff + ' Weeks';
-            }
-        };
+                    display.value = diff + ' Weeks';
+                }
+            };
+        }
+    }
+
+    setInnerOverflow() {
+        var container = $('.info-inner');
+
+        container.each(function () {
+            var dates = $(this).find('.spot-column');
+            var colWidth = dates.outerWidth();
+            var dateCount = dates.length;
+
+            console.log(dateCount);
+
+            $(this).find('.scrollable').css({
+                'min-width' : colWidth * dateCount + 'px',
+            });
+        });
     }
 }

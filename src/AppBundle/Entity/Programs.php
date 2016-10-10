@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Program
+ * Programs
  *
- * @ORM\Table(name="program")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\ProgramRepository")
+ * @ORM\Table(name="programs")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ProgramsRepository")
  */
-class Program
+class Programs
 {
     /**
      * @var int
@@ -64,7 +64,56 @@ class Program
     private $program;
 
     /**
-     * @var string
+     * @var bool
+     *
+     * @ORM\Column(name="monday", type="boolean")
+     */
+    private $monday;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="tuesday", type="boolean")
+     */
+    private $tuesday;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="wednesday", type="boolean")
+     */
+    private $wednesday;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="thursday", type="boolean")
+     */
+    private $thursday;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="friday", type="boolean")
+     */
+    private $friday;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="saturday", type="boolean")
+     */
+    private $saturday;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="sunday", type="boolean")
+     */
+    private $sunday;
+
+    /**
+     * @var \DateTime
      *
      * @ORM\Column(name="time_slot_start", type="time")
      */
@@ -87,7 +136,7 @@ class Program
     /**
      * @var float
      *
-     * @ORM\Column(name="spot_rate", type="float")
+     * @ORM\Column(name="spot_rate", type="decimal", precision=10, scale=2)
      */
     private $spotRate;
 
@@ -135,7 +184,7 @@ class Program
      *
      * @param string $name
      *
-     * @return Program
+     * @return Programs
      */
     public function setName($name)
     {
@@ -159,7 +208,7 @@ class Program
      *
      * @param integer $worksheetId
      *
-     * @return Program
+     * @return Programs
      */
     public function setWorksheetId($worksheetId)
     {
@@ -183,7 +232,7 @@ class Program
      *
      * @param string $dayPart
      *
-     * @return Program
+     * @return Programs
      */
     public function setDayPart($dayPart)
     {
@@ -207,7 +256,7 @@ class Program
      *
      * @param string $station
      *
-     * @return Program
+     * @return Programs
      */
     public function setStation($station)
     {
@@ -231,7 +280,7 @@ class Program
      *
      * @param string $network
      *
-     * @return Program
+     * @return Programs
      */
     public function setNetwork($network)
     {
@@ -255,7 +304,7 @@ class Program
      *
      * @param string $program
      *
-     * @return Program
+     * @return Programs
      */
     public function setProgram($program)
     {
@@ -275,11 +324,179 @@ class Program
     }
 
     /**
+     * Set monday
+     *
+     * @param boolean $monday
+     *
+     * @return Programs
+     */
+    public function setMonday($monday)
+    {
+        $this->monday = $monday;
+
+        return $this;
+    }
+
+    /**
+     * Get monday
+     *
+     * @return bool
+     */
+    public function getMonday()
+    {
+        return $this->monday;
+    }
+
+    /**
+     * Set tuesday
+     *
+     * @param boolean $tuesday
+     *
+     * @return Programs
+     */
+    public function setTuesday($tuesday)
+    {
+        $this->tuesday = $tuesday;
+
+        return $this;
+    }
+
+    /**
+     * Get tuesday
+     *
+     * @return bool
+     */
+    public function getTuesday()
+    {
+        return $this->tuesday;
+    }
+
+    /**
+     * Set wednesday
+     *
+     * @param boolean $wednesday
+     *
+     * @return Programs
+     */
+    public function setWednesday($wednesday)
+    {
+        $this->wednesday = $wednesday;
+
+        return $this;
+    }
+
+    /**
+     * Get wednesday
+     *
+     * @return bool
+     */
+    public function getWednesday()
+    {
+        return $this->wednesday;
+    }
+
+    /**
+     * Set thursday
+     *
+     * @param boolean $thursday
+     *
+     * @return Programs
+     */
+    public function setThursday($thursday)
+    {
+        $this->thursday = $thursday;
+
+        return $this;
+    }
+
+    /**
+     * Get thursday
+     *
+     * @return bool
+     */
+    public function getThursday()
+    {
+        return $this->thursday;
+    }
+
+    /**
+     * Set friday
+     *
+     * @param boolean $friday
+     *
+     * @return Programs
+     */
+    public function setFriday($friday)
+    {
+        $this->friday = $friday;
+
+        return $this;
+    }
+
+    /**
+     * Get friday
+     *
+     * @return bool
+     */
+    public function getFriday()
+    {
+        return $this->friday;
+    }
+
+    /**
+     * Set saturday
+     *
+     * @param boolean $saturday
+     *
+     * @return Programs
+     */
+    public function setSaturday($saturday)
+    {
+        $this->saturday = $saturday;
+
+        return $this;
+    }
+
+    /**
+     * Get saturday
+     *
+     * @return bool
+     */
+    public function getSaturday()
+    {
+        return $this->saturday;
+    }
+
+    /**
+     * Set sunday
+     *
+     * @param boolean $sunday
+     *
+     * @return Programs
+     */
+    public function setSunday($sunday)
+    {
+        $this->sunday = $sunday;
+
+        return $this;
+    }
+
+    /**
+     * Get sunday
+     *
+     * @return bool
+     */
+    public function getSunday()
+    {
+        return $this->sunday;
+    }
+
+    /**
      * Set timeSlotStart
      *
      * @param \DateTime $timeSlotStart
      *
-     * @return Program
+     * @return Programs
      */
     public function setTimeSlotStart($timeSlotStart)
     {
@@ -303,7 +520,7 @@ class Program
      *
      * @param \DateTime $timeSlotEnd
      *
-     * @return Program
+     * @return Programs
      */
     public function setTimeSlotEnd($timeSlotEnd)
     {
@@ -327,7 +544,7 @@ class Program
      *
      * @param integer $spotLength
      *
-     * @return Program
+     * @return Programs
      */
     public function setSpotLength($spotLength)
     {
@@ -351,7 +568,7 @@ class Program
      *
      * @param float $spotRate
      *
-     * @return Program
+     * @return Programs
      */
     public function setSpotRate($spotRate)
     {
@@ -375,7 +592,7 @@ class Program
      *
      * @param string $breakCode
      *
-     * @return Program
+     * @return Programs
      */
     public function setBreakCode($breakCode)
     {
@@ -399,7 +616,7 @@ class Program
      *
      * @param string $comment
      *
-     * @return Program
+     * @return Programs
      */
     public function setComment($comment)
     {
@@ -423,7 +640,7 @@ class Program
      *
      * @param \DateTime $createdAt
      *
-     * @return Program
+     * @return Programs
      */
     public function setCreatedAt($createdAt)
     {
@@ -447,7 +664,7 @@ class Program
      *
      * @param \DateTime $updatedAt
      *
-     * @return Program
+     * @return Programs
      */
     public function setUpdatedAt($updatedAt)
     {

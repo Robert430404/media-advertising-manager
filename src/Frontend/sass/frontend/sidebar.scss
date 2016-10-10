@@ -35,6 +35,8 @@
         background: $off-white;
         color: $black;
         cursor: pointer;
+        font-size: 14px;
+        line-height: 18px;
         border-bottom: 1px solid $grey;
         transition: all .3s;
         &:hover {
@@ -86,10 +88,11 @@
       label {
         margin: 0;
         padding: 15px;
-        line-height: 1;
         background: $off-white;
         color: $black;
         cursor: pointer;
+        font-size: 14px;
+        line-height: 18px;
         border-bottom: 1px solid $grey;
         transition: all .3s;
         &:hover {

@@ -2,13 +2,13 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}Dollar Loan Center{% endblock %}</title>
+        <title>{% block title %}Media Manager{% endblock %}</title>
         <link rel="stylesheet" href="{{ asset('assets/libs/foundation/css/foundation.min.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/libs/font-awesome/css/font-awesome.min.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
-    <body>
+    <body class="{% if is_granted('ROLE_USER') %}add-padding{% endif %}">
 
         <div class="site-content">
             {% if is_granted('ROLE_USER') %}

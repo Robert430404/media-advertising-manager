@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Worksheets
@@ -76,7 +77,6 @@ class Worksheets
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
-
 
     /**
      * Get id
