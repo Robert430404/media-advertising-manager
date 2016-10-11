@@ -29,9 +29,10 @@ $shadowSize: 25px;
 body {
   background: $lighter-grey url('/assets/img/background.png') fixed;
   font-family: 'Segoe UI', 'Helveitca Neue', 'Arial', 'Helvetica', sans-serif;
-  padding: 0;
+  padding:  0 0 0 63px;
+  transition: all .3s;
   &.add-padding {
-    padding: 0 0 0 300px;
+    padding: 0 0 0 250px;
   }
 }
 
@@ -67,6 +68,31 @@ body {
   .align-center {
     text-align: center;
   }
+}
+
+/* Let's get this party started */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: $darker-grey;
+  border: 2px solid $white;
+  border-radius: $border-radius;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: $highlight-dark;
+  border: 2px solid $white;
+  border-radius: $border-radius;
+}
+::-webkit-scrollbar-thumb:window-inactive {
+  background: $lighter-black;
+}
+::-webkit-scrollbar-corner {
+  background: $white;
 }
 
 /**

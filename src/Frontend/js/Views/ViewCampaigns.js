@@ -4,6 +4,7 @@ class ViewCampaigns {
         this.setFlightFieldFormats();
         this.setFlightWeeks();
         this.setInnerOverflow();
+        this.setSpotTotals();
 
         this.CampaignsController = new CampaignsController();
     }
@@ -58,7 +59,7 @@ class ViewCampaigns {
                 if (startVal.length > 9 && endVal.length > 9) {
                     var diff = object.CampaignsController.calculateFlightLength(startVal, endVal);
 
-                    display.value = diff + ' Weeks';
+                    display.value = diff;
                 }
             };
         }
@@ -85,10 +86,38 @@ class ViewCampaigns {
             var colWidth = dates.outerWidth();
             var dateCount = dates.length;
 
-            console.log(dateCount);
-
             $(this).find('.scrollable').css({
                 'min-width' : colWidth * dateCount + 'px',
+            });
+        });
+    }
+
+    setSpotTotals() {
+        var container = $('.info-inner');
+        var inputs    = container.find('input.date-count');
+        var count     = 0;
+
+        inputs.each(function () {
+            var program = $(this).attr('data-program');
+            var sectionedInputs = container.find('input.date-count[data-program=' + program + ']');
+            count = 0;
+
+            sectionedInputs.each(function () {
+                count = Number($(this).val()) + Number(count);
+            });
+
+            $('.spot-date-total .program-' + program + '-total').empty().append(count);
+
+            $(this).keyup(function () {
+                var program = $(this).attr('data-program');
+                var sectionedInputs = container.find('input.date-count[data-program=' + program + ']');
+                count = 0;
+
+                sectionedInputs.each(function () {
+                    count = Number($(this).val()) + Number(count);
+                });
+
+                $('.spot-date-total .program-' + program + '-total').empty().append(count);
             });
         });
     }

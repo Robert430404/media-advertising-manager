@@ -23,13 +23,23 @@ class WorksheetsController extends Controller
     {
         $worksheets = $this->getDoctrine()
             ->getRepository('AppBundle:Worksheets')
-            ->findAllWorksheetsWithData();
+            ->findAllWorksheetsWithData($campaign_id);
         $campaign = $this->getDoctrine()
             ->getRepository('AppBundle:Campaigns')
             ->find($campaign_id);
         $spot_types = $this->getDoctrine()
             ->getRepository('AppBundle:SpotTypes')
             ->findAll();
+
+        foreach($worksheets as $key => $worksheet)
+        {
+            $programs = $this->getDoctrine()
+                ->getRepository('AppBundle:Programs')
+                ->findByWorksheetId($worksheet['id']);
+
+            $worksheets[$key]['programs'] = $programs;
+            $worksheets[$key]['weekInfo'] = json_decode($worksheet['weekInfo']);
+        }
 
         return $this->render('dashboard/worksheets/index.html.twig', [
             'worksheets' => $worksheets,

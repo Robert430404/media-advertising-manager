@@ -34,21 +34,77 @@
                                                     - End Date: <strong>{{ worksheet.flightEndDate.format("M d, Y") }}</strong>
                                                 </h4>
                                                 <div class="div info-inner">
-                                                    <div class="scrollable">
-                                                        <div class="spot-column spot-count">
-                                                            <div class="spot-count-heading">
-                                                                Total Spots Running
+                                                    <div class="spot-column spot-count">
+                                                        <div class="spot-count-heading">
+                                                            Total Spots<br />Running
+                                                        </div>
+                                                        {% for program in worksheet.programs %}
+                                                            <div class="spot-date-total">
+                                                                <p>
+                                                                    <strong>Station:</strong> {{ program.station }} <br />
+                                                                    <strong>Start:</strong> {{ program.timeSlotStart.format('h:i a') }} <br />
+                                                                    <strong>End:</strong> {{ program.timeSlotEnd.format('h:i a') }} <br />
+                                                                    <strong>Days:</strong> <span class="days">
+                                                                        {% if program.Monday != 0 %} M {% endif %}
+                                                                        {% if program.Tuesday != 0 %} T {% endif %}
+                                                                        {% if program.Wednesday != 0 %} W {% endif %}
+                                                                        {% if program.Thursday != 0 %} Thu {% endif %}
+                                                                        {% if program.Friday != 0 %} F {% endif %}
+                                                                        {% if program.Saturday != 0 %} S {% endif %}
+                                                                        {% if program.Sunday != 0 %} Su {% endif %}
+                                                                    </span> <br />
+                                                                    <strong>Total:</strong>
+                                                                    <span class="total program-{{ program.id }}-total">
+                                                                        0
+                                                                    </span>
+                                                                </p>
+                                                            </div>
+                                                        {% endfor %}
+                                                        <a class="update-week-information button" data-worksheet="{{ worksheet.id }}">
+                                                            Save Data
+                                                        </a>
+                                                    </div>
+                                                    <div class="outer-scrollable">
+                                                        <div class="scrollable">
+                                                            <div class="form-wrapper">
+                                                                <form action="" class="spot-counts worksheet-counts-{{ worksheet.id }}" method="post">
+                                                                    {% if worksheet.weekInfo != null %}
+                                                                        {% for d in range(worksheet.flightStartDate|date('U'), worksheet.flightEndDate|date('U'), 86400 ) %}
+                                                                            {% if d|date('D') == 'Mon' %}
+                                                                                <div class="spot-column spot-date-column">
+                                                                                    <div class="spot-date-heading">
+                                                                                        {{ d|date('m/d/Y l') }}
+                                                                                    </div>
+                                                                                    {% for program in worksheet.programs %}
+                                                                                        <div class="spot-date-input">
+                                                                                            <input type="text" name="date-{{ d }}-{{ program.id }}" tabindex="{{ program.id }}"
+                                                                                                   class="form-control date-count date-{{ d }}-{{ program.id }}" data-program="{{ program.id }}"
+                                                                                                   value="{{ attribute(worksheet.weekInfo, 'date-' ~ d ~ '-' ~ program.id) }}" />
+                                                                                        </div>
+                                                                                    {% endfor %}
+                                                                                </div>
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                    {% else %}
+                                                                        {% for d in range(worksheet.flightStartDate|date('U'), worksheet.flightEndDate|date('U'), 86400 ) %}
+                                                                            {% if d|date('D') == 'Mon' %}
+                                                                                <div class="spot-column spot-date-column">
+                                                                                    <div class="spot-date-heading">
+                                                                                        {{ d|date('m/d/Y l') }}
+                                                                                    </div>
+                                                                                    {% for program in worksheet.programs %}
+                                                                                        <div class="spot-date-input">
+                                                                                            <input type="text" name="date-{{ d }}-{{ program.id }}" tabindex="{{ program.id }}"
+                                                                                                   class="form-control date-count date-{{ d }}-{{ program.id }}" data-program="{{ program.id }}" />
+                                                                                        </div>
+                                                                                    {% endfor %}
+                                                                                </div>
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                    {% endif %}
+                                                                </form>
                                                             </div>
                                                         </div>
-                                                        {% for d in range(worksheet.flightStartDate|date('U'), worksheet.flightEndDate|date('U'), 86400 ) %}
-                                                            {% if d|date('D') == 'Mon' %}
-                                                                <div class="spot-column spot-date-column">
-                                                                    <div class="spot-date-heading">
-                                                                        {{ d|date('m/d/Y l') }}
-                                                                    </div>
-                                                                </div>
-                                                            {% endif %}
-                                                        {% endfor %}
                                                     </div>
                                                 </div>
                                             </div>
@@ -79,7 +135,7 @@
                                     <input type="hidden" name="worksheet_organization" value="{{ campaign.organizationId }}" />
                                     <div class="form-group row">
                                         <div class="column large-12 medium-12 small-12">
-                                            <input type="submit" class="submit form-button" id="submit" value="Add New Campaign"
+                                            <input type="submit" class="submit form-button" id="submit" value="Add New Worksheet"
                                                    name="submit"/>
                                         </div>
                                     </div>

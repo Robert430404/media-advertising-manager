@@ -3,6 +3,8 @@
 $(document).ready(function () {
     new ViewOrganizations();
     new ViewCampaigns();
+    new ViewNavigation();
+    new ViewWorksheets();
 });
 "use strict";
 
@@ -49,37 +51,29 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var AjaxHelpers = function () {
-    function AjaxHelpers() {
-        _classCallCheck(this, AjaxHelpers);
+var WorksheetsController = function () {
+    function WorksheetsController() {
+        _classCallCheck(this, WorksheetsController);
+
+        this.AjaxHelpers = new AjaxHelpers();
     }
 
-    _createClass(AjaxHelpers, [{
-        key: 'getCall',
-        value: function getCall(url) {
-            return new Promise(function (resolve, reject) {
-                var request = new XMLHttpRequest();
+    _createClass(WorksheetsController, [{
+        key: 'persistWorksheetWeekInformation',
+        value: function persistWorksheetWeekInformation(id) {
+            var form = $('.worksheet-counts-' + id);
+            var data = form.serialize();
+            var endpoint = '/api/v1/worksheet/' + id + '/update';
 
-                request.open('GET', url);
+            if (data == '') {
+                return false;
+            }
 
-                request.onload = function () {
-                    if (request.status === 200) {
-                        resolve(JSON.parse(request.response));
-                    } else {
-                        reject(new Error(request.statusText));
-                    }
-                };
-
-                request.onerror = function () {
-                    reject(new Error('Network Error'));
-                };
-
-                request.send();
-            });
+            return this.AjaxHelpers.postCall(endpoint, data);
         }
     }]);
 
-    return AjaxHelpers;
+    return WorksheetsController;
 }();
 'use strict';
 
@@ -95,6 +89,7 @@ var ViewCampaigns = function () {
         this.setFlightFieldFormats();
         this.setFlightWeeks();
         this.setInnerOverflow();
+        this.setSpotTotals();
 
         this.CampaignsController = new CampaignsController();
     }
@@ -152,7 +147,7 @@ var ViewCampaigns = function () {
                     if (startVal.length > 9 && endVal.length > 9) {
                         var diff = object.CampaignsController.calculateFlightLength(startVal, endVal);
 
-                        display.value = diff + ' Weeks';
+                        display.value = diff;
                     }
                 };
             }
@@ -180,16 +175,70 @@ var ViewCampaigns = function () {
                 var colWidth = dates.outerWidth();
                 var dateCount = dates.length;
 
-                console.log(dateCount);
-
                 $(this).find('.scrollable').css({
                     'min-width': colWidth * dateCount + 'px'
+                });
+            });
+        }
+    }, {
+        key: 'setSpotTotals',
+        value: function setSpotTotals() {
+            var container = $('.info-inner');
+            var inputs = container.find('input.date-count');
+            var count = 0;
+
+            inputs.each(function () {
+                var program = $(this).attr('data-program');
+                var sectionedInputs = container.find('input.date-count[data-program=' + program + ']');
+                count = 0;
+
+                sectionedInputs.each(function () {
+                    count = Number($(this).val()) + Number(count);
+                });
+
+                $('.spot-date-total .program-' + program + '-total').empty().append(count);
+
+                $(this).keyup(function () {
+                    var program = $(this).attr('data-program');
+                    var sectionedInputs = container.find('input.date-count[data-program=' + program + ']');
+                    count = 0;
+
+                    sectionedInputs.each(function () {
+                        count = Number($(this).val()) + Number(count);
+                    });
+
+                    $('.spot-date-total .program-' + program + '-total').empty().append(count);
                 });
             });
         }
     }]);
 
     return ViewCampaigns;
+}();
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ViewNavigation = function () {
+    function ViewNavigation() {
+        _classCallCheck(this, ViewNavigation);
+
+        this.navigationToggle();
+    }
+
+    _createClass(ViewNavigation, [{
+        key: 'navigationToggle',
+        value: function navigationToggle() {
+            $('.hamburger').click(function () {
+                $('body').toggleClass('add-padding');
+                $('.masthead').toggleClass('show');
+            });
+        }
+    }]);
+
+    return ViewNavigation;
 }();
 'use strict';
 
@@ -240,4 +289,105 @@ var ViewOrganizations = function () {
     }]);
 
     return ViewOrganizations;
+}();
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ViewWorksheets = function () {
+    function ViewWorksheets() {
+        _classCallCheck(this, ViewWorksheets);
+
+        this.persisAction();
+
+        this.Worksheets = new WorksheetsController();
+    }
+
+    _createClass(ViewWorksheets, [{
+        key: 'persisAction',
+        value: function persisAction() {
+            var object = this;
+
+            $('.update-week-information').click(function () {
+                var id = $(this).attr('data-worksheet');
+                var response = object.Worksheets.persistWorksheetWeekInformation(id);
+
+                if (response) {
+                    response.then(function (resp) {
+                        if (resp.success == true) {
+                            console.log('success');
+                        } else {
+                            console.log('failure');
+                        }
+                    });
+                }
+            });
+        }
+    }]);
+
+    return ViewWorksheets;
+}();
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var AjaxHelpers = function () {
+    function AjaxHelpers() {
+        _classCallCheck(this, AjaxHelpers);
+    }
+
+    _createClass(AjaxHelpers, [{
+        key: 'getCall',
+        value: function getCall(url) {
+            return new Promise(function (resolve, reject) {
+                var request = new XMLHttpRequest();
+
+                request.open('GET', url);
+
+                request.onload = function () {
+                    if (request.status === 200) {
+                        resolve(JSON.parse(request.response));
+                    } else {
+                        reject(new Error(request.statusText));
+                    }
+                };
+
+                request.onerror = function () {
+                    reject(new Error('Network Error'));
+                };
+
+                request.send();
+            });
+        }
+    }, {
+        key: 'postCall',
+        value: function postCall(url, data) {
+            return new Promise(function (resolve, reject) {
+                var request = new XMLHttpRequest();
+
+                request.open('POST', url, true);
+                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+                request.onload = function () {
+                    if (request.status === 200) {
+                        resolve(JSON.parse(request.response));
+                    } else {
+                        reject(new Error(request.statusText));
+                    }
+                };
+
+                request.onerror = function () {
+                    reject(new Error('Network Error'));
+                };
+
+                request.send(data);
+            });
+        }
+    }]);
+
+    return AjaxHelpers;
 }();

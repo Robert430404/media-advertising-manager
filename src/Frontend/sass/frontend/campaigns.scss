@@ -62,7 +62,7 @@
   }
 }
 
-.current-worksheets{
+.current-worksheets {
   margin: 0;
   padding: 0;
   ul {
@@ -98,10 +98,18 @@
           text-transform: uppercase;
         }
         .info-inner {
+          position: relative;
           background: $off-white;
           border-radius: $border-radius;
+          border: 1px solid $lighter-grey;
           overflow: hidden;
-          overflow-x: scroll;
+          .outer-scrollable {
+            overflow-x: scroll;
+          }
+          .spot-count {
+            border-right: 1px solid $lighter-grey;
+            width: 240px !important;
+          }
           .spot-column {
             float: left;
             width: 170px;
@@ -109,18 +117,64 @@
             .spot-count-heading {
               background: $highlight-light;
               text-align: center;
-              margin: -10px;
+              margin: -10px -10px 10px;
               padding: 10px;
             }
             .spot-date-heading {
               background: $alpha-black;
               color: $white;
               text-align: center;
-              margin: -10px;
+              margin: -10px -10px 10px;
               padding: 10px;
             }
             &:nth-child(even) {
               background: $lighter-grey;
+            }
+            .update-week-information {
+              padding: 5px;
+              margin-top: 10px;
+            }
+          }
+          .spot-date-total {
+            p {
+              text-align: left;
+              line-height: 1.25;
+              font-size: 12px;
+              text-transform: uppercase;
+              font-weight: 300;
+              color: $darker-grey;
+              margin: 5px 0 0;
+              padding: 10px;
+              border-radius: $border-radius;
+              border: 1px solid $lighter-grey;
+              background: $white;
+              strong {
+                min-width: 75px;
+                display: inline-block;
+              }
+              span {
+                font-weight: 800;
+                color: $black;
+                &.days {
+                  font-weight: 300;
+                  letter-spacing: 0;
+                  text-transform: capitalize;
+                  color: $darker-grey;
+                }
+              }
+            }
+          }
+          .spot-date-input {
+            input {
+              background: $highlight-light;
+              text-align: center;
+              color: $black;
+              height: auto;
+              line-height: 79px;
+              font-size: 42px;
+            }
+            &:last-child {
+              padding-bottom: 27px;
             }
           }
         }
@@ -175,7 +229,7 @@
   }
 }
 
-.current-programs{
+.current-programs {
   margin: 0;
   padding: 0;
   ul {
@@ -240,6 +294,7 @@
         overflow: hidden;
         span {
           font-size: 14px;
+          letter-spacing: 0;
           color: $black;
           &.program-name {
             text-transform: uppercase;
@@ -249,13 +304,35 @@
             line-height: 1;
             margin: 5px 0 0 0;
           }
+          &.day-part {
+            min-width: 90px;
+          }
+          &.station {
+            min-width: 74px;
+          }
+          &.network {
+            min-width: 80px;
+          }
+          &.program {
+            min-width: 90px;
+          }
+          &.times {
+            min-width: 190px;
+          }
+          &.length {
+            min-width: 80px;
+          }
+          &.rate {
+            min-width: 100px;
+          }
           &.day-part,
           &.station,
           &.network,
           &.program,
           &.times,
           &.length,
-          &.rate{
+          &.rate {
+            text-align: center;
             float: right;
             background: $highlight-dark;
             color: $off-white;
@@ -282,6 +359,7 @@
         background: $highlight-light;
         border-radius: $border-radius;
         padding: 10px;
+        margin-bottom: 5px;
         .comments-title {
           text-transform: uppercase;
           font-size: 24px;
@@ -291,6 +369,46 @@
           margin: 0;
           color: $highlight-dark;
           font-size: 14px;
+        }
+      }
+      &.headings {
+        background: $highlight-light;
+        .info {
+          margin-bottom: 0;
+          overflow: hidden;
+          span {
+            margin: 0 0 0 10px;
+            &.program-name {
+              text-transform: uppercase;
+              float: left;
+              padding: 5px 0;
+              display: block;
+              line-height: 1;
+              margin: 0;
+            }
+            &.day-part,
+            &.station,
+            &.network,
+            &.program,
+            &.times,
+            &.length,
+            &.rate {
+              background: $white;
+              color: $highlight-dark;
+              .divider {
+                height: 10px;
+                width: 1px;
+                displaY: inline-block;
+                float: none;
+                background: $highlight-dark;
+                margin: 0;
+              }
+              span {
+                color: $highlight-dark;
+                margin: 0;
+              }
+            }
+          }
         }
       }
     }

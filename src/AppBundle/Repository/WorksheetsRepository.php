@@ -11,9 +11,10 @@ namespace AppBundle\Repository;
 class WorksheetsRepository extends \Doctrine\ORM\EntityRepository
 {
     /**
+     * @param $campaign_id
      * @return array
      */
-    public function findAllWorksheetsWithData()
+    public function findAllWorksheetsWithData($campaign_id)
     {
         $query = $this->getEntityManager()
             ->createQuery('SELECT w.id as id, ' .
@@ -31,7 +32,8 @@ class WorksheetsRepository extends \Doctrine\ORM\EntityRepository
                               'JOIN AppBundle:Campaigns c ' .
                                   'WITH w.campaignId = c.id ' .
                               'JOIN AppBundle:Organizations o ' .
-                                  'WHERE w.organizationId = o.id');
+                                  'WITH w.organizationId = o.id ' .
+                          'WHERE w.campaignId = ' . $campaign_id);
         $data = $query->getResult();
 
         return $data;
