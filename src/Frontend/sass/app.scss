@@ -91,6 +91,8 @@ body {
 ::-webkit-scrollbar-thumb:window-inactive {
   background: $lighter-black;
 }
+
+/* Corner Styles */
 ::-webkit-scrollbar-corner {
   background: $white;
 }

@@ -81,6 +81,68 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var AjaxHelpers = function () {
+    function AjaxHelpers() {
+        _classCallCheck(this, AjaxHelpers);
+    }
+
+    _createClass(AjaxHelpers, [{
+        key: 'getCall',
+        value: function getCall(url) {
+            return new Promise(function (resolve, reject) {
+                var request = new XMLHttpRequest();
+
+                request.open('GET', url);
+
+                request.onload = function () {
+                    if (request.status === 200) {
+                        resolve(JSON.parse(request.response));
+                    } else {
+                        reject(new Error(request.statusText));
+                    }
+                };
+
+                request.onerror = function () {
+                    reject(new Error('Network Error'));
+                };
+
+                request.send();
+            });
+        }
+    }, {
+        key: 'postCall',
+        value: function postCall(url, data) {
+            return new Promise(function (resolve, reject) {
+                var request = new XMLHttpRequest();
+
+                request.open('POST', url, true);
+                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+                request.onload = function () {
+                    if (request.status === 200) {
+                        resolve(JSON.parse(request.response));
+                    } else {
+                        reject(new Error(request.statusText));
+                    }
+                };
+
+                request.onerror = function () {
+                    reject(new Error('Network Error'));
+                };
+
+                request.send(data);
+            });
+        }
+    }]);
+
+    return AjaxHelpers;
+}();
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 var ViewCampaigns = function () {
     function ViewCampaigns() {
         _classCallCheck(this, ViewCampaigns);
@@ -183,33 +245,46 @@ var ViewCampaigns = function () {
     }, {
         key: 'setSpotTotals',
         value: function setSpotTotals() {
+            var object = this;
             var container = $('.info-inner');
             var inputs = container.find('input.date-count');
+            var columns = container.find('.spot-column');
             var count = 0;
+            var weekCount = 0;
 
             inputs.each(function () {
                 var program = $(this).attr('data-program');
-                var sectionedInputs = container.find('input.date-count[data-program=' + program + ']');
-                count = 0;
 
-                sectionedInputs.each(function () {
-                    count = Number($(this).val()) + Number(count);
-                });
-
-                $('.spot-date-total .program-' + program + '-total').empty().append(count);
+                object.setBuyTotals(container, 0, columns, program);
 
                 $(this).keyup(function () {
-                    var program = $(this).attr('data-program');
-                    var sectionedInputs = container.find('input.date-count[data-program=' + program + ']');
-                    count = 0;
-
-                    sectionedInputs.each(function () {
-                        count = Number($(this).val()) + Number(count);
-                    });
-
-                    $('.spot-date-total .program-' + program + '-total').empty().append(count);
+                    object.setBuyTotals(container, 0, columns, program);
                 });
             });
+        }
+    }, {
+        key: 'setBuyTotals',
+        value: function setBuyTotals(container, count, columns, program) {
+            var sectionedInputs = container.find('input.date-count[data-program=' + program + ']');
+            count = 0;
+
+            sectionedInputs.each(function () {
+                count = Number($(this).val()) + Number(count);
+            });
+
+            columns.each(function () {
+                var inputs = $(this).find('input');
+                var sum = 0;
+
+                inputs.each(function () {
+                    var value = $(this).val();
+                    sum = Number(value) + Number(sum);
+                });
+
+                $(this).find('.week-total .total').empty().append(sum);
+            });
+
+            $('.spot-date-total .program-' + program + '-total').empty().append(count);
         }
     }]);
 
@@ -328,66 +403,4 @@ var ViewWorksheets = function () {
     }]);
 
     return ViewWorksheets;
-}();
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var AjaxHelpers = function () {
-    function AjaxHelpers() {
-        _classCallCheck(this, AjaxHelpers);
-    }
-
-    _createClass(AjaxHelpers, [{
-        key: 'getCall',
-        value: function getCall(url) {
-            return new Promise(function (resolve, reject) {
-                var request = new XMLHttpRequest();
-
-                request.open('GET', url);
-
-                request.onload = function () {
-                    if (request.status === 200) {
-                        resolve(JSON.parse(request.response));
-                    } else {
-                        reject(new Error(request.statusText));
-                    }
-                };
-
-                request.onerror = function () {
-                    reject(new Error('Network Error'));
-                };
-
-                request.send();
-            });
-        }
-    }, {
-        key: 'postCall',
-        value: function postCall(url, data) {
-            return new Promise(function (resolve, reject) {
-                var request = new XMLHttpRequest();
-
-                request.open('POST', url, true);
-                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-                request.onload = function () {
-                    if (request.status === 200) {
-                        resolve(JSON.parse(request.response));
-                    } else {
-                        reject(new Error(request.statusText));
-                    }
-                };
-
-                request.onerror = function () {
-                    reject(new Error('Network Error'));
-                };
-
-                request.send(data);
-            });
-        }
-    }]);
-
-    return AjaxHelpers;
 }();

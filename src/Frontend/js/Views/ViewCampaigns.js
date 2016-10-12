@@ -87,38 +87,50 @@ class ViewCampaigns {
             var dateCount = dates.length;
 
             $(this).find('.scrollable').css({
-                'min-width' : colWidth * dateCount + 'px',
+                'min-width': colWidth * dateCount + 'px',
             });
         });
     }
 
     setSpotTotals() {
+        var object = this;
         var container = $('.info-inner');
-        var inputs    = container.find('input.date-count');
-        var count     = 0;
+        var inputs = container.find('input.date-count');
+        var columns = container.find('.spot-column');
+        var count = 0;
+        var weekCount = 0;
 
         inputs.each(function () {
             var program = $(this).attr('data-program');
-            var sectionedInputs = container.find('input.date-count[data-program=' + program + ']');
-            count = 0;
 
-            sectionedInputs.each(function () {
-                count = Number($(this).val()) + Number(count);
-            });
-
-            $('.spot-date-total .program-' + program + '-total').empty().append(count);
+            object.setBuyTotals(container, 0, columns, program);
 
             $(this).keyup(function () {
-                var program = $(this).attr('data-program');
-                var sectionedInputs = container.find('input.date-count[data-program=' + program + ']');
-                count = 0;
-
-                sectionedInputs.each(function () {
-                    count = Number($(this).val()) + Number(count);
-                });
-
-                $('.spot-date-total .program-' + program + '-total').empty().append(count);
+                object.setBuyTotals(container, 0, columns, program);
             });
         });
+    }
+
+    setBuyTotals(container, count, columns, program) {
+        var sectionedInputs = container.find('input.date-count[data-program=' + program + ']');
+        count = 0;
+
+        sectionedInputs.each(function () {
+            count = Number($(this).val()) + Number(count);
+        });
+
+        columns.each(function () {
+            var inputs = $(this).find('input');
+            var sum = 0;
+
+            inputs.each(function () {
+                var value = $(this).val();
+                sum = Number(value) + Number(sum);
+            });
+
+            $(this).find('.week-total .total').empty().append(sum);
+        });
+
+        $('.spot-date-total .program-' + program + '-total').empty().append(count);
     }
 }

@@ -63,6 +63,7 @@ body {
 ::-webkit-scrollbar-thumb:window-inactive {
   background: #3b3b3b; }
 
+/* Corner Styles */
 ::-webkit-scrollbar-corner {
   background: #FFF; }
 
@@ -185,6 +186,11 @@ body {
           .current-worksheets ul li .week-information .info-inner .spot-column .update-week-information {
             padding: 5px;
             margin-top: 10px; }
+          .current-worksheets ul li .week-information .info-inner .spot-column .week-total {
+            text-align: center;
+            font-size: 14px;
+            text-transform: uppercase;
+            margin-top: 5px; }
         .current-worksheets ul li .week-information .info-inner .spot-date-total p {
           text-align: left;
           line-height: 1.25;

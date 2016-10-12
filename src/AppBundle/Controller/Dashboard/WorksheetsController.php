@@ -76,4 +76,36 @@ class WorksheetsController extends Controller
 
         return $this->redirectToRoute('campaigns');
     }
+
+    /**
+     * Deletes the selected campaign from the database
+     *
+     * @param Request $request
+     * @param $worksheet_id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @Route("/campaigns/worksheets/delete/{campaign_id}", name="worksheet-delete")
+     * @Method({"GET"})
+     */
+    public function deleteAction(Request $request, $worksheet_id)
+    {
+        $worksheet = $this->getDoctrine()
+            ->getRepository('AppBundle:Worksheets')
+            ->find($worksheet_id);
+        $programs = $this->getDoctrine()
+            ->getRepository('AppBundle:Programs')
+            ->findByWorksheetId($worksheet_id);
+
+        $orm = $this->get('doctrine')->getEntityManager();
+        $orm->remove($worksheet);
+
+        foreach($programs as $program)
+        {
+            $orm->remove($program);
+        }
+
+        $orm->flush();
+
+        return $this->redirectToRoute('campaigns');
+    }
 }

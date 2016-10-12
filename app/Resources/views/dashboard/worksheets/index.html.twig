@@ -82,6 +82,9 @@
                                                                                                    value="{{ attribute(worksheet.weekInfo, 'date-' ~ d ~ '-' ~ program.id) }}" />
                                                                                         </div>
                                                                                     {% endfor %}
+                                                                                    <div class="week-total">
+                                                                                        Total: <span class="total">0</span>
+                                                                                    </div>
                                                                                 </div>
                                                                             {% endif %}
                                                                         {% endfor %}
@@ -98,6 +101,9 @@
                                                                                                    class="form-control date-count date-{{ d }}-{{ program.id }}" data-program="{{ program.id }}" />
                                                                                         </div>
                                                                                     {% endfor %}
+                                                                                    <div class="week-total">
+                                                                                        Total: <span class="total">0</span>
+                                                                                    </div>
                                                                                 </div>
                                                                             {% endif %}
                                                                         {% endfor %}
