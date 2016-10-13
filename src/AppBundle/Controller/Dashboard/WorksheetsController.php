@@ -74,7 +74,7 @@ class WorksheetsController extends Controller
         $orm->persist($worksheet);
         $orm->flush();
 
-        return $this->redirectToRoute('campaigns');
+        return $this->redirect('/campaigns/worksheets/' . $campaign_id);
     }
 
     /**
@@ -82,12 +82,13 @@ class WorksheetsController extends Controller
      *
      * @param Request $request
      * @param $worksheet_id
+     * @param $campaign_id
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      *
-     * @Route("/campaigns/worksheets/delete/{campaign_id}", name="worksheet-delete")
+     * @Route("/campaigns/worksheets/{campaign_id}/delete/{worksheet_id}", name="worksheet-delete")
      * @Method({"GET"})
      */
-    public function deleteAction(Request $request, $worksheet_id)
+    public function deleteAction(Request $request, $worksheet_id, $campaign_id)
     {
         $worksheet = $this->getDoctrine()
             ->getRepository('AppBundle:Worksheets')
@@ -106,6 +107,6 @@ class WorksheetsController extends Controller
 
         $orm->flush();
 
-        return $this->redirectToRoute('campaigns');
+        return $this->redirect('/campaigns/worksheets/' . $campaign_id);
     }
 }

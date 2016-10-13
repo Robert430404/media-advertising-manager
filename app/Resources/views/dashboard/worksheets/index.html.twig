@@ -17,7 +17,10 @@
                                             <div class="identifier-bar">
                                                 <span class="worksheet-name">{{ worksheet.name }}</span>
                                                 <div class="actions">
-                                                    <label>Actions: </label><a href="/campaigns/worksheets/programs/{{ worksheet.id }}" class="action">Manage Programs</a>
+                                                    <label>Actions: </label>
+                                                    <a href="/campaigns/worksheets/programs/{{ worksheet.id }}" class="action">Manage Programs</a>
+                                                    <a href="/campaigns/worksheets/{{ campaign.id }}/delete/{{ worksheet.id }}" class="action">Delete Worksheet</a>
+                                                    <a href="/campaigns" class="action">See Campaigns</a>
                                                 </div>
                                                 <span class="divider"></span>
                                                 <div class="tags">
@@ -77,9 +80,14 @@
                                                                                     </div>
                                                                                     {% for program in worksheet.programs %}
                                                                                         <div class="spot-date-input">
-                                                                                            <input type="text" name="date-{{ d }}-{{ program.id }}" tabindex="{{ program.id }}"
-                                                                                                   class="form-control date-count date-{{ d }}-{{ program.id }}" data-program="{{ program.id }}"
-                                                                                                   value="{{ attribute(worksheet.weekInfo, 'date-' ~ d ~ '-' ~ program.id) }}" />
+                                                                                            {% if attribute(worksheet.weekInfo, 'date-' ~ d ~ '-' ~ program.id) is defined %}
+                                                                                                <input type="text" name="date-{{ d }}-{{ program.id }}" tabindex="{{ program.id }}"
+                                                                                                       class="form-control date-count date-{{ d }}-{{ program.id }}" data-program="{{ program.id }}"
+                                                                                                       value="{{ attribute(worksheet.weekInfo, 'date-' ~ d ~ '-' ~ program.id) }}" />
+                                                                                            {% else %}
+                                                                                                <input type="text" name="date-{{ d }}-{{ program.id }}" tabindex="{{ program.id }}"
+                                                                                                       class="form-control date-count date-{{ d }}-{{ program.id }}" data-program="{{ program.id }}" />
+                                                                                            {% endif %}
                                                                                         </div>
                                                                                     {% endfor %}
                                                                                     <div class="week-total">

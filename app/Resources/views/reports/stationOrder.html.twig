@@ -1,0 +1,119 @@
+{% extends 'report.html.twig' %}
+
+{% block styles %}
+    <style>
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', 'Helveitca Neue', 'Arial', 'Helvetica', sans-serif;
+            font-size: 12pt;
+            background-color: #eee;
+        }
+        .page {
+            width: 21cm;
+            min-height: 29.7cm;
+            padding-left: 2cm;
+            padding-top: 2cm;
+            padding-right: 2cm;
+            padding-bottom: 2cm;
+            margin: 1cm auto;
+            background: #fff;
+            box-shadow: 0 4px 5px rgba(75, 75, 75, 0.2);
+            outline: 0;
+        }
+        .heading,
+        .sub-heading {
+            width: 100%;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        .heading .left,
+        .sub-heading .left {
+            float: left;
+            width: 33.333%;
+        }
+        .heading .middle,
+        .sub-heading .middle {
+            float: left;
+            width: 33.333%;
+        }
+        .heading .right,
+        .sub-heading .right {
+            float: right;
+            width: 33.333%;
+        }
+        .heading .left p,
+        .sub-heading .left p {
+            text-align: left;
+            margin: 0;
+        }
+        .heading .middle h1,
+        .sub-heading .middle h1 {
+            font-size: 22px;
+            margin: 0;
+            text-align: center;
+        }
+        .sub-heading .middle p {
+            margin: 0;
+            text-align: center;
+        }
+        .heading .right p,
+        .sub-heading .right p {
+            text-align: right;
+            margin: 0;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+
+    <div class="page">
+        <div class="heading">
+            <div class="left">
+                <p>Client: </p>
+                <p>Product: </p>
+                <p>Campaign: </p>
+            </div>
+            <div class="middle">
+                <h1>Station Order</h1>
+            </div>
+            <div class="right">
+                <p>Dollar Loan Center, LLC<br>8860 Sunset Road</p>
+                <p>Las Vegas, NV 89148</p>
+                <p>702-947-4381</p>
+            </div>
+        </div>
+        <div class="sub-heading">
+            <div class="left">
+                <p>Estimate No: </p>
+                <p>Contract No: </p>
+                <p>Job No: </p>
+            </div>
+            <div class="middle">
+                <p>Rev #: 0</p>
+                <p>Flight From: to</p>
+            </div>
+            <div class="right">
+                <p>Buyer Name: </p>
+                <p>Sweeps: </p>
+            </div>
+        </div>
+        <div class="sub-heading">
+            <div class="left">
+                <p>Market: </p>
+                <p>Station: </p>
+                <p>Station Contact: </p>
+            </div>
+            <div class="middle">
+
+            </div>
+            <div class="right">
+                <p>Actg. Order No: </p>
+                <p>WS Order No: </p>
+                <p>Contact No:</p>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

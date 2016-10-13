@@ -161,6 +161,57 @@ body {
         border-radius: 4px;
         border: 1px solid #cbcbcb;
         overflow: hidden; }
+        .current-worksheets ul li .week-information .info-inner.loading:before {
+          content: 'Sending Save Request';
+          position: absolute;
+          top: 15%;
+          left: 15%;
+          padding: 4%;
+          width: 66%;
+          height: 66%;
+          display: block;
+          text-align: center;
+          background: rgba(0, 0, 0, 0.35);
+          color: #FFF;
+          z-index: 99999;
+          font-size: 32px;
+          text-transform: uppercase;
+          border-radius: 4px;
+          box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.35); }
+        .current-worksheets ul li .week-information .info-inner.success:before {
+          content: 'Save Successful';
+          position: absolute;
+          top: 15%;
+          left: 15%;
+          padding: 4%;
+          width: 66%;
+          height: 66%;
+          text-align: center;
+          display: block;
+          background: rgba(201, 255, 189, 0.56);
+          color: #000;
+          z-index: 99999;
+          font-size: 32px;
+          text-transform: uppercase;
+          border-radius: 4px;
+          box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.35); }
+        .current-worksheets ul li .week-information .info-inner.failure:before {
+          content: 'Save Failed';
+          position: absolute;
+          top: 15%;
+          left: 15%;
+          padding: 4%;
+          width: 66%;
+          height: 66%;
+          text-align: center;
+          display: block;
+          background: #FFC9BD;
+          color: #000;
+          z-index: 99999;
+          font-size: 32px;
+          text-transform: uppercase;
+          border-radius: 4px;
+          box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.35); }
         .current-worksheets ul li .week-information .info-inner .outer-scrollable {
           overflow-x: scroll; }
         .current-worksheets ul li .week-information .info-inner .spot-count {
@@ -275,7 +326,8 @@ body {
       padding: 10px 15px;
       margin: 0 -15px;
       background: #ECEDEE;
-      border-bottom: 1px solid #cbcbcb; }
+      border-bottom: 1px solid #cbcbcb;
+      overflow: hidden; }
       .current-programs ul li .actions,
       .current-programs ul li .tags {
         float: right; }
@@ -321,7 +373,8 @@ body {
         background: #FFF; }
       .current-programs ul li .info {
         margin-bottom: 15px;
-        overflow: hidden; }
+        overflow: hidden;
+        float: left; }
         .current-programs ul li .info span {
           font-size: 14px;
           letter-spacing: 0;
@@ -332,7 +385,8 @@ body {
             padding: 5px 0;
             display: block;
             line-height: 1;
-            margin: 5px 0 0 0; }
+            margin: 5px 0 0 0;
+            min-width: 300px; }
           .current-programs ul li .info span.day-part {
             min-width: 90px; }
           .current-programs ul li .info span.station {
@@ -350,8 +404,8 @@ body {
           .current-programs ul li .info span.day-part, .current-programs ul li .info span.station, .current-programs ul li .info span.network, .current-programs ul li .info span.program, .current-programs ul li .info span.times, .current-programs ul li .info span.length, .current-programs ul li .info span.rate {
             text-align: center;
             float: right;
-            background: #0E690F;
-            color: #ECEDEE;
+            background: #C9FFBD;
+            color: #000;
             padding: 5px 7px;
             display: block;
             line-height: 1;
@@ -362,15 +416,22 @@ body {
               width: 1px;
               displaY: inline-block;
               float: none;
-              background: #C9FFBD;
+              background: #0E690F;
               margin: 0; }
             .current-programs ul li .info span.day-part span, .current-programs ul li .info span.station span, .current-programs ul li .info span.network span, .current-programs ul li .info span.program span, .current-programs ul li .info span.times span, .current-programs ul li .info span.length span, .current-programs ul li .info span.rate span {
-              color: #ECEDEE; }
+              color: #000; }
+      .current-programs ul li .actions {
+        float: left; }
+        .current-programs ul li .actions .divider {
+          margin: 2px 10px; }
+        .current-programs ul li .actions .button {
+          margin: 5px 0; }
       .current-programs ul li .comments {
         background: #C9FFBD;
         border-radius: 4px;
         padding: 10px;
-        margin-bottom: 5px; }
+        margin-bottom: 5px;
+        clear: both; }
         .current-programs ul li .comments .comments-title {
           text-transform: uppercase;
           font-size: 24px;

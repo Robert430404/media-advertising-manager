@@ -111,4 +111,38 @@ class ProgramsController extends Controller
 
         return $this->redirect("/campaigns/worksheets/programs/$worksheet_id");
     }
+
+    /**
+     * @param Request $request
+     * @param integer $worksheet_id
+     * @param integer $program_id
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/campaigns/worksheets/programs/{worksheet_id}/delete/{program_id}", name="program-delete")
+     * @Method({"GET"})
+     */
+    public function deleteAction(Request $request, $worksheet_id, $program_id)
+    {
+        $program = $this->getDoctrine()
+            ->getRepository('AppBundle:Programs')
+            ->find($program_id);
+
+        $orm = $this->get('doctrine')->getEntityManager();
+        $orm->remove($program);
+        $orm->flush();
+
+        return $this->redirect('/campaigns/worksheets/programs/' . $worksheet_id, 302);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/campaigns/worksheets/station-order", name="generate-order")
+     * @Method({"GET"})
+     */
+    public function pdfAction(Request $request)
+    {
+        echo 'test';
+    }
 }

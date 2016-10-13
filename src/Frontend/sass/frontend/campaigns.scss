@@ -103,6 +103,66 @@
           border-radius: $border-radius;
           border: 1px solid $lighter-grey;
           overflow: hidden;
+          &.loading {
+            &:before {
+              content: 'Sending Save Request';
+              position: absolute;
+              top: 15%;
+              left: 15%;
+              padding: 4%;
+              width: 66%;
+              height: 66%;
+              display: block;
+              text-align: center;
+              background: $alpha-black;
+              color: $white;
+              z-index: 99999;
+              font-size: 32px;
+              text-transform: uppercase;
+              border-radius: $border-radius;
+              box-shadow: 0 0 $shadowSize 0 $alpha-black;
+            }
+          }
+          &.success {
+            &:before {
+              content: 'Save Successful';
+              position: absolute;
+              top: 15%;
+              left: 15%;
+              padding: 4%;
+              width: 66%;
+              height: 66%;
+              text-align: center;
+              display: block;
+              background: $highlight-light-alpha;
+              color: $black;
+              z-index: 99999;
+              font-size: 32px;
+              text-transform: uppercase;
+              border-radius: $border-radius;
+              box-shadow: 0 0 $shadowSize 0 $alpha-black;
+            }
+          }
+          &.failure {
+            &:before {
+              content: 'Save Failed';
+              position: absolute;
+              top: 15%;
+              left: 15%;
+              padding: 4%;
+              width: 66%;
+              height: 66%;
+              text-align: center;
+              display: block;
+              background: $highlight-light-error;
+              color: $black;
+              z-index: 99999;
+              font-size: 32px;
+              text-transform: uppercase;
+              border-radius: $border-radius;
+              box-shadow: 0 0 $shadowSize 0 $alpha-black;
+            }
+          }
           .outer-scrollable {
             overflow-x: scroll;
           }
@@ -246,6 +306,7 @@
       margin: 0 -15px;
       background: $off-white;
       border-bottom: 1px solid $lighter-grey;
+      overflow: hidden;
       .actions,
       .tags {
         float: right;
@@ -298,6 +359,7 @@
       .info {
         margin-bottom: 15px;
         overflow: hidden;
+        float: left;
         span {
           font-size: 14px;
           letter-spacing: 0;
@@ -309,6 +371,7 @@
             display: block;
             line-height: 1;
             margin: 5px 0 0 0;
+            min-width: 300px;
           }
           &.day-part {
             min-width: 90px;
@@ -340,8 +403,8 @@
           &.rate {
             text-align: center;
             float: right;
-            background: $highlight-dark;
-            color: $off-white;
+            background: $highlight-light;
+            color: $black;
             padding: 5px 7px;
             display: block;
             line-height: 1;
@@ -352,13 +415,22 @@
               width: 1px;
               displaY: inline-block;
               float: none;
-              background: $highlight-light;
+              background: $highlight-dark;
               margin: 0;
             }
             span {
-              color: $off-white;
+              color: $black;
             }
           }
+        }
+      }
+      .actions {
+        float: left;
+        .divider {
+          margin: 2px 10px;
+        }
+        .button {
+          margin: 5px 0;
         }
       }
       .comments {
@@ -366,6 +438,7 @@
         border-radius: $border-radius;
         padding: 10px;
         margin-bottom: 5px;
+        clear: both;
         .comments-title {
           text-transform: uppercase;
           font-size: 24px;

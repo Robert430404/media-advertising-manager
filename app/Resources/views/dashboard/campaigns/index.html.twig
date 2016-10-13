@@ -15,8 +15,11 @@
                                     {% for campaign in campaigns %}
                                         <li>
                                             <span class="campaign-name">{{ campaign.name }}</span>
-                                            <a href="/campaigns/worksheets/{{ campaign.id }}" class="action">Manage Worksheets</a>
-                                            <a href="/campaigns/delete/{{ campaign.id }}" class="action">Delete Campaign</a>
+                                            <div class="actions">
+                                                <label>Actions: </label>
+                                                <a href="/campaigns/worksheets/{{ campaign.id }}" class="action">Manage Worksheets</a>
+                                                <a href="/campaigns/delete/{{ campaign.id }}" class="action">Delete Campaign</a>
+                                            </div>
                                         </li>
                                     {% endfor %}
                                 </ul>

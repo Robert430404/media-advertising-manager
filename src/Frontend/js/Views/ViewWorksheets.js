@@ -9,17 +9,32 @@ class ViewWorksheets {
         var object = this;
 
         $('.update-week-information').click(function () {
+            var button = $(this);
             var id = $(this).attr('data-worksheet');
             var response = object.Worksheets.persistWorksheetWeekInformation(id);
 
+            button.parent().parent().toggleClass('loading');
+
             if(response) {
                 response.then(function (resp) {
-                    if(resp.success == true) {
-                        console.log('success');
-                    }
-                    else {
-                        console.log('failure');
-                    }
+                    setTimeout(function () {
+                        button.parent().parent().toggleClass('loading');
+
+                        if(resp.success == true) {
+                            button.parent().parent().toggleClass('success');
+
+                            setTimeout(function () {
+                                button.parent().parent().toggleClass('success');
+                            }, 700);
+                        }
+                        else {
+                            button.parent().parent().toggleClass('failure');
+
+                            setTimeout(function () {
+                                button.parent().parent().toggleClass('failure');
+                            }, 700);
+                        }
+                    }, 100);
                 });
             }
         });

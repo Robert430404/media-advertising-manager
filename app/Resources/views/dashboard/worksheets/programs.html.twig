@@ -27,6 +27,10 @@
                                             <span class="length">Length</span>
                                             <span class="rate">Rate</span>
                                         </div>
+                                        <div class="actions">
+                                            <a href="/campaigns/worksheets/{{ worksheet.campaignId }}" class="action button" style="margin: 0;">See Worksheet</a>
+                                            <span class="divider" style="height: 22px;"></span>
+                                        </div>
                                     </li>
                                     {% for program in programs %}
                                         <li>
@@ -43,6 +47,10 @@
                                                 </span>
                                                 <span class="length">{{ program.spotLength }} Sec</span>
                                                 <span class="rate">${{ program.spotRate }}</span>
+                                            </div>
+                                            <div class="actions">
+                                                <a href="/campaigns/worksheets/programs/{{ worksheet.id }}/delete/{{ program.id }}" class="action button">Delete Program</a>
+                                                <span class="divider"></span>
                                             </div>
                                             <div class="comments">
                                                 <h3 class="comments-title">Comments</h3>
