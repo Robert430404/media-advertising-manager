@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * SpotTypes
@@ -25,6 +26,7 @@ class SpotTypes
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $name;
 
@@ -32,6 +34,7 @@ class SpotTypes
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
+     * @Assert\NotBlank()
      */
     private $createdAt;
 
@@ -39,6 +42,7 @@ class SpotTypes
      * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime")
+     * @Assert\NotBlank()
      */
     private $updatedAt;
 

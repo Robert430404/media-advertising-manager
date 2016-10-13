@@ -3,7 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Worksheets
@@ -26,6 +26,7 @@ class Worksheets
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $name;
 
@@ -33,6 +34,7 @@ class Worksheets
      * @var int
      *
      * @ORM\Column(name="spot_type_id", type="integer")
+     * @Assert\NotBlank()
      */
     private $spotTypeId;
 
@@ -40,6 +42,7 @@ class Worksheets
      * @var int
      *
      * @ORM\Column(name="campaign_id", type="integer")
+     * @Assert\NotBlank()
      */
     private $campaignId;
 
@@ -47,6 +50,7 @@ class Worksheets
      * @var int
      *
      * @ORM\Column(name="organization_id", type="integer")
+     * @Assert\NotBlank()
      */
     private $organizationId;
 
@@ -54,6 +58,7 @@ class Worksheets
      * @var int
      *
      * @ORM\Column(name="region_id", type="integer")
+     * @Assert\NotBlank()
      */
     private $regionId;
 
@@ -61,6 +66,7 @@ class Worksheets
      * @var string
      *
      * @ORM\Column(name="week_information", type="text")
+     * @Assert\NotBlank()
      */
     private $weekInformation;
 
@@ -68,6 +74,7 @@ class Worksheets
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
+     * @Assert\NotBlank()
      */
     private $createdAt;
 
@@ -75,6 +82,7 @@ class Worksheets
      * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime")
+     * @Assert\NotBlank()
      */
     private $updatedAt;
 

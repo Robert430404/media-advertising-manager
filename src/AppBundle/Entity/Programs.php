@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Programs
@@ -25,6 +26,7 @@ class Programs
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $name;
 
@@ -32,6 +34,7 @@ class Programs
      * @var int
      *
      * @ORM\Column(name="worksheet_id", type="integer")
+     * @Assert\NotBlank()
      */
     private $worksheetId;
 
@@ -39,6 +42,7 @@ class Programs
      * @var string
      *
      * @ORM\Column(name="day_part", type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $dayPart;
 
@@ -46,6 +50,7 @@ class Programs
      * @var string
      *
      * @ORM\Column(name="station", type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $station;
 
@@ -53,6 +58,7 @@ class Programs
      * @var string
      *
      * @ORM\Column(name="network", type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $network;
 
@@ -60,6 +66,7 @@ class Programs
      * @var string
      *
      * @ORM\Column(name="program", type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $program;
 
@@ -67,6 +74,7 @@ class Programs
      * @var bool
      *
      * @ORM\Column(name="monday", type="boolean")
+     * @Assert\NotBlank()
      */
     private $monday;
 
@@ -74,6 +82,7 @@ class Programs
      * @var bool
      *
      * @ORM\Column(name="tuesday", type="boolean")
+     * @Assert\NotBlank()
      */
     private $tuesday;
 
@@ -81,6 +90,7 @@ class Programs
      * @var bool
      *
      * @ORM\Column(name="wednesday", type="boolean")
+     * @Assert\NotBlank()
      */
     private $wednesday;
 
@@ -88,6 +98,7 @@ class Programs
      * @var bool
      *
      * @ORM\Column(name="thursday", type="boolean")
+     * @Assert\NotBlank()
      */
     private $thursday;
 
@@ -95,6 +106,7 @@ class Programs
      * @var bool
      *
      * @ORM\Column(name="friday", type="boolean")
+     * @Assert\NotBlank()
      */
     private $friday;
 
@@ -102,6 +114,7 @@ class Programs
      * @var bool
      *
      * @ORM\Column(name="saturday", type="boolean")
+     * @Assert\NotBlank()
      */
     private $saturday;
 
@@ -109,6 +122,7 @@ class Programs
      * @var bool
      *
      * @ORM\Column(name="sunday", type="boolean")
+     * @Assert\NotBlank()
      */
     private $sunday;
 
@@ -116,6 +130,7 @@ class Programs
      * @var \DateTime
      *
      * @ORM\Column(name="time_slot_start", type="time")
+     * @Assert\NotBlank()
      */
     private $timeSlotStart;
 
@@ -123,6 +138,7 @@ class Programs
      * @var \DateTime
      *
      * @ORM\Column(name="time_slot_end", type="time")
+     * @Assert\NotBlank()
      */
     private $timeSlotEnd;
 
@@ -130,6 +146,7 @@ class Programs
      * @var int
      *
      * @ORM\Column(name="spot_length", type="integer")
+     * @Assert\NotBlank()
      */
     private $spotLength;
 
@@ -137,6 +154,7 @@ class Programs
      * @var float
      *
      * @ORM\Column(name="spot_rate", type="decimal", precision=10, scale=2)
+     * @Assert\NotBlank()
      */
     private $spotRate;
 
@@ -144,6 +162,7 @@ class Programs
      * @var string
      *
      * @ORM\Column(name="break_code", type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $breakCode;
 
@@ -151,6 +170,7 @@ class Programs
      * @var string
      *
      * @ORM\Column(name="comment", type="text")
+     * @Assert\NotBlank()
      */
     private $comment;
 
@@ -158,6 +178,7 @@ class Programs
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
+     * @Assert\NotBlank()
      */
     private $createdAt;
 
@@ -165,6 +186,7 @@ class Programs
      * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime")
+     * @Assert\NotBlank()
      */
     private $updatedAt;
 

@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Campaigns
@@ -25,6 +26,7 @@ class Campaigns
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, unique=true)
+     * @Assert\NotBlank()
      */
     private $name;
 
@@ -32,6 +34,7 @@ class Campaigns
      * @var int
      *
      * @ORM\Column(name="region_id", type="integer")
+     * @Assert\NotBlank()
      */
     private $regionId;
 
@@ -39,6 +42,7 @@ class Campaigns
      * @var int
      *
      * @ORM\Column(name="organization_id", type="integer")
+     * @Assert\NotBlank()
      */
     private $organizationId;
 
@@ -46,6 +50,7 @@ class Campaigns
      * @var \DateTime
      *
      * @ORM\Column(name="flight_start_date", type="datetime")
+     * @Assert\NotBlank()
      */
     private $flightStartDate;
 
@@ -53,6 +58,7 @@ class Campaigns
      * @var \DateTime
      *
      * @ORM\Column(name="flight_end_date", type="datetime")
+     * @Assert\NotBlank()
      */
     private $flightEndDate;
 
@@ -60,6 +66,7 @@ class Campaigns
      * @var int
      *
      * @ORM\Column(name="flight_length", type="integer")
+     * @Assert\NotBlank()
      */
     private $flightLength;
 
@@ -67,6 +74,7 @@ class Campaigns
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
+     * @Assert\NotBlank()
      */
     private $createdAt;
 
@@ -74,6 +82,7 @@ class Campaigns
      * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime")
+     * @Assert\NotBlank()
      */
     private $updatedAt;
 

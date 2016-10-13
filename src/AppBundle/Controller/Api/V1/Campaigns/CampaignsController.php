@@ -50,23 +50,23 @@ class CampaignsController extends Controller
      */
     public function insertAction(Request $request)
     {
-//        $data  = $request->request->all();
-//        $start = Carbon::parse($data['flight_start']);
-//        $end   = Carbon::parse($data['flight_end']);
-//
-//        $campaign = new Campaigns();
-//        $campaign->setName($data['campaign_name']);
-//        $campaign->setOrganizationId($data['campaign_organization']);
-//        $campaign->setRegionId($data['campaign_region']);
-//        $campaign->setFlightStartDate($start);
-//        $campaign->setFlightEndDate($end);
-//        $campaign->setFlightLength((int)$data['flight_length']);
-//        $campaign->setCreatedAt(Carbon::now());
-//        $campaign->setUpdatedAt(Carbon::now());
-//
-//        $orm = $this->get('doctrine')->getEntityManager();
-//        $orm->persist($campaign);
-//        $orm->flush();
+        $data  = $request->request->all();
+        $start = Carbon::parse($data['flight_start']);
+        $end   = Carbon::parse($data['flight_end']);
+
+        $campaign = new Campaigns();
+        $campaign->setName($data['campaign_name']);
+        $campaign->setOrganizationId($data['campaign_organization']);
+        $campaign->setRegionId($data['campaign_region']);
+        $campaign->setFlightStartDate($start);
+        $campaign->setFlightEndDate($end);
+        $campaign->setFlightLength((int)$data['flight_length']);
+        $campaign->setCreatedAt(Carbon::now());
+        $campaign->setUpdatedAt(Carbon::now());
+
+        $orm = $this->get('doctrine')->getEntityManager();
+        $orm->persist($campaign);
+        $orm->flush();
 
         $response = [
             'success' => true,
