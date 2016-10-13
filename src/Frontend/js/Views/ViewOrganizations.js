@@ -1,6 +1,7 @@
 class ViewOrganizations {
     constructor() {
         this.loadDashboardRegions();
+        this.loadDashboardCampaigns();
 
         this.AjaxHelpers = new AjaxHelpers();
     }
@@ -22,17 +23,44 @@ class ViewOrganizations {
 
                     if (resp.length > 0) {
                         for (var i = 0; i < resp.length; i++) {
-                            container.find('.region-list').append('<li data-id="' + resp[i].id + '">' + resp[i].name + '</li>');
+                            container.find('.region-list').append('<li class="region-selector region-selector-' + resp[i].id + '" data-id="' + resp[i].id + '">' + resp[i].name + '</li>');
                         }
                     }
                     else {
                         container.append('<p class="align-center">There Are No Regions</p>');
                     }
 
-                    container.append('<hr />');
-                    container.append('<div class="region-information"></div>');
+                    container.append('<div class="region-campaigns"></div>');
                 });
             };
         }
+    }
+
+    loadDashboardCampaigns() {
+        var object = this;
+
+        $('body').on('click' , '.region-selector', function () {
+            var id = $(this).attr('data-id');
+            var endpoint = '/api/v1/campaigns/' + id;
+            var container = $('.region-campaigns');
+
+            object.AjaxHelpers.getCall(endpoint).then(function (resp) {
+                console.log(resp);
+                if(resp.length > 0) {
+                    console.log(resp);
+                    container.empty().append('<h1 class="campaigns-title">Campaigns</h1>');
+                    container.append('<ul class="campaign-list"></ul>');
+                    for(var i = 0; i < resp.length; i++) {
+                        container.find('.campaign-list').append('<li class="campaign-selector campaign-selector-' + resp[i].id + '" data-id="' + resp[i].id + '">' + resp[i].name + '</li>');
+                        container.find('.campaign-selector-' + resp[i].id).append('<div class="actions">Actions: <a href="/campaigns/worksheets/' + resp[i].id + '">See Worksheets</a></div>');
+                    }
+                } else {
+                    container.empty().append('<h1 class="campaigns-title">Campaigns</h1>');
+                    container.append('<p class="align-center">No campaigns are currently running</p>');
+                }
+            });
+
+            console.log(id);
+        });
     }
 }

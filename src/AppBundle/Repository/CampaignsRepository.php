@@ -10,4 +10,26 @@ namespace AppBundle\Repository;
  */
 class CampaignsRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * @return array
+     */
+    public function findAllCampaignsWithOrganization()
+    {
+        $query = $this->getEntityManager()
+            ->createQuery('SELECT c.id as id, ' .
+                                 'c.name as name, ' .
+                                 'c.flightStartDate, ' .
+                                 'c.flightEndDate, ' .
+                                 'c.flightLength, ' .
+                                 'o.name as orgName, ' .
+                                 'r.name as regionName ' .
+                          'FROM AppBundle:Campaigns c ' .
+                              'JOIN AppBundle:Organizations o ' .
+                                  'WITH c.organizationId = o.id ' .
+                              'JOIN AppBundle:Regions r ' .
+                                  'WITH c.regionId = r.id');
+        $data = $query->getResult();
+
+        return $data;
+    }
 }

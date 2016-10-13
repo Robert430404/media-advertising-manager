@@ -1,7 +1,7 @@
 .primary-content {
   background: $alpha-white;
   padding: 15px;
-  margin: 30px 15px;
+  margin: 15px 0;
   border-radius: $border-radius;
   box-shadow: 0 0 $shadowSize 0 $alpha-black;
   overflow: hidden;
@@ -65,12 +65,16 @@
     display: block;
     overflow: hidden;
     margin: 0;
+    padding: 0 15px;
+    width: 30%;
+    float: left;
     text-align: center;
+    border-right: 1px solid $lighter-grey;
     li {
       display: inline-block;
       list-style: none;
       text-align: center;
-      width: 32%;
+      width: 100%;
       margin: 0 0 15px;
       border-radius: $border-radius;
       color: $white;
@@ -81,9 +85,71 @@
       padding: 5px 10px;
       border: 2px solid $highlight-dark;
       transition: all .3s;
+      &:last-child {
+        margin: 0;
+      }
       &:hover {
         background: $white;
         color: $highlight-dark;
+      }
+    }
+  }
+  .region-campaigns {
+    float: right;
+    width: 70%;
+    padding-left: 15px;
+    .campaigns-title {
+      background: $highlight-dark;
+      padding: 10px;
+      border-radius: $border-radius;
+      text-align: center;
+      font-size: 22px;
+      color: $white;
+      margin-right: 15px;
+      text-transform: uppercase;
+    }
+    p {
+      &.align-center {
+        background: $off-white;
+        border-radius: $border-radius;
+        padding: 10px 15px;
+        border: 1px solid $lighter-grey;
+      }
+    }
+    .campaign-list {
+      margin: 0 15px 0 0;
+      padding: 0;
+      width: auto;
+      border-radius: $border-radius;
+      background: $off-white;
+      list-style: none;
+      border: 1px solid $lighter-grey;
+      li {
+        overflow: hidden;
+        padding: 10px 15px;
+        border-bottom: 1px solid $lighter-grey;
+        .actions {
+          float: right;
+          line-height: 26px;
+          font-size: 14px;
+          a {
+            background: $highlight-dark;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: $white;
+            padding: 5px 10px;
+            border-radius: $border-radius;
+            border: 2px solid $highlight-dark;
+            transition: all .3s;
+            &:hover {
+              color: $highlight-dark;
+              background: $off-white;
+            }
+          }
+        }
+        &:last-child {
+          border: 0;
+        }
       }
     }
   }

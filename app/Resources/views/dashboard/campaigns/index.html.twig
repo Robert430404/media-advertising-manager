@@ -20,6 +20,10 @@
                                                 <a href="/campaigns/worksheets/{{ campaign.id }}" class="action">Manage Worksheets</a>
                                                 <a href="/campaigns/delete/{{ campaign.id }}" class="action">Delete Campaign</a>
                                             </div>
+                                            <span class="divider"></span>
+                                            <div class="tags">
+                                                <label>Info: </label><span class="tag">{{ campaign.regionName }}</span><span class="tag">{{ campaign.orgName }}</span>
+                                            </div>
                                         </li>
                                     {% endfor %}
                                 </ul>

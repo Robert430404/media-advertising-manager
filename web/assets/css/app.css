@@ -646,7 +646,7 @@ body {
 .primary-content {
   background: rgba(255, 255, 255, 0.85);
   padding: 15px;
-  margin: 30px 15px;
+  margin: 15px 0;
   border-radius: 4px;
   box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.35);
   overflow: hidden; }
@@ -704,12 +704,16 @@ body {
     display: block;
     overflow: hidden;
     margin: 0;
-    text-align: center; }
+    padding: 0 15px;
+    width: 30%;
+    float: left;
+    text-align: center;
+    border-right: 1px solid #cbcbcb; }
     .primary-content .region-list li {
       display: inline-block;
       list-style: none;
       text-align: center;
-      width: 32%;
+      width: 100%;
       margin: 0 0 15px;
       border-radius: 4px;
       color: #FFF;
@@ -720,9 +724,59 @@ body {
       padding: 5px 10px;
       border: 2px solid #0E690F;
       transition: all .3s; }
+      .primary-content .region-list li:last-child {
+        margin: 0; }
       .primary-content .region-list li:hover {
         background: #FFF;
         color: #0E690F; }
+  .primary-content .region-campaigns {
+    float: right;
+    width: 70%;
+    padding-left: 15px; }
+    .primary-content .region-campaigns .campaigns-title {
+      background: #0E690F;
+      padding: 10px;
+      border-radius: 4px;
+      text-align: center;
+      font-size: 22px;
+      color: #FFF;
+      margin-right: 15px;
+      text-transform: uppercase; }
+    .primary-content .region-campaigns p.align-center {
+      background: #ECEDEE;
+      border-radius: 4px;
+      padding: 10px 15px;
+      border: 1px solid #cbcbcb; }
+    .primary-content .region-campaigns .campaign-list {
+      margin: 0 15px 0 0;
+      padding: 0;
+      width: auto;
+      border-radius: 4px;
+      background: #ECEDEE;
+      list-style: none;
+      border: 1px solid #cbcbcb; }
+      .primary-content .region-campaigns .campaign-list li {
+        overflow: hidden;
+        padding: 10px 15px;
+        border-bottom: 1px solid #cbcbcb; }
+        .primary-content .region-campaigns .campaign-list li .actions {
+          float: right;
+          line-height: 26px;
+          font-size: 14px; }
+          .primary-content .region-campaigns .campaign-list li .actions a {
+            background: #0E690F;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #FFF;
+            padding: 5px 10px;
+            border-radius: 4px;
+            border: 2px solid #0E690F;
+            transition: all .3s; }
+            .primary-content .region-campaigns .campaign-list li .actions a:hover {
+              color: #0E690F;
+              background: #ECEDEE; }
+        .primary-content .region-campaigns .campaign-list li:last-child {
+          border: 0; }
 
 .button {
   border-radius: 4px;
@@ -809,7 +863,7 @@ body {
     border-top: 1px solid #9b9b9b;
     border-bottom: 0; }
 
-.sidebar .spot-type-list {
+.sidebar .sidebar-list {
   list-style: none;
   text-transform: uppercase;
   margin: 0;
@@ -818,7 +872,7 @@ body {
   overflow: hidden;
   border: 1px solid #9b9b9b;
   border-radius: 4px; }
-  .sidebar .spot-type-list li label {
+  .sidebar .sidebar-list li label {
     margin: 0;
     padding: 15px;
     background: #ECEDEE;
@@ -828,15 +882,15 @@ body {
     line-height: 18px;
     border-bottom: 1px solid #9b9b9b;
     transition: all .3s; }
-    .sidebar .spot-type-list li label:hover {
+    .sidebar .sidebar-list li label:hover {
       background: #C9FFBD; }
-    .sidebar .spot-type-list li label i {
+    .sidebar .sidebar-list li label i {
       font-size: 12px;
       line-height: 18px;
       float: right; }
-  .sidebar .spot-type-list li:last-child label {
+  .sidebar .sidebar-list li:last-child label {
     border-bottom: 0; }
-  .sidebar .spot-type-list li:last-child .region-list {
+  .sidebar .sidebar-list li:last-child .region-list {
     border-top: 1px solid #9b9b9b;
     border-bottom: 0; }
 

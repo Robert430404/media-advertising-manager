@@ -22,7 +22,7 @@ class CampaignsController extends Controller
     {
         $campaigns = $this->getDoctrine()
             ->getRepository('AppBundle:Campaigns')
-            ->findAll();
+            ->findAllCampaignsWithOrganization();
         $organizations = $this->getDoctrine()
             ->getRepository('AppBundle:Organizations')
             ->findAll();
