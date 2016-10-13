@@ -5,6 +5,7 @@ class ViewCampaigns {
         this.setFlightWeeks();
         this.setInnerOverflow();
         this.setSpotTotals();
+        this.dashboardCreateCampaign();
 
         this.CampaignsController = new CampaignsController();
     }
@@ -132,5 +133,38 @@ class ViewCampaigns {
         });
 
         $('.spot-date-total .program-' + program + '-total').empty().append(count);
+    }
+
+    dashboardCreateCampaign() {
+        var object = this;
+        var overlay = $('.campaigns-overlay');
+        var button = $('.dash-create-campaign-button');
+        var close = $('.campaigns-overlay .close');
+        var form = $('.campaigns-overlay form');
+
+        button.click(function () {
+            overlay.fadeIn();
+        });
+
+        close.click(function () {
+            overlay.fadeOut();
+        });
+
+        form.submit(function (e) {
+            e.preventDefault();
+
+            var data = $(this).serialize();
+
+            object.CampaignsController.createNewCampaign(data).then(function (resp) {
+                if(resp.success == true) {
+                    form[0].reset();
+                    form.addClass('successful');
+
+                    setTimeout(function () {
+                        form.removeClass('successful');
+                    }, 1000);
+                }
+            });
+        });
     }
 }

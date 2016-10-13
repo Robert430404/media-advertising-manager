@@ -6,7 +6,7 @@ $(document).ready(function () {
     new ViewNavigation();
     new ViewWorksheets();
 });
-"use strict";
+'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -20,14 +20,21 @@ var CampaignsController = function () {
     }
 
     _createClass(CampaignsController, [{
-        key: "loadCampaignRegions",
+        key: 'loadCampaignRegions',
         value: function loadCampaignRegions(organization) {
             var endpoint = '/api/v1/regions/' + organization;
 
             return this.AjaxHelpers.getCall(endpoint);
         }
     }, {
-        key: "calculateFlightLength",
+        key: 'createNewCampaign',
+        value: function createNewCampaign(data) {
+            var endpoint = '/api/v1/campaigns/new';
+
+            return this.AjaxHelpers.postCall(endpoint, data);
+        }
+    }, {
+        key: 'calculateFlightLength',
         value: function calculateFlightLength(start, end) {
             var startDate = moment(start, "YYYY-MM-DD");
             var endDate = moment(end, "YYYY-MM-DD");
@@ -152,6 +159,7 @@ var ViewCampaigns = function () {
         this.setFlightWeeks();
         this.setInnerOverflow();
         this.setSpotTotals();
+        this.dashboardCreateCampaign();
 
         this.CampaignsController = new CampaignsController();
     }
@@ -285,6 +293,40 @@ var ViewCampaigns = function () {
             });
 
             $('.spot-date-total .program-' + program + '-total').empty().append(count);
+        }
+    }, {
+        key: 'dashboardCreateCampaign',
+        value: function dashboardCreateCampaign() {
+            var object = this;
+            var overlay = $('.campaigns-overlay');
+            var button = $('.dash-create-campaign-button');
+            var close = $('.campaigns-overlay .close');
+            var form = $('.campaigns-overlay form');
+
+            button.click(function () {
+                overlay.fadeIn();
+            });
+
+            close.click(function () {
+                overlay.fadeOut();
+            });
+
+            form.submit(function (e) {
+                e.preventDefault();
+
+                var data = $(this).serialize();
+
+                object.CampaignsController.createNewCampaign(data).then(function (resp) {
+                    if (resp.success == true) {
+                        form[0].reset();
+                        form.addClass('successful');
+
+                        setTimeout(function () {
+                            form.removeClass('successful');
+                        }, 1000);
+                    }
+                });
+            });
         }
     }]);
 

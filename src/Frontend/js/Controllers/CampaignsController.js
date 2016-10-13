@@ -9,6 +9,12 @@ class CampaignsController {
         return this.AjaxHelpers.getCall(endpoint);
     }
 
+    createNewCampaign(data) {
+        var endpoint = '/api/v1/campaigns/new';
+
+        return this.AjaxHelpers.postCall(endpoint, data);
+    }
+
     calculateFlightLength(start, end) {
         var startDate = moment(start, "YYYY-MM-DD");
         var endDate = moment(end, "YYYY-MM-DD");

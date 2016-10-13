@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Api\V1\Campaigns;
 
 use Carbon\Carbon;
+use AppBundle\Entity\Campaigns;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -38,5 +39,39 @@ class CampaignsController extends Controller
         }
 
         return $this->json($data);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     *
+     * @Route("/api/v1/campaigns/new", name="api-campaign-new")
+     * @Method({"POST"})
+     */
+    public function insertAction(Request $request)
+    {
+//        $data  = $request->request->all();
+//        $start = Carbon::parse($data['flight_start']);
+//        $end   = Carbon::parse($data['flight_end']);
+//
+//        $campaign = new Campaigns();
+//        $campaign->setName($data['campaign_name']);
+//        $campaign->setOrganizationId($data['campaign_organization']);
+//        $campaign->setRegionId($data['campaign_region']);
+//        $campaign->setFlightStartDate($start);
+//        $campaign->setFlightEndDate($end);
+//        $campaign->setFlightLength((int)$data['flight_length']);
+//        $campaign->setCreatedAt(Carbon::now());
+//        $campaign->setUpdatedAt(Carbon::now());
+//
+//        $orm = $this->get('doctrine')->getEntityManager();
+//        $orm->persist($campaign);
+//        $orm->flush();
+
+        $response = [
+            'success' => true,
+        ];
+
+        return $this->json($response);
     }
 }

@@ -23,7 +23,7 @@
                 <div class="section">
                     <h2 class="sidebar-title">Management</h2>
                     <ul class="sidebar-list">
-                        <li><label>Create Campaign</label></li>
+                        <li><label class="dash-create-campaign-button">Create Campaign</label></li>
                         <li><label>Create Organization</label></li>
                         <li><label>Create Spot Type</label></li>
                         <li><label>Create Region</label></li>
@@ -42,6 +42,61 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="campaigns-overlay overlay">
+        <div class="form-wrapper">
+            <form action="/api/v1/campaigns/new" method="post" class="campaign-form" id="campaign-form">
+                <h2 class="form-title">Create New Campaign <div class="close">&times;</div></h2>
+                <div class="form-group row">
+                    <div class="columns large-4 medium-4 small-12">
+                        <label for="campaign_name">Campaign Name *
+                            <input type="text" class="form-control campaign-name" id="campaign-name" name="campaign_name"/>
+                        </label>
+                    </div>
+                    <div class="columns large-4 medium-4 small-12">
+                        <label for="campaign_organization">Select Your Organization *
+                            <select name="campaign_organization" id="campaign-organization">
+                                <option value="">Select Organization</option>
+                                {% for organization in organizations %}
+                                    <option value="{{ organization.id }}">{{ organization.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </label>
+                    </div>
+                    <div class="columns large-4 medium-4 small-12">
+                        <label for="campaign_region">Campaign Region *
+                            <select name="campaign_region" id="campaign-region">
+                                <option value="">Select Organization</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="columns large-4 medium-4 small-12">
+                        <label for="flight_start">Flight Start Date *
+                            <input type="text" class="flight-start form-control" id="flight-start" name="flight_start" placeholder="YYYY-MM-DD" />
+                        </label>
+                    </div>
+                    <div class="columns large-4 medium-4 small-12">
+                        <label for="flight_end">Flight End Date *
+                            <input type="text" class="flight-end form-control" id="flight-end" name="flight_end" placeholder="YYYY-MM-DD" />
+                        </label>
+                    </div>
+                    <div class="columns large-4 medium-4 small-12">
+                        <label for="flight_length">Flight Length (in weeks)
+                            <input type="text" class="flight-length form-control" id="flight-length" name="flight_length" readonly>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="column large-12 medium-12 small-12">
+                        <input type="submit" class="submit form-button" id="submit" value="Add New Campaign"
+                               name="submit"/>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 {% endblock %}
