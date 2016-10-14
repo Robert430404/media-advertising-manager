@@ -57,10 +57,10 @@ class CreateUserCommand extends ContainerAwareCommand
 
         $encoder          = $this->getContainer()->get('security.password_encoder');
         $password         = $input->getArgument('password');
-        $encoded_password = $encoder->encodePassword($user, $password);
+        $encodedPassword = $encoder->encodePassword($user, $password);
 
         $user->setUsername($input->getArgument('username'));
-        $user->setPassword($encoded_password);
+        $user->setPassword($encodedPassword);
         $user->setEmailAddress($input->getArgument('email'));
         $user->setUserRole($input->getArgument('user_role'));
         $user->setCreatedAt(Carbon::now());

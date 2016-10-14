@@ -14,40 +14,41 @@ class ProgramsController extends Controller
 {
     /**
      * @param Request $request
-     * @param integer $worksheet_id
+     * @param integer $worksheetId
      * @return \Symfony\Component\HttpFoundation\Response
      *
-     * @Route("/campaigns/worksheets/programs/{worksheet_id}", name="worksheet-programs")
+     * @Route("/campaigns/worksheets/programs/{worksheetId}", name="worksheet-programs")
      * @Method({"GET"})
      */
-    public function indexAction(Request $request, $worksheet_id)
+    public function indexAction(Request $request, $worksheetId)
     {
         $programs = $this->getDoctrine()
             ->getRepository('AppBundle:Programs')
-            ->findByWorksheetId($worksheet_id);
+            ->findByWorksheetId($worksheetId);
         $worksheet = $this->getDoctrine()
             ->getRepository('AppBundle:Worksheets')
-            ->find($worksheet_id);
+            ->find($worksheetId);
 
         return $this->render('dashboard/worksheets/programs.html.twig', [
-            'programs'  => $programs,
+            'programs' => $programs,
             'worksheet' => $worksheet
         ]);
     }
+
     /**
      * @param Request $request
-     * @param integer $worksheet_id
+     * @param integer $worksheetId
      * @return \Symfony\Component\HttpFoundation\Response
      *
-     * @Route("/campaigns/worksheets/programs/{worksheet_id}/add", name="worksheet-programs-add")
+     * @Route("/campaigns/worksheets/programs/{worksheetId}/add", name="worksheet-programs-add")
      * @Method({"POST"})
      */
-    public function insertAction(Request $request, $worksheet_id)
+    public function insertAction(Request $request, $worksheetId)
     {
         $data = $request->request->all();
 
         $program = new Programs();
-        $program->setWorksheetId($worksheet_id);
+        $program->setWorksheetId($worksheetId);
         $program->setName($data['program_name']);
         $program->setDayPart($data['day_part']);
         $program->setStation($data['station']);
@@ -55,44 +56,37 @@ class ProgramsController extends Controller
         $program->setProgram($data['program']);
 
         $program->setMonday(false);
-        if(isset($data['monday']))
-        {
+        if (isset($data['monday'])) {
             $program->setMonday(true);
         }
 
         $program->setTuesday(false);
-        if(isset($data['tuesday']))
-        {
+        if (isset($data['tuesday'])) {
             $program->setTuesday(true);
         }
 
         $program->setWednesday(false);
-        if(isset($data['wednesday']))
-        {
+        if (isset($data['wednesday'])) {
             $program->setWednesday(true);
         }
 
         $program->setThursday(false);
-        if(isset($data['thursday']))
-        {
+        if (isset($data['thursday'])) {
             $program->setThursday(true);
         }
 
         $program->setFriday(false);
-        if(isset($data['friday']))
-        {
+        if (isset($data['friday'])) {
             $program->setFriday(true);
         }
 
         $program->setSaturday(false);
-        if(isset($data['saturday']))
-        {
+        if (isset($data['saturday'])) {
             $program->setSaturday(true);
         }
 
         $program->setSunday(false);
-        if(isset($data['sunday']))
-        {
+        if (isset($data['sunday'])) {
             $program->setSunday(true);
         }
 
@@ -109,29 +103,29 @@ class ProgramsController extends Controller
         $orm->persist($program);
         $orm->flush();
 
-        return $this->redirect("/campaigns/worksheets/programs/$worksheet_id");
+        return $this->redirect("/campaigns/worksheets/programs/$worksheetId");
     }
 
     /**
      * @param Request $request
-     * @param integer $worksheet_id
-     * @param integer $program_id
+     * @param integer $worksheetId
+     * @param integer $programId
      * @return \Symfony\Component\HttpFoundation\Response
      *
-     * @Route("/campaigns/worksheets/programs/{worksheet_id}/delete/{program_id}", name="program-delete")
+     * @Route("/campaigns/worksheets/programs/{worksheetId}/delete/{programId}", name="program-delete")
      * @Method({"GET"})
      */
-    public function deleteAction(Request $request, $worksheet_id, $program_id)
+    public function deleteAction(Request $request, $worksheetId, $programId)
     {
         $program = $this->getDoctrine()
             ->getRepository('AppBundle:Programs')
-            ->find($program_id);
+            ->find($programId);
 
         $orm = $this->get('doctrine')->getEntityManager();
         $orm->remove($program);
         $orm->flush();
 
-        return $this->redirect('/campaigns/worksheets/programs/' . $worksheet_id, 302);
+        return $this->redirect('/campaigns/worksheets/programs/' . $worksheetId, 302);
     }
 
     /**

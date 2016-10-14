@@ -13,20 +13,20 @@ class RegionsController extends Controller
 {
     /**
      * @param Request $request
-     * @param integer $organization_id
+     * @param integer $organizationId
      * @return \Symfony\Component\HttpFoundation\Response
      *
-     * @Route("/regions/{organization_id}", name="region")
+     * @Route("/regions/{organizationId}", name="region")
      * @Method({"GET"})
      */
-    public function indexAction(Request $request, $organization_id)
+    public function indexAction(Request $request, $organizationId)
     {
         $organization = $this->getDoctrine()
             ->getRepository('AppBundle:Organizations')
-            ->find($organization_id);
+            ->find($organizationId);
         $regions = $this->getDoctrine()
             ->getRepository('AppBundle:Regions')
-            ->findByOrganizationId($organization_id);
+            ->findByOrganizationId($organizationId);
 
         return $this->render('dashboard/regions/index.html.twig', [
             'organization' => $organization,
@@ -62,23 +62,23 @@ class RegionsController extends Controller
 
     /**
      * @param Request $request
-     * @param integer $region_id
+     * @param integer $regionId
      * @return \Symfony\Component\HttpFoundation\Response
      *
-     * @Route("/regions/delete/{region_id}", name="region-delete")
+     * @Route("/regions/delete/{regionId}", name="region-delete")
      * @Method({"GET"})
      */
-    public function deleteAction(Request $request, $region_id)
+    public function deleteAction(Request $request, $regionId)
     {
         $region = $this->getDoctrine()
             ->getRepository('AppBundle:Regions')
-            ->find($region_id);
-        $organization_id = $region->getOrganizationId();
+            ->find($regionId);
+        $organizationId = $region->getOrganizationId();
 
         $orm = $this->get('doctrine')->getEntityManager();
         $orm->remove($region);
         $orm->flush();
 
-        return $this->redirect('/regions/' . $organization_id, 302);
+        return $this->redirect('/regions/' . $organizationId, 302);
     }
 }

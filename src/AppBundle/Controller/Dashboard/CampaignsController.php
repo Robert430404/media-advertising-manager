@@ -44,9 +44,9 @@ class CampaignsController extends Controller
      */
     public function insertAction(Request $request)
     {
-        $data  = $request->request->all();
+        $data = $request->request->all();
         $start = Carbon::parse($data['flight_start']);
-        $end   = Carbon::parse($data['flight_end']);
+        $end = Carbon::parse($data['flight_end']);
 
         $campaign = new Campaigns();
         $campaign->setName($data['campaign_name']);
@@ -71,38 +71,35 @@ class CampaignsController extends Controller
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      *
-     * @Route("/campaigns/delete/{campaign_id}", name="campaign-delete")
+     * @Route("/campaigns/delete/{campaignId}", name="campaign-delete")
      * @Method({"GET"})
      */
-    public function deleteAction(Request $request, $campaign_id)
+    public function deleteAction(Request $request, $campaignId)
     {
         $campaign = $this->getDoctrine()
             ->getRepository('AppBundle:Campaigns')
-            ->find($campaign_id);
+            ->find($campaignId);
         $worksheets = $this->getDoctrine()
             ->getRepository('AppBundle:Worksheets')
-            ->findByCampaignId($campaign_id);
-        $worksheet_ids = [];
+            ->findByCampaignId($campaignId);
+        $worksheetIds = [];
 
-        foreach($worksheets as $key => $worksheet)
-        {
-            $worksheet_ids[$key] = $worksheet->getId();
+        foreach ($worksheets as $key => $worksheet) {
+            $worksheetIds[$key] = $worksheet->getId();
         }
 
         $programs = $this->getDoctrine()
             ->getRepository('AppBundle:Programs')
-            ->findByWorksheetId($worksheet_ids);
+            ->findByWorksheetId($worksheetIds);
 
         $orm = $this->get('doctrine')->getEntityManager();
         $orm->remove($campaign);
 
-        foreach($worksheets as $worksheet)
-        {
+        foreach ($worksheets as $worksheet) {
             $orm->remove($worksheet);
         }
 
-        foreach($programs as $program)
-        {
+        foreach ($programs as $program) {
             $orm->remove($program);
         }
 

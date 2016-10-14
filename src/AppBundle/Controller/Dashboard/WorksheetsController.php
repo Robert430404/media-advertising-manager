@@ -13,26 +13,25 @@ class WorksheetsController extends Controller
 {
     /**
      * @param Request $request
-     * @param $campaign_id
+     * @param $campaignId
      * @return \Symfony\Component\HttpFoundation\Response
      *
-     * @Route("/campaigns/worksheets/{campaign_id}", name="campaign-worksheets")
+     * @Route("/campaigns/worksheets/{campaignId}", name="campaign-worksheets")
      * @Method({"GET"})
      */
-    public function indexAction(Request $request, $campaign_id)
+    public function indexAction(Request $request, $campaignId)
     {
         $worksheets = $this->getDoctrine()
             ->getRepository('AppBundle:Worksheets')
-            ->findAllWorksheetsWithData($campaign_id);
+            ->findAllWorksheetsWithData($campaignId);
         $campaign = $this->getDoctrine()
             ->getRepository('AppBundle:Campaigns')
-            ->find($campaign_id);
-        $spot_types = $this->getDoctrine()
+            ->find($campaignId);
+        $spotTypes = $this->getDoctrine()
             ->getRepository('AppBundle:SpotTypes')
             ->findAll();
 
-        foreach($worksheets as $key => $worksheet)
-        {
+        foreach ($worksheets as $key => $worksheet) {
             $programs = $this->getDoctrine()
                 ->getRepository('AppBundle:Programs')
                 ->findByWorksheetId($worksheet['id']);
@@ -44,25 +43,25 @@ class WorksheetsController extends Controller
         return $this->render('dashboard/worksheets/index.html.twig', [
             'worksheets' => $worksheets,
             'campaign' => $campaign,
-            'spot_types' => $spot_types,
+            'spot_types' => $spotTypes,
         ]);
     }
 
     /**
      * @param Request $request
-     * @param $campaign_id
+     * @param $campaignId
      * @return \Symfony\Component\HttpFoundation\Response
      *
-     * @Route("/campaigns/worksheets/{campaign_id}/add", name="campaign-worksheets-add")
+     * @Route("/campaigns/worksheets/{campaignId}/add", name="campaign-worksheets-add")
      * @Method({"POST"})
      */
-    public function insertAction(Request $request, $campaign_id)
+    public function insertAction(Request $request, $campaignId)
     {
         $data = $request->request->all();
 
         $worksheet = new Worksheets();
         $worksheet->setName($data['worksheet_name']);
-        $worksheet->setCampaignId($campaign_id);
+        $worksheet->setCampaignId($campaignId);
         $worksheet->setOrganizationId($data['worksheet_organization']);
         $worksheet->setRegionId($data['worksheet_region']);
         $worksheet->setSpotTypeId($data['worksheet_spot_type']);
@@ -74,39 +73,38 @@ class WorksheetsController extends Controller
         $orm->persist($worksheet);
         $orm->flush();
 
-        return $this->redirect('/campaigns/worksheets/' . $campaign_id);
+        return $this->redirect('/campaigns/worksheets/' . $campaignId);
     }
 
     /**
      * Deletes the selected campaign from the database
      *
      * @param Request $request
-     * @param $worksheet_id
-     * @param $campaign_id
+     * @param $worksheetId
+     * @param $campaignId
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      *
-     * @Route("/campaigns/worksheets/{campaign_id}/delete/{worksheet_id}", name="worksheet-delete")
+     * @Route("/campaigns/worksheets/{campaignId}/delete/{worksheetId}", name="worksheet-delete")
      * @Method({"GET"})
      */
-    public function deleteAction(Request $request, $worksheet_id, $campaign_id)
+    public function deleteAction(Request $request, $worksheetId, $campaignId)
     {
         $worksheet = $this->getDoctrine()
             ->getRepository('AppBundle:Worksheets')
-            ->find($worksheet_id);
+            ->find($worksheetId);
         $programs = $this->getDoctrine()
             ->getRepository('AppBundle:Programs')
-            ->findByWorksheetId($worksheet_id);
+            ->findByWorksheetId($worksheetId);
 
         $orm = $this->get('doctrine')->getEntityManager();
         $orm->remove($worksheet);
 
-        foreach($programs as $program)
-        {
+        foreach ($programs as $program) {
             $orm->remove($program);
         }
 
         $orm->flush();
 
-        return $this->redirect('/campaigns/worksheets/' . $campaign_id);
+        return $this->redirect('/campaigns/worksheets/' . $campaignId);
     }
 }

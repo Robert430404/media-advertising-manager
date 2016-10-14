@@ -22,7 +22,7 @@ class Users implements UserInterface, \Serializable
     /**
      * @var integer
      *
-     * @ORM\Column(type="integer")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -32,7 +32,7 @@ class Users implements UserInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=100, unique=true)
+     * @ORM\Column(name="username", type="string", length=100, unique=true)
      * @Assert\NotBlank()
      */
     private $username;
@@ -40,7 +40,7 @@ class Users implements UserInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(name="password", type="string", length=100)
      * @Assert\NotBlank()
      * @Assert\Length(max=4096)
      */
@@ -49,35 +49,35 @@ class Users implements UserInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(name="user_role", type="string", length=100)
      * @Assert\NotBlank()
      */
-    private $user_role;
+    private $userRole;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=100, unique=true)
+     * @ORM\Column(name="email_address", type="string", length=100, unique=true)
      * @Assert\NotBlank()
      * @Assert\Email()
      */
-    private $email_address;
+    private $emailAddress;
 
     /**
      * @var object
      *
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(name="created_at", type="datetime")
      * @Assert\NotBlank()
      */
-    private $created_at;
+    private $createdAt;
 
     /**
      * @var object
      *
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(name="updated_at", type="datetime")
      * @Assert\NotBlank()
      */
-    private $updated_at;
+    private $updatedAt;
 
     /**
      * Get id
@@ -146,7 +146,7 @@ class Users implements UserInterface, \Serializable
      */
     public function setUserRole($userRole)
     {
-        $this->user_role = $userRole;
+        $this->userRole = $userRole;
 
         return $this;
     }
@@ -158,7 +158,7 @@ class Users implements UserInterface, \Serializable
      */
     public function getUserRole()
     {
-        $role = [$this->user_role];
+        $role = [$this->userRole];
 
         return $role;
     }
@@ -172,7 +172,7 @@ class Users implements UserInterface, \Serializable
      */
     public function setEmailAddress($emailAddress)
     {
-        $this->email_address = $emailAddress;
+        $this->emailAddress = $emailAddress;
 
         return $this;
     }
@@ -184,7 +184,7 @@ class Users implements UserInterface, \Serializable
      */
     public function getEmailAddress()
     {
-        return $this->email_address;
+        return $this->emailAddress;
     }
 
     /**
@@ -196,7 +196,7 @@ class Users implements UserInterface, \Serializable
      */
     public function setCreatedAt($createdAt)
     {
-        $this->created_at = $createdAt;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
@@ -208,7 +208,7 @@ class Users implements UserInterface, \Serializable
      */
     public function getCreatedAt()
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
     /**
@@ -220,7 +220,7 @@ class Users implements UserInterface, \Serializable
      */
     public function setUpdatedAt($updatedAt)
     {
-        $this->updated_at = $updatedAt;
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
@@ -232,7 +232,7 @@ class Users implements UserInterface, \Serializable
      */
     public function getUpdatedAt()
     {
-        return $this->updated_at;
+        return $this->updatedAt;
     }
 
     /**

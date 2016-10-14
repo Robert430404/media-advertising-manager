@@ -13,7 +13,6 @@ class SpotTypeController extends Controller
 {
     /**
      * @param Request $request
-     * @param integer $organization
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @Route("/spot-types", name="spot-type")
@@ -59,16 +58,17 @@ class SpotTypeController extends Controller
      * Deletes the selected spot type in the database
      *
      * @param Request $request
+     * @param $spotId
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      *
-     * @Route("/spot-types/delete/{spot_id}", name="spot-type-delete")
+     * @Route("/spot-types/delete/{spotId}", name="spot-type-delete")
      * @Method({"GET"})
      */
-    public function deleteAction(Request $request, $spot_id)
+    public function deleteAction(Request $request, $spotId)
     {
         $type = $this->getDoctrine()
             ->getRepository('AppBundle:SpotTypes')
-            ->find($spot_id);
+            ->find($spotId);
 
         $orm = $this->get('doctrine')->getEntityManager();
         $orm->remove($type);
