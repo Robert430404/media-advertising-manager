@@ -1,9 +1,9 @@
 <?php
 
-namespace AppBundle\Controller\Api\V1\Regions;
+namespace AppBundle\Controller\Api\V1;
 
-use AppBundle\Entity\Regions;
 use Carbon\Carbon;
+use AppBundle\Entity\Regions;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -24,20 +24,19 @@ class RegionsController extends Controller
         $organization = $this->getDoctrine()
             ->getRepository('AppBundle:Organizations')
             ->find($organization);
-        $regions  = $this->getDoctrine()
+        $regions = $this->getDoctrine()
             ->getRepository('AppBundle:Regions')
             ->findByOrganizationId($organization);
 
         $data = [];
 
-        foreach($regions as $key => $region)
-        {
+        foreach ($regions as $key => $region) {
             $data[$key] = [
-                'id'              => $region->getId(),
-                'name'            => $region->getName(),
+                'id' => $region->getId(),
+                'name' => $region->getName(),
                 'organization_id' => $region->getOrganizationId(),
-                'created_at'      => $region->getCreatedAt(),
-                'updated_at'      => $region->getUpdatedAt(),
+                'created_at' => $region->getCreatedAt(),
+                'updated_at' => $region->getUpdatedAt(),
             ];
         }
 

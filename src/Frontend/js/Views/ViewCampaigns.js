@@ -163,6 +163,12 @@ class ViewCampaigns {
                     setTimeout(function () {
                         form.removeClass('successful');
                     }, 1000);
+                } else {
+                    form.addClass('failure');
+
+                    setTimeout(function () {
+                        form.removeClass('failure');
+                    }, 1000);
                 }
             });
         });

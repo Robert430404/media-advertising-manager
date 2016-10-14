@@ -24,7 +24,7 @@
                     <h2 class="sidebar-title">Management</h2>
                     <ul class="sidebar-list">
                         <li><label class="dash-create-campaign-button">Create Campaign</label></li>
-                        <li><label>Create Organization</label></li>
+                        <li><label class="dash-create-organizations-button">Create Organization</label></li>
                         <li><label>Create Spot Type</label></li>
                         <li><label>Create Region</label></li>
                     </ul>
@@ -94,6 +94,27 @@
                     <div class="column large-12 medium-12 small-12">
                         <input type="submit" class="submit form-button" id="submit" value="Add New Campaign"
                                name="submit"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="organizations-overlay overlay">
+        <div class="form-wrapper">
+            <form action="/organizations/add" method="post" class="organization-form" id="organization-form">
+                <h2 class="form-title">Create New Organization <div class="close">&times;</div></h2>
+                <div class="form-group row">
+                    <div class="columns large-12 medium-12 small-12">
+                        <label for="organization-name">Organization Name *
+                            <input type="text" class="form-control organization-name"
+                                   id="organization-name" name="organization_name" />
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="column large-12 medium-12 small-12">
+                        <input type="submit" class="submit form-button" id="submit" value="Add New Organization" name="submit" />
                     </div>
                 </div>
             </form>

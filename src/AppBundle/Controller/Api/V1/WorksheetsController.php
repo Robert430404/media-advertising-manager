@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller\Api\V1\Worksheets;
+namespace AppBundle\Controller\Api\V1;
 
 use Carbon\Carbon;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -12,24 +12,24 @@ class WorksheetsController extends Controller
 {
     /**
      * @param Request $request
-     * @param integer $worksheet_id
+     * @param integer $worksheetId
      * @return \Symfony\Component\HttpFoundation\Response
      *
-     * @Route("/api/v1/worksheet/{worksheet_id}/update", name="api-worksheet-update")
+     * @Route("/api/v1/worksheet/{worksheetId}/update", name="api-worksheet-update")
      * @Method({"POST"})
      */
-    public function updateAction(Request $request, $worksheet_id)
+    public function updateAction(Request $request, $worksheetId)
     {
         $data = $request->request->all();
         $orm = $this->getDoctrine()->getManager();
-        $worksheet = $orm->getRepository('AppBundle:Worksheets')->find($worksheet_id);
+        $worksheet = $orm->getRepository('AppBundle:Worksheets')->find($worksheetId);
 
-        if(!$worksheet)
-        {
+        if (!$worksheet) {
             return $this->json(['success' => false]);
         }
 
         $worksheet->setWeekInformation(json_encode($data));
+        $worksheet->setUpdatedAt(Carbon::now());
         $orm->flush();
 
         return $this->json(['success' => true]);

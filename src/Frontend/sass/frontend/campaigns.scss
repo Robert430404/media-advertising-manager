@@ -533,7 +533,8 @@
     }
   }
 }
-&.campaign-form {
+&.campaign-form,
+&.organization-form {
   &.successful {
     position: relative;
     &:before {
@@ -553,6 +554,40 @@
       text-transform: uppercase;
       border-radius: $border-radius;
       box-shadow: 0 0 $shadowSize 0 $alpha-black;
+    }
+  }
+  &.failure {
+    position: relative;
+    &:before {
+      content: 'Please Fill Out All Information';
+      position: absolute;
+      top: 15%;
+      left: 15%;
+      padding: 6% 1%;
+      width: 66%;
+      height: 66%;
+      text-align: center;
+      display: block;
+      background: $highlight-light-error;
+      color: $black;
+      z-index: 99999;
+      font-size: 32px;
+      text-transform: uppercase;
+      border-radius: $border-radius;
+      box-shadow: 0 0 $shadowSize 0 $alpha-black;
+    }
+  }
+}
+&.organization-form {
+  &.successful {
+    &:before {
+      padding: 3.5%;
+    }
+  }
+  &.failure {
+    position: relative;
+    &:before {
+      padding: 3.5% 1%;
     }
   }
 }

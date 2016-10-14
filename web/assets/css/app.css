@@ -503,9 +503,11 @@ body {
         .overlay .form-wrapper .form-title .close:hover {
           opacity: .5; }
 
-.campaign-form.successful {
+.campaign-form.successful,
+.organization-form.successful {
   position: relative; }
-  .campaign-form.successful:before {
+  .campaign-form.successful:before,
+  .organization-form.successful:before {
     content: 'Save Successful';
     position: absolute;
     top: 15%;
@@ -522,6 +524,36 @@ body {
     text-transform: uppercase;
     border-radius: 4px;
     box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.35); }
+
+.campaign-form.failure,
+.organization-form.failure {
+  position: relative; }
+  .campaign-form.failure:before,
+  .organization-form.failure:before {
+    content: 'Please Fill Out All Information';
+    position: absolute;
+    top: 15%;
+    left: 15%;
+    padding: 6% 1%;
+    width: 66%;
+    height: 66%;
+    text-align: center;
+    display: block;
+    background: #FFC9BD;
+    color: #000;
+    z-index: 99999;
+    font-size: 32px;
+    text-transform: uppercase;
+    border-radius: 4px;
+    box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.35); }
+
+.organization-form.successful:before {
+  padding: 3.5%; }
+
+.organization-form.failure {
+  position: relative; }
+  .organization-form.failure:before {
+    padding: 3.5% 1%; }
 
 .current-spot-types {
   margin: 0;

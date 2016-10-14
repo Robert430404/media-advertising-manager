@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller\Api\V1\Campaigns;
+namespace AppBundle\Controller\Api\V1;
 
 use Carbon\Carbon;
 use AppBundle\Entity\Campaigns;
@@ -13,28 +13,27 @@ class CampaignsController extends Controller
 {
     /**
      * @param Request $request
-     * @param integer $region_id
+     * @param integer $regionId
      * @return \Symfony\Component\HttpFoundation\Response
      *
-     * @Route("/api/v1/campaigns/{region_id}", name="api-campaigns")
+     * @Route("/api/v1/campaigns/{regionId}", name="api-campaigns")
      * @Method({"GET"})
      */
-    public function indexAction(Request $request, $region_id)
+    public function indexAction(Request $request, $regionId)
     {
         $campaigns = $this->getDoctrine()
             ->getRepository('AppBundle:Campaigns')
-            ->findByRegionId($region_id);
+            ->findByRegionId($regionId);
 
         $data = [];
 
-        foreach($campaigns as $key => $campaign)
-        {
+        foreach ($campaigns as $key => $campaign) {
             $data[$key] = [
-                'id'              => $campaign->getId(),
-                'name'            => $campaign->getName(),
+                'id' => $campaign->getId(),
+                'name' => $campaign->getName(),
                 'organization_id' => $campaign->getOrganizationId(),
-                'created_at'      => $campaign->getCreatedAt(),
-                'updated_at'      => $campaign->getUpdatedAt(),
+                'created_at' => $campaign->getCreatedAt(),
+                'updated_at' => $campaign->getUpdatedAt(),
             ];
         }
 
@@ -50,9 +49,9 @@ class CampaignsController extends Controller
      */
     public function insertAction(Request $request)
     {
-        $data  = $request->request->all();
+        $data = $request->request->all();
         $start = Carbon::parse($data['flight_start']);
-        $end   = Carbon::parse($data['flight_end']);
+        $end = Carbon::parse($data['flight_end']);
 
         $campaign = new Campaigns();
         $campaign->setName($data['campaign_name']);
@@ -63,6 +62,20 @@ class CampaignsController extends Controller
         $campaign->setFlightLength((int)$data['flight_length']);
         $campaign->setCreatedAt(Carbon::now());
         $campaign->setUpdatedAt(Carbon::now());
+
+        $validator = $this->get('validator');
+        $errors = $validator->validate($campaign);
+
+        if (count($errors) > 0) {
+            $error_string = (string)$errors;
+
+            $response = [
+                'success' => false,
+                'error' => $error_string,
+            ];
+
+            return $this->json($response);
+        }
 
         $orm = $this->get('doctrine')->getEntityManager();
         $orm->persist($campaign);
