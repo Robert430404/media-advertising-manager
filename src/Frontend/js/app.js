@@ -3,4 +3,5 @@ $(document).ready(function () {
     new ViewCampaigns();
     new ViewNavigation();
     new ViewWorksheets();
+    new ViewSpotTypes();
 });

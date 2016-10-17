@@ -14,7 +14,9 @@
                         {% else %}
                             <ul class="organization-list">
                                 {% for organization in organizations %}
-                                    <li><label data-id="{{ organization.id }}" data-name="{{ organization.name }}">{{ organization.name }} <i class="fa fa-chevron-right"></i></label></li>
+                                    <li><label data-id="{{ organization.id }}"
+                                               data-name="{{ organization.name }}">{{ organization.name }} <i
+                                                    class="fa fa-chevron-right"></i></label></li>
                                 {% endfor %}
                             </ul>
                         {% endif %}
@@ -25,7 +27,7 @@
                     <ul class="sidebar-list">
                         <li><label class="dash-create-campaign-button">Create Campaign</label></li>
                         <li><label class="dash-create-organizations-button">Create Organization</label></li>
-                        <li><label>Create Spot Type</label></li>
+                        <li><label class="dash-create-spot-types-button">Create Spot Type</label></li>
                         <li><label>Create Region</label></li>
                     </ul>
                 </div>
@@ -48,11 +50,14 @@
     <div class="campaigns-overlay overlay">
         <div class="form-wrapper">
             <form action="/api/v1/campaigns/new" method="post" class="campaign-form" id="campaign-form">
-                <h2 class="form-title">Create New Campaign <div class="close">&times;</div></h2>
+                <h2 class="form-title">Create New Campaign
+                    <div class="close">&times;</div>
+                </h2>
                 <div class="form-group row">
                     <div class="columns large-4 medium-4 small-12">
                         <label for="campaign_name">Campaign Name *
-                            <input type="text" class="form-control campaign-name" id="campaign-name" name="campaign_name"/>
+                            <input type="text" class="form-control campaign-name" id="campaign-name"
+                                   name="campaign_name"/>
                         </label>
                     </div>
                     <div class="columns large-4 medium-4 small-12">
@@ -76,17 +81,20 @@
                 <div class="form-group row">
                     <div class="columns large-4 medium-4 small-12">
                         <label for="flight_start">Flight Start Date *
-                            <input type="text" class="flight-start form-control" id="flight-start" name="flight_start" placeholder="YYYY-MM-DD" />
+                            <input type="text" class="flight-start form-control" id="flight-start" name="flight_start"
+                                   placeholder="YYYY-MM-DD"/>
                         </label>
                     </div>
                     <div class="columns large-4 medium-4 small-12">
                         <label for="flight_end">Flight End Date *
-                            <input type="text" class="flight-end form-control" id="flight-end" name="flight_end" placeholder="YYYY-MM-DD" />
+                            <input type="text" class="flight-end form-control" id="flight-end" name="flight_end"
+                                   placeholder="YYYY-MM-DD"/>
                         </label>
                     </div>
                     <div class="columns large-4 medium-4 small-12">
                         <label for="flight_length">Flight Length (in weeks)
-                            <input type="text" class="flight-length form-control" id="flight-length" name="flight_length" readonly>
+                            <input type="text" class="flight-length form-control" id="flight-length"
+                                   name="flight_length" readonly>
                         </label>
                     </div>
                 </div>
@@ -103,18 +111,63 @@
     <div class="organizations-overlay overlay">
         <div class="form-wrapper">
             <form action="/organizations/add" method="post" class="organization-form" id="organization-form">
-                <h2 class="form-title">Create New Organization <div class="close">&times;</div></h2>
+                <h2 class="form-title">Create New Organization
+                    <div class="close">&times;</div>
+                </h2>
                 <div class="form-group row">
                     <div class="columns large-12 medium-12 small-12">
                         <label for="organization-name">Organization Name *
                             <input type="text" class="form-control organization-name"
-                                   id="organization-name" name="organization_name" />
+                                   id="organization-name" name="organization_name"/>
                         </label>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="column large-12 medium-12 small-12">
-                        <input type="submit" class="submit form-button" id="submit" value="Add New Organization" name="submit" />
+                        <input type="submit" class="submit form-button" id="submit" value="Add New Organization"
+                               name="submit"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="spot-types-overlay overlay">
+        <div class="form-wrapper">
+            <form action="/spot-types/add" method="post" class="spot-type-form"
+                  id="spot-type-form">
+                <h2 class="form-title">Create New Organization
+                    <div class="close">&times;</div>
+                </h2>
+                <div class="form-group row">
+                    <div class="columns large-12 medium-12 small-12">
+                        <label for="spot_type_name">Spot Types *
+                            <input type="text" class="form-control spot-type-name"
+                                   id="spot-type-name" name="spot_type_name"/>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="column large-12 medium-12 small-12">
+                        <input type="submit" class="submit form-button" id="submit" value="Add New Spot Type"
+                               name="submit"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="regions-overlay overlay">
+        <div class="form-wrapper">
+            <form action="/regions/add" method="post" class="region-form" id="region-form">
+                <label for="region-name">Region Name *
+                    <input type="text" class="form-control region-name"
+                           id="region-name" name="region_name"/>
+                </label>
+                <div class="form-group row">
+                    <div class="column large-12 medium-12 small-12">
+                        <input type="submit" class="submit form-button" id="submit" value="Add New Region"
+                               name="submit"/>
                     </div>
                 </div>
             </form>

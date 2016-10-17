@@ -5,7 +5,70 @@ $(document).ready(function () {
     new ViewCampaigns();
     new ViewNavigation();
     new ViewWorksheets();
+    new ViewSpotTypes();
 });
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var AjaxHelpers = function () {
+    function AjaxHelpers() {
+        _classCallCheck(this, AjaxHelpers);
+    }
+
+    _createClass(AjaxHelpers, [{
+        key: 'getCall',
+        value: function getCall(url) {
+            return new Promise(function (resolve, reject) {
+                var request = new XMLHttpRequest();
+
+                request.open('GET', url);
+
+                request.onload = function () {
+                    if (request.status === 200) {
+                        resolve(JSON.parse(request.response));
+                    } else {
+                        reject(new Error(request.statusText));
+                    }
+                };
+
+                request.onerror = function () {
+                    reject(new Error('Network Error'));
+                };
+
+                request.send();
+            });
+        }
+    }, {
+        key: 'postCall',
+        value: function postCall(url, data) {
+            return new Promise(function (resolve, reject) {
+                var request = new XMLHttpRequest();
+
+                request.open('POST', url, true);
+                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+                request.onload = function () {
+                    if (request.status === 200) {
+                        resolve(JSON.parse(request.response));
+                    } else {
+                        reject(new Error(request.statusText));
+                    }
+                };
+
+                request.onerror = function () {
+                    reject(new Error('Network Error'));
+                };
+
+                request.send(data);
+            });
+        }
+    }]);
+
+    return AjaxHelpers;
+}();
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -428,6 +491,66 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var ViewSpotTypes = function () {
+    function ViewSpotTypes() {
+        _classCallCheck(this, ViewSpotTypes);
+
+        this.dashboardCreateSpotType();
+
+        this.AjaxHelpers = new AjaxHelpers();
+    }
+
+    _createClass(ViewSpotTypes, [{
+        key: 'dashboardCreateSpotType',
+        value: function dashboardCreateSpotType() {
+            var object = this;
+            var overlay = $('.spot-types-overlay');
+            var button = $('.dash-create-spot-types-button');
+            var close = $('.spot-types-overlay .close');
+            var form = $('.spot-types-overlay form');
+            var endpoint = '/api/v1/spot-types/new';
+
+            button.click(function () {
+                overlay.fadeIn();
+            });
+
+            close.click(function () {
+                overlay.fadeOut();
+            });
+
+            form.submit(function (e) {
+                e.preventDefault();
+
+                var data = $(this).serialize();
+
+                object.AjaxHelpers.postCall(endpoint, data).then(function (resp) {
+                    if (resp.success == true) {
+                        form[0].reset();
+                        form.addClass('successful');
+
+                        setTimeout(function () {
+                            form.removeClass('successful');
+                        }, 1000);
+                    } else {
+                        form.addClass('failure');
+
+                        setTimeout(function () {
+                            form.removeClass('failure');
+                        }, 1000);
+                    }
+                });
+            });
+        }
+    }]);
+
+    return ViewSpotTypes;
+}();
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 var ViewWorksheets = function () {
     function ViewWorksheets() {
         _classCallCheck(this, ViewWorksheets);
@@ -475,66 +598,4 @@ var ViewWorksheets = function () {
     }]);
 
     return ViewWorksheets;
-}();
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var AjaxHelpers = function () {
-    function AjaxHelpers() {
-        _classCallCheck(this, AjaxHelpers);
-    }
-
-    _createClass(AjaxHelpers, [{
-        key: 'getCall',
-        value: function getCall(url) {
-            return new Promise(function (resolve, reject) {
-                var request = new XMLHttpRequest();
-
-                request.open('GET', url);
-
-                request.onload = function () {
-                    if (request.status === 200) {
-                        resolve(JSON.parse(request.response));
-                    } else {
-                        reject(new Error(request.statusText));
-                    }
-                };
-
-                request.onerror = function () {
-                    reject(new Error('Network Error'));
-                };
-
-                request.send();
-            });
-        }
-    }, {
-        key: 'postCall',
-        value: function postCall(url, data) {
-            return new Promise(function (resolve, reject) {
-                var request = new XMLHttpRequest();
-
-                request.open('POST', url, true);
-                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-                request.onload = function () {
-                    if (request.status === 200) {
-                        resolve(JSON.parse(request.response));
-                    } else {
-                        reject(new Error(request.statusText));
-                    }
-                };
-
-                request.onerror = function () {
-                    reject(new Error('Network Error'));
-                };
-
-                request.send(data);
-            });
-        }
-    }]);
-
-    return AjaxHelpers;
 }();

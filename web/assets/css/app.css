@@ -502,58 +502,50 @@ body {
         transition: all .3s; }
         .overlay .form-wrapper .form-title .close:hover {
           opacity: .5; }
-
-.campaign-form.successful,
-.organization-form.successful {
-  position: relative; }
-  .campaign-form.successful:before,
-  .organization-form.successful:before {
-    content: 'Save Successful';
-    position: absolute;
-    top: 15%;
-    left: 15%;
-    padding: 6%;
-    width: 66%;
-    height: 66%;
-    text-align: center;
-    display: block;
-    background: rgba(201, 255, 189, 0.56);
-    color: #000;
-    z-index: 99999;
-    font-size: 32px;
-    text-transform: uppercase;
-    border-radius: 4px;
-    box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.35); }
-
-.campaign-form.failure,
-.organization-form.failure {
-  position: relative; }
-  .campaign-form.failure:before,
-  .organization-form.failure:before {
-    content: 'Please Fill Out All Information';
-    position: absolute;
-    top: 15%;
-    left: 15%;
-    padding: 6% 1%;
-    width: 66%;
-    height: 66%;
-    text-align: center;
-    display: block;
-    background: #FFC9BD;
-    color: #000;
-    z-index: 99999;
-    font-size: 32px;
-    text-transform: uppercase;
-    border-radius: 4px;
-    box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.35); }
-
-.organization-form.successful:before {
-  padding: 3.5%; }
-
-.organization-form.failure {
-  position: relative; }
-  .organization-form.failure:before {
-    padding: 3.5% 1%; }
+  .overlay form.campaign-form.successful, .overlay form.organization-form.successful, .overlay form.spot-type-form.successful {
+    position: relative; }
+    .overlay form.campaign-form.successful:before, .overlay form.organization-form.successful:before, .overlay form.spot-type-form.successful:before {
+      content: 'Save Successful';
+      position: absolute;
+      top: 15%;
+      left: 15%;
+      padding: 6%;
+      width: 66%;
+      height: 66%;
+      text-align: center;
+      display: block;
+      background: rgba(201, 255, 189, 0.56);
+      color: #000;
+      z-index: 99999;
+      font-size: 32px;
+      text-transform: uppercase;
+      border-radius: 4px;
+      box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.35); }
+  .overlay form.campaign-form.failure, .overlay form.organization-form.failure, .overlay form.spot-type-form.failure {
+    position: relative; }
+    .overlay form.campaign-form.failure:before, .overlay form.organization-form.failure:before, .overlay form.spot-type-form.failure:before {
+      content: 'Please Fill Out All Information';
+      position: absolute;
+      top: 15%;
+      left: 15%;
+      padding: 6% 1%;
+      width: 66%;
+      height: 66%;
+      text-align: center;
+      display: block;
+      background: #FFC9BD;
+      color: #000;
+      z-index: 99999;
+      font-size: 32px;
+      text-transform: uppercase;
+      border-radius: 4px;
+      box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.35); }
+  .overlay form.organization-form.successful:before, .overlay form.spot-type-form.successful:before {
+    padding: 3.5%; }
+  .overlay form.organization-form.failure, .overlay form.spot-type-form.failure {
+    position: relative; }
+    .overlay form.organization-form.failure:before, .overlay form.spot-type-form.failure:before {
+      padding: 3.5% 1%; }
 
 .current-spot-types {
   margin: 0;
