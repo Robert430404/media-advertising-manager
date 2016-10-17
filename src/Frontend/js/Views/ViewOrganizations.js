@@ -40,18 +40,16 @@ class ViewOrganizations {
     loadDashboardCampaigns() {
         var object = this;
 
-        $('body').on('click' , '.region-selector', function () {
+        $('body').on('click', '.region-selector', function () {
             var id = $(this).attr('data-id');
             var endpoint = '/api/v1/campaigns/' + id;
             var container = $('.region-campaigns');
 
             object.AjaxHelpers.getCall(endpoint).then(function (resp) {
-                console.log(resp);
-                if(resp.length > 0) {
-                    console.log(resp);
+                if (resp.length > 0) {
                     container.empty().append('<h1 class="campaigns-title">Campaigns</h1>');
                     container.append('<ul class="campaign-list"></ul>');
-                    for(var i = 0; i < resp.length; i++) {
+                    for (var i = 0; i < resp.length; i++) {
                         container.find('.campaign-list').append('<li class="campaign-selector campaign-selector-' + resp[i].id + '" data-id="' + resp[i].id + '">' + resp[i].name + '</li>');
                         container.find('.campaign-selector-' + resp[i].id).append('<div class="actions">Actions: <a href="/campaigns/worksheets/' + resp[i].id + '">See Worksheets</a></div>');
                     }
@@ -87,9 +85,10 @@ class ViewOrganizations {
             var data = $(this).serialize();
 
             object.AjaxHelpers.postCall(endpoint, data).then(function (resp) {
-                if(resp.success == true) {
+                if (resp.success == true) {
                     form[0].reset();
                     form.addClass('successful');
+                    object.refreshOrganizations();
 
                     setTimeout(function () {
                         form.removeClass('successful');
@@ -102,6 +101,28 @@ class ViewOrganizations {
                     }, 1000);
                 }
             });
+        });
+    }
+
+    refreshOrganizations() {
+        var object = this;
+        var sidebar = $('.sidebar .organization-list');
+        var regionSelect = $('.regions-overlay #organization-id');
+        var endpoint = '/api/v1/organizations';
+
+        object.AjaxHelpers.getCall(endpoint).then(function (resp) {
+            sidebar.empty();
+
+            for (var i = 0; i < resp.length; i++) {
+                sidebar.append('<li>' +
+                        '<label data-id="' + resp[i].id + '" data-name="' + resp[i].name + '">' +
+                            resp[i].name +
+                            '<i class="fa fa-chevron-right"></i>' +
+                        '</label>' +
+                    '</li>');
+            }
+
+            object.loadDashboardRegions();
         });
     }
 }

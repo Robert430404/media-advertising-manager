@@ -327,6 +327,7 @@
         font-weight: 300;
         font-size: 14px;
         padding: 3px 7px;
+        min-width: 200px;
         transition: all .3s;
         &:hover {
           background: $white;
@@ -371,7 +372,7 @@
             display: block;
             line-height: 1;
             margin: 5px 0 0 0;
-            min-width: 300px;
+            min-width: 150px;
           }
           &.day-part {
             min-width: 90px;
@@ -425,7 +426,7 @@
         }
       }
       .actions {
-        float: left;
+        float: right;
         .divider {
           margin: 2px 10px;
         }
@@ -518,7 +519,10 @@
       padding: 10px;
       text-transform: uppercase;
       color: $white;
-      margin-top: -15px;
+      font-weight: 300;
+      line-height: 1;
+      margin: -15px 0 15px;
+      letter-spacing: 2px;
       .close {
         position: absolute;
         top: 7px;
@@ -535,7 +539,8 @@
   form {
     &.campaign-form,
     &.organization-form,
-    &.spot-type-form {
+    &.spot-type-form,
+    &.region-form {
       &.successful {
         position: relative;
         &:before {
@@ -581,7 +586,8 @@
     }
 
     &.organization-form,
-    &.spot-type-form {
+    &.spot-type-form,
+    &.region-form {
       &.successful {
         &:before {
           padding: 3.5%;

@@ -13,13 +13,12 @@ class OrganizationsController extends Controller
 {
     /**
      * @param Request $request
-     * @param integer $regionId
      * @return \Symfony\Component\HttpFoundation\Response
      *
-     * @Route("/api/v1/organizations/{regionId}", name="api-organizations")
+     * @Route("/api/v1/organizations", name="api-organizations")
      * @Method({"GET"})
      */
-    public function indexAction(Request $request, $regionId)
+    public function indexAction(Request $request)
     {
         $organizations = $this->getDoctrine()
             ->getRepository('AppBundle:Organizations')

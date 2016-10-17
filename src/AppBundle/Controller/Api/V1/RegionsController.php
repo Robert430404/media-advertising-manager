@@ -42,4 +42,48 @@ class RegionsController extends Controller
 
         return $this->json($data);
     }
+
+    /**
+     * Inserts the new region in the database
+     *
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     *
+     * @Route("/api/v1/regions/new", name="api-region-new")
+     * @Method({"POST"})
+     */
+    public function insertAction(Request $request)
+    {
+        $data = $request->request->all();
+
+        $region = new Regions();
+        $region->setName($data['region_name']);
+        $region->setOrganizationId($data['organization_id']);
+        $region->setCreatedAt(Carbon::now());
+        $region->setUpdatedAt(Carbon::now());
+
+        $validator = $this->get('validator');
+        $errors = $validator->validate($region);
+
+        if (count($errors) > 0) {
+            $error_string = (string)$errors;
+
+            $response = [
+                'success' => false,
+                'error' => $error_string,
+            ];
+
+            return $this->json($response);
+        }
+
+        $orm = $this->get('doctrine')->getEntityManager();
+        $orm->persist($region);
+        $orm->flush();
+
+        $response = [
+            'success' => true,
+        ];
+
+        return $this->json($response);
+    }
 }

@@ -28,7 +28,7 @@
                         <li><label class="dash-create-campaign-button">Create Campaign</label></li>
                         <li><label class="dash-create-organizations-button">Create Organization</label></li>
                         <li><label class="dash-create-spot-types-button">Create Spot Type</label></li>
-                        <li><label>Create Region</label></li>
+                        <li><label class="dash-create-regions-button">Create Region</label></li>
                     </ul>
                 </div>
             </div>
@@ -50,9 +50,9 @@
     <div class="campaigns-overlay overlay">
         <div class="form-wrapper">
             <form action="/api/v1/campaigns/new" method="post" class="campaign-form" id="campaign-form">
-                <h2 class="form-title">Create New Campaign
+                <div class="form-title">Create New Campaign
                     <div class="close">&times;</div>
-                </h2>
+                </div>
                 <div class="form-group row">
                     <div class="columns large-4 medium-4 small-12">
                         <label for="campaign_name">Campaign Name *
@@ -111,9 +111,9 @@
     <div class="organizations-overlay overlay">
         <div class="form-wrapper">
             <form action="/organizations/add" method="post" class="organization-form" id="organization-form">
-                <h2 class="form-title">Create New Organization
+                <div class="form-title">Create New Organization
                     <div class="close">&times;</div>
-                </h2>
+                </div>
                 <div class="form-group row">
                     <div class="columns large-12 medium-12 small-12">
                         <label for="organization-name">Organization Name *
@@ -136,9 +136,9 @@
         <div class="form-wrapper">
             <form action="/spot-types/add" method="post" class="spot-type-form"
                   id="spot-type-form">
-                <h2 class="form-title">Create New Organization
+                <div class="form-title">Create New Spot Type
                     <div class="close">&times;</div>
-                </h2>
+                </div>
                 <div class="form-group row">
                     <div class="columns large-12 medium-12 small-12">
                         <label for="spot_type_name">Spot Types *
@@ -160,10 +160,27 @@
     <div class="regions-overlay overlay">
         <div class="form-wrapper">
             <form action="/regions/add" method="post" class="region-form" id="region-form">
-                <label for="region-name">Region Name *
-                    <input type="text" class="form-control region-name"
-                           id="region-name" name="region_name"/>
-                </label>
+                <div class="row form-group">
+                    <div class="form-title">Create New Region
+                        <div class="close">&times;</div>
+                    </div>
+                    <div class="columns large-6 medium-6 small-12">
+                        <label for="region-name">Region Name *
+                            <input type="text" class="form-control region-name"
+                                   id="region-name" name="region_name"/>
+                        </label>
+                    </div>
+                    <div class="columns large-6 medium-6 small-12">
+                        <label for="organization_id">Select Organization *
+                            <select name="organization_id" id="organization-id" class="form-control">
+                                <option value="">Select Organization</option>
+                                {% for organization in organizations %}
+                                    <option value="{{ organization.id }}">{{ organization.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </label>
+                    </div>
+                </div>
                 <div class="form-group row">
                     <div class="column large-12 medium-12 small-12">
                         <input type="submit" class="submit form-button" id="submit" value="Add New Region"

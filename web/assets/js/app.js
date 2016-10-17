@@ -6,69 +6,8 @@ $(document).ready(function () {
     new ViewNavigation();
     new ViewWorksheets();
     new ViewSpotTypes();
+    new ViewRegions();
 });
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var AjaxHelpers = function () {
-    function AjaxHelpers() {
-        _classCallCheck(this, AjaxHelpers);
-    }
-
-    _createClass(AjaxHelpers, [{
-        key: 'getCall',
-        value: function getCall(url) {
-            return new Promise(function (resolve, reject) {
-                var request = new XMLHttpRequest();
-
-                request.open('GET', url);
-
-                request.onload = function () {
-                    if (request.status === 200) {
-                        resolve(JSON.parse(request.response));
-                    } else {
-                        reject(new Error(request.statusText));
-                    }
-                };
-
-                request.onerror = function () {
-                    reject(new Error('Network Error'));
-                };
-
-                request.send();
-            });
-        }
-    }, {
-        key: 'postCall',
-        value: function postCall(url, data) {
-            return new Promise(function (resolve, reject) {
-                var request = new XMLHttpRequest();
-
-                request.open('POST', url, true);
-                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-                request.onload = function () {
-                    if (request.status === 200) {
-                        resolve(JSON.parse(request.response));
-                    } else {
-                        reject(new Error(request.statusText));
-                    }
-                };
-
-                request.onerror = function () {
-                    reject(new Error('Network Error'));
-                };
-
-                request.send(data);
-            });
-        }
-    }]);
-
-    return AjaxHelpers;
-}();
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -144,6 +83,68 @@ var WorksheetsController = function () {
     }]);
 
     return WorksheetsController;
+}();
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var AjaxHelpers = function () {
+    function AjaxHelpers() {
+        _classCallCheck(this, AjaxHelpers);
+    }
+
+    _createClass(AjaxHelpers, [{
+        key: 'getCall',
+        value: function getCall(url) {
+            return new Promise(function (resolve, reject) {
+                var request = new XMLHttpRequest();
+
+                request.open('GET', url);
+
+                request.onload = function () {
+                    if (request.status === 200) {
+                        resolve(JSON.parse(request.response));
+                    } else {
+                        reject(new Error(request.statusText));
+                    }
+                };
+
+                request.onerror = function () {
+                    reject(new Error('Network Error'));
+                };
+
+                request.send();
+            });
+        }
+    }, {
+        key: 'postCall',
+        value: function postCall(url, data) {
+            return new Promise(function (resolve, reject) {
+                var request = new XMLHttpRequest();
+
+                request.open('POST', url, true);
+                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+                request.onload = function () {
+                    if (request.status === 200) {
+                        resolve(JSON.parse(request.response));
+                    } else {
+                        reject(new Error(request.statusText));
+                    }
+                };
+
+                request.onerror = function () {
+                    reject(new Error('Network Error'));
+                };
+
+                request.send(data);
+            });
+        }
+    }]);
+
+    return AjaxHelpers;
 }();
 'use strict';
 
@@ -422,9 +423,7 @@ var ViewOrganizations = function () {
                 var container = $('.region-campaigns');
 
                 object.AjaxHelpers.getCall(endpoint).then(function (resp) {
-                    console.log(resp);
                     if (resp.length > 0) {
-                        console.log(resp);
                         container.empty().append('<h1 class="campaigns-title">Campaigns</h1>');
                         container.append('<ul class="campaign-list"></ul>');
                         for (var i = 0; i < resp.length; i++) {
@@ -467,6 +466,85 @@ var ViewOrganizations = function () {
                     if (resp.success == true) {
                         form[0].reset();
                         form.addClass('successful');
+                        object.refreshOrganizations();
+
+                        setTimeout(function () {
+                            form.removeClass('successful');
+                        }, 1000);
+                    } else {
+                        form.addClass('failure');
+
+                        setTimeout(function () {
+                            form.removeClass('failure');
+                        }, 1000);
+                    }
+                });
+            });
+        }
+    }, {
+        key: 'refreshOrganizations',
+        value: function refreshOrganizations() {
+            var object = this;
+            var sidebar = $('.sidebar .organization-list');
+            var regionSelect = $('.regions-overlay #organization-id');
+            var endpoint = '/api/v1/organizations';
+
+            object.AjaxHelpers.getCall(endpoint).then(function (resp) {
+                sidebar.empty();
+
+                for (var i = 0; i < resp.length; i++) {
+                    sidebar.append('<li>' + '<label data-id="' + resp[i].id + '" data-name="' + resp[i].name + '">' + resp[i].name + '<i class="fa fa-chevron-right"></i>' + '</label>' + '</li>');
+                }
+
+                object.loadDashboardRegions();
+            });
+        }
+    }]);
+
+    return ViewOrganizations;
+}();
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ViewRegions = function () {
+    function ViewRegions() {
+        _classCallCheck(this, ViewRegions);
+
+        this.dashboardCreateRegion();
+
+        this.AjaxHelpers = new AjaxHelpers();
+    }
+
+    _createClass(ViewRegions, [{
+        key: 'dashboardCreateRegion',
+        value: function dashboardCreateRegion() {
+            var object = this;
+            var overlay = $('.regions-overlay');
+            var button = $('.dash-create-regions-button');
+            var close = $('.regions-overlay .close');
+            var form = $('.regions-overlay form');
+            var endpoint = '/api/v1/regions/new';
+
+            button.click(function () {
+                overlay.fadeIn();
+            });
+
+            close.click(function () {
+                overlay.fadeOut();
+            });
+
+            form.submit(function (e) {
+                e.preventDefault();
+
+                var data = $(this).serialize();
+
+                object.AjaxHelpers.postCall(endpoint, data).then(function (resp) {
+                    if (resp.success == true) {
+                        form[0].reset();
+                        form.addClass('successful');
 
                         setTimeout(function () {
                             form.removeClass('successful');
@@ -483,7 +561,7 @@ var ViewOrganizations = function () {
         }
     }]);
 
-    return ViewOrganizations;
+    return ViewRegions;
 }();
 'use strict';
 

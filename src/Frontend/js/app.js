@@ -4,4 +4,5 @@ $(document).ready(function () {
     new ViewNavigation();
     new ViewWorksheets();
     new ViewSpotTypes();
+    new ViewRegions();
 });
