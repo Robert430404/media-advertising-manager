@@ -153,7 +153,7 @@ class Programs
     /**
      * @var float
      *
-     * @ORM\Column(name="spot_rate", type="decimal", precision=10, scale=2)
+     * @ORM\Column(name="spot_rate", type="decimal", precision=13, scale=2)
      * @Assert\NotBlank()
      */
     private $spotRate;

@@ -23,7 +23,9 @@ class CreateUserCommand extends ContainerAwareCommand
             ->addArgument('username', InputArgument::REQUIRED, 'Username Of New User')
             ->addArgument('password', InputArgument::REQUIRED, 'Password Of New User')
             ->addArgument('email', InputArgument::REQUIRED, 'Email Of New User')
-            ->addArgument('user_role', InputArgument::REQUIRED, 'Set User Role');
+            ->addArgument('user_role', InputArgument::REQUIRED, 'Set User Role')
+            ->addArgument('first_name', InputArgument::REQUIRED, 'Full Name Of New User')
+            ->addArgument('last_name', InputArgument::REQUIRED, 'Last Name Of New User');
     }
 
     /**
@@ -42,6 +44,7 @@ class CreateUserCommand extends ContainerAwareCommand
             'Username:  ' . $input->getArgument('username'),
             'Password:  ' . $input->getArgument('password'),
             'Email:     ' . $input->getArgument('email'),
+            'Full Name: ' . $input->getArgument('first_name') . ' ' . $input->getArgument('last_name'),
             'User Role: ' . $input->getArgument('user_role'),
             ''
         ]);
@@ -63,6 +66,7 @@ class CreateUserCommand extends ContainerAwareCommand
         $user->setPassword($encodedPassword);
         $user->setEmailAddress($input->getArgument('email'));
         $user->setUserRole($input->getArgument('user_role'));
+        $user->setFullName($input->getArgument('first_name') . ' ' . $input->getArgument('last_name'));
         $user->setCreatedAt(Carbon::now());
         $user->setUpdatedAt(Carbon::now());
 

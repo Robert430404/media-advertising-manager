@@ -128,16 +128,19 @@
         overflow: hidden;
         padding: 10px 15px;
         border-bottom: 1px solid $lighter-grey;
+        font-size: 14px;
+        line-height: 26px;
         .actions {
           float: right;
           line-height: 26px;
-          font-size: 14px;
+          font-size: 12px;
           a {
             background: $highlight-dark;
             font-size: 12px;
             text-transform: uppercase;
             color: $white;
             padding: 5px 10px;
+            margin: 0 0 0 10px;
             border-radius: $border-radius;
             border: 2px solid $highlight-dark;
             transition: all .3s;

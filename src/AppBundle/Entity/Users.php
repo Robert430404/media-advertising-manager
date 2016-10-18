@@ -40,6 +40,14 @@ class Users implements UserInterface, \Serializable
     /**
      * @var string
      *
+     * @ORM\Column(name="full_name", type="string", length=100)
+     * @Assert\NotBlank()
+     */
+    private $fullName;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="password", type="string", length=100)
      * @Assert\NotBlank()
      * @Assert\Length(max=4096)
@@ -111,6 +119,30 @@ class Users implements UserInterface, \Serializable
     public function getUsername()
     {
         return $this->username;
+    }
+
+    /**
+     * Set fullName
+     *
+     * @param string $fullName
+     *
+     * @return Users
+     */
+    public function setFullName($fullName)
+    {
+        $this->fullName = $fullName;
+
+        return $this;
+    }
+
+    /**
+     * Get fullName
+     *
+     * @return string
+     */
+    public function getFullName()
+    {
+        return $this->fullName;
     }
 
     /**

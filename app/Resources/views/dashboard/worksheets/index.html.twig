@@ -1,7 +1,9 @@
 {% extends 'base.html.twig' %}
+
 {% block title %}
     Worksheets - Media Manager
 {% endblock %}
+
 {% block body %}
     <div class="container row">
         <div class="columns large-12 medium-12 small-12">
@@ -20,13 +22,18 @@
                                                 <span class="worksheet-name">{{ worksheet.name }}</span>
                                                 <div class="actions">
                                                     <label>Actions: </label>
-                                                    <a href="/campaigns/worksheets/programs/{{ worksheet.id }}" class="action">Manage Programs</a>
-                                                    <a href="/campaigns/worksheets/{{ campaign.id }}/delete/{{ worksheet.id }}" class="action">Delete Worksheet</a>
+                                                    <a href="/reports/station-order/{{ campaign.id }}"
+                                                       class="action">Gen Station Report</a>
+                                                    <a href="/campaigns/worksheets/programs/{{ worksheet.id }}"
+                                                       class="action">Manage Programs</a>
+                                                    <a href="/campaigns/worksheets/{{ campaign.id }}/delete/{{ worksheet.id }}"
+                                                       class="action">Delete Worksheet</a>
                                                     <a href="/campaigns" class="action">See Campaigns</a>
                                                 </div>
                                                 <span class="divider"></span>
                                                 <div class="tags">
-                                                    <label>Type: </label><span class="tag">{{ worksheet.spotType }}</span>
+                                                    <label>Type: </label><span
+                                                            class="tag">{{ worksheet.spotType }}</span>
                                                 </div>
                                             </div>
                                             <div class="week-information">
@@ -35,20 +42,25 @@
                                                 </h3>
                                                 <h4 class="sub-title">
                                                     Length: <strong>{{ worksheet.flightLength }} Weeks</strong>
-                                                    - Start Date: <strong>{{ worksheet.flightStartDate.format("M d, Y") }}</strong>
-                                                    - End Date: <strong>{{ worksheet.flightEndDate.format("M d, Y") }}</strong>
+                                                    - Start Date:
+                                                    <strong>{{ worksheet.flightStartDate.format("M d, Y") }}</strong>
+                                                    - End Date:
+                                                    <strong>{{ worksheet.flightEndDate.format("M d, Y") }}</strong>
                                                 </h4>
                                                 <div class="div info-inner">
                                                     <div class="spot-column spot-count">
                                                         <div class="spot-count-heading">
-                                                            Total Spots<br />Running
+                                                            Total Spots<br/>Running
                                                         </div>
                                                         {% for program in worksheet.programs %}
                                                             <div class="spot-date-total">
                                                                 <p>
-                                                                    <strong>Station:</strong> {{ program.station }} <br />
-                                                                    <strong>Start:</strong> {{ program.timeSlotStart.format('h:i a') }} <br />
-                                                                    <strong>End:</strong> {{ program.timeSlotEnd.format('h:i a') }} <br />
+                                                                    <strong>Station:</strong> {{ program.station }}
+                                                                    <br/>
+                                                                    <strong>Start:</strong> {{ program.timeSlotStart.format('h:i a') }}
+                                                                    <br/>
+                                                                    <strong>End:</strong> {{ program.timeSlotEnd.format('h:i a') }}
+                                                                    <br/>
                                                                     <strong>Days:</strong> <span class="days">
                                                                         {% if program.Monday != 0 %} M {% endif %}
                                                                         {% if program.Tuesday != 0 %} T {% endif %}
@@ -57,7 +69,7 @@
                                                                         {% if program.Friday != 0 %} F {% endif %}
                                                                         {% if program.Saturday != 0 %} S {% endif %}
                                                                         {% if program.Sunday != 0 %} Su {% endif %}
-                                                                    </span> <br />
+                                                                    </span> <br/>
                                                                     <strong>Total:</strong>
                                                                     <span class="total program-{{ program.id }}-total">
                                                                         0
@@ -65,14 +77,17 @@
                                                                 </p>
                                                             </div>
                                                         {% endfor %}
-                                                        <a class="update-week-information button" data-worksheet="{{ worksheet.id }}">
+                                                        <a class="update-week-information button"
+                                                           data-worksheet="{{ worksheet.id }}">
                                                             Save Data
                                                         </a>
                                                     </div>
                                                     <div class="outer-scrollable">
                                                         <div class="scrollable">
                                                             <div class="form-wrapper">
-                                                                <form action="" class="spot-counts worksheet-counts-{{ worksheet.id }}" method="post">
+                                                                <form action=""
+                                                                      class="spot-counts worksheet-counts-{{ worksheet.id }}"
+                                                                      method="post">
                                                                     {% if worksheet.weekInfo != null %}
                                                                         {% for d in range(worksheet.flightStartDate|date('U'), worksheet.flightEndDate|date('U'), 86400 ) %}
                                                                             {% if d|date('D') == 'Mon' %}
@@ -83,17 +98,24 @@
                                                                                     {% for program in worksheet.programs %}
                                                                                         <div class="spot-date-input">
                                                                                             {% if attribute(worksheet.weekInfo, 'date-' ~ d ~ '-' ~ program.id) is defined %}
-                                                                                                <input type="text" name="date-{{ d }}-{{ program.id }}" tabindex="{{ program.id }}"
-                                                                                                       class="form-control date-count date-{{ d }}-{{ program.id }}" data-program="{{ program.id }}"
-                                                                                                       value="{{ attribute(worksheet.weekInfo, 'date-' ~ d ~ '-' ~ program.id) }}" />
+                                                                                                <input type="text"
+                                                                                                       name="date-{{ d }}-{{ program.id }}"
+                                                                                                       tabindex="{{ program.id }}"
+                                                                                                       class="form-control date-count date-{{ d }}-{{ program.id }}"
+                                                                                                       data-program="{{ program.id }}"
+                                                                                                       value="{{ attribute(worksheet.weekInfo, 'date-' ~ d ~ '-' ~ program.id) }}"/>
                                                                                             {% else %}
-                                                                                                <input type="text" name="date-{{ d }}-{{ program.id }}" tabindex="{{ program.id }}"
-                                                                                                       class="form-control date-count date-{{ d }}-{{ program.id }}" data-program="{{ program.id }}" />
+                                                                                                <input type="text"
+                                                                                                       name="date-{{ d }}-{{ program.id }}"
+                                                                                                       tabindex="{{ program.id }}"
+                                                                                                       class="form-control date-count date-{{ d }}-{{ program.id }}"
+                                                                                                       data-program="{{ program.id }}"/>
                                                                                             {% endif %}
                                                                                         </div>
                                                                                     {% endfor %}
                                                                                     <div class="week-total">
-                                                                                        Total: <span class="total">0</span>
+                                                                                        Total: <span
+                                                                                                class="total">0</span>
                                                                                     </div>
                                                                                 </div>
                                                                             {% endif %}
@@ -107,12 +129,16 @@
                                                                                     </div>
                                                                                     {% for program in worksheet.programs %}
                                                                                         <div class="spot-date-input">
-                                                                                            <input type="text" name="date-{{ d }}-{{ program.id }}" tabindex="{{ program.id }}"
-                                                                                                   class="form-control date-count date-{{ d }}-{{ program.id }}" data-program="{{ program.id }}" />
+                                                                                            <input type="text"
+                                                                                                   name="date-{{ d }}-{{ program.id }}"
+                                                                                                   tabindex="{{ program.id }}"
+                                                                                                   class="form-control date-count date-{{ d }}-{{ program.id }}"
+                                                                                                   data-program="{{ program.id }}"/>
                                                                                         </div>
                                                                                     {% endfor %}
                                                                                     <div class="week-total">
-                                                                                        Total: <span class="total">0</span>
+                                                                                        Total: <span
+                                                                                                class="total">0</span>
                                                                                     </div>
                                                                                 </div>
                                                                             {% endif %}
@@ -129,11 +155,13 @@
                                 </ul>
                             {% endif %}
                             <div class="form-wrapper">
-                                <form action="/campaigns/worksheets/{{ campaign.id }}/add" method="post" class="worksheet-form" id="worksheet-form">
+                                <form action="/campaigns/worksheets/{{ campaign.id }}/add" method="post"
+                                      class="worksheet-form" id="worksheet-form">
                                     <div class="form-group row">
                                         <div class="columns large-6 medium-6 small-12">
                                             <label for="campaign_name">Worksheet Name *
-                                                <input type="text" class="form-control worksheet-name" id="worksheet-name" name="worksheet_name"/>
+                                                <input type="text" class="form-control worksheet-name"
+                                                       id="worksheet-name" name="worksheet_name"/>
                                             </label>
                                         </div>
                                         <div class="columns large-6 medium-6 small-12">
@@ -147,11 +175,13 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <input type="hidden" name="worksheet_region" value="{{ campaign.regionId }}" />
-                                    <input type="hidden" name="worksheet_organization" value="{{ campaign.organizationId }}" />
+                                    <input type="hidden" name="worksheet_region" value="{{ campaign.regionId }}"/>
+                                    <input type="hidden" name="worksheet_organization"
+                                           value="{{ campaign.organizationId }}"/>
                                     <div class="form-group row">
                                         <div class="column large-12 medium-12 small-12">
-                                            <input type="submit" class="submit form-button" id="submit" value="Add New Worksheet"
+                                            <input type="submit" class="submit form-button" id="submit"
+                                                   value="Add New Worksheet"
                                                    name="submit"/>
                                         </div>
                                     </div>

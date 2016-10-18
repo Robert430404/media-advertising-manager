@@ -1,8 +1,11 @@
 {% extends 'report.html.twig' %}
 
+{% block title %}
+    Station Report For {{ campaign.name }}
+{% endblock %}
+
 {% block styles %}
     <style>
-
         body {
             margin: 0;
             padding: 0;
@@ -10,6 +13,12 @@
             font-size: 12pt;
             background-color: #eee;
         }
+
+        p {
+            font-size: 12px;
+            margin: 0 !important;
+        }
+
         .page {
             width: 21cm;
             min-height: 29.7cm;
@@ -22,98 +31,436 @@
             box-shadow: 0 4px 5px rgba(75, 75, 75, 0.2);
             outline: 0;
         }
+
         .heading,
         .sub-heading {
             width: 100%;
             overflow: hidden;
             margin-bottom: 10px;
         }
+
         .heading .left,
         .sub-heading .left {
             float: left;
             width: 33.333%;
         }
+
         .heading .middle,
         .sub-heading .middle {
             float: left;
             width: 33.333%;
         }
+
         .heading .right,
         .sub-heading .right {
             float: right;
             width: 33.333%;
         }
+
         .heading .left p,
         .sub-heading .left p {
             text-align: left;
             margin: 0;
+            font-size: 12px;
         }
+
         .heading .middle h1,
         .sub-heading .middle h1 {
             font-size: 22px;
             margin: 0;
             text-align: center;
         }
+
         .sub-heading .middle p {
             margin: 0;
             text-align: center;
+            font-size: 12px;
         }
+
         .heading .right p,
         .sub-heading .right p {
             text-align: right;
             margin: 0;
+            font-size: 12px;
+        }
+
+        .spot-column {
+            float: left;
+            padding-right: 10px;
+            padding-left: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .row-count {
+            width: auto;
+        }
+
+        .col-heading {
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            font-size: 12px;
+            border-bottom: 1px solid #000;
+            font-weight: bold;
+            margin-right: -10px;
+            margin-left: -10px;
+        }
+
+        .week-information {
+            margin-top: 30px;
+        }
+
+        .weekly-information {
+            overflow: hidden;
+            padding-left: 15px;
+        }
+
+        .weekly-overview {
+            overflow: hidden;
+            float: left;
+        }
+
+        .monthly-totals {
+            overflow: hidden;
+            clear: both;
+        }
+
+        .monthly-totals .title {
+            font-size: 18px;
+            text-transform: uppercase;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        .monthly-totals .sub-title {
+            font-size: 14px;
+            font-weight: 400;
+            margin: 0 0 15px;
+            text-align: center;
+        }
+
+        .col-footer {
+            border-top: 1px solid #000;
+            margin-top: 15px !important;
+            margin-right: -10px !important;
+            margin-left: -10px !important;
+            padding: 5px 10px;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .monthly-totals {
+            position: relative;
+            top: -20px;
+            border: 1px solid #000;
+            padding: 10px;
+        }
+
+        .monthly-breakdown {
+            overflow: hidden;
+        }
+
+        .monthly-breakdown .breakdown-row {
+            float: none;
+            overflow: hidden;
+        }
+        .monthly-breakdown .heading-row .column{
+            font-weight: bold;
+            margin: 0 0 15px 0;
+            border-bottom: 1px solid #000;
+        }
+        .monthly-breakdown .column {
+            float: left;
+            font-size: 12px;
+            text-align: center;
+            width: 33.333%;
+            padding: 0 10px 5px;
+            margin: 0;
+        }
+        .monthly-breakdown .footer-row .column{
+            border-top: 1px solid #000;
+            margin: 10px 0 0 0;
+            padding: 5px 10px 0;
         }
     </style>
 {% endblock %}
 
 {% block body %}
 
-    <div class="page">
-        <div class="heading">
-            <div class="left">
-                <p>Client: </p>
-                <p>Product: </p>
-                <p>Campaign: </p>
+    {% for worksheet in worksheets %}
+        <div class="page">
+            <div class="heading">
+                <div class="left">
+                    <p>Client: {{ worksheet.orgName }}</p>
+                    <p>Product: {{ worksheet.spotType }}</p>
+                    <p>Campaign: {{ campaign.name }}</p>
+                </div>
+                <div class="middle">
+                    <h1>Station Order</h1>
+                </div>
+                <div class="right">
+                    {% if worksheets.0.orgName == 'Dollar Loan Center' %}
+                        <p>Dollar Loan Center, LLC<br>8860 Sunset Road</p>
+                        <p>Las Vegas, NV 89148</p>
+                        <p>702-947-4381</p>
+                    {% endif %}
+                </div>
             </div>
-            <div class="middle">
-                <h1>Station Order</h1>
+            <div class="sub-heading">
+                <div class="left">
+                    <p>Market: {{ worksheet.region }}</p>
+                    <p>Station: {{ worksheet.programs.0.station }}</p>
+                    <p>Station Contact: ADD TO CAMPAIGN</p>
+                </div>
+                <div class="middle">
+                    <p>Flight From: {{ campaign.flightStartDate.format('m/d/Y') }}
+                        to {{ campaign.flightEndDate.format('m/d/Y') }}</p>
+                </div>
+                <div class="right">
+                    <p>Buyer Name: {{ app.user.fullName }}</p>
+                </div>
             </div>
-            <div class="right">
-                <p>Dollar Loan Center, LLC<br>8860 Sunset Road</p>
-                <p>Las Vegas, NV 89148</p>
-                <p>702-947-4381</p>
+            <div class="week-information">
+                <div class="div info-inner">
+                    <div class="weekly-overview">
+                        <div class="spot-column row-information spot-count">
+                            <div class="col-heading">Item<br/>Num</div>
+                            {% set i = 1 %}
+                            {% for program in worksheet.programs %}
+                                <div class="spot-date-days-times">
+                                    <p>
+                                    <p>{{ i }}</p>
+                                    <p>&nbsp;</p>
+                                    </p>
+                                </div>
+                                {% set i = i + 1 %}
+                            {% endfor %}
+                        </div>
+                        <div class="spot-column row-information spot-count">
+                            <div class="col-heading">Days/<br/>Times</div>
+                            {% for program in worksheet.programs %}
+                                <div class="spot-date-days-times">
+                                    <p>
+                                    <span class="days">
+                                        {% if program.Monday != 0 %} M {% endif %}
+                                        {% if program.Tuesday != 0 %} T {% endif %}
+                                        {% if program.Wednesday != 0 %} W {% endif %}
+                                        {% if program.Thursday != 0 %} Thu {% endif %}
+                                        {% if program.Friday != 0 %} F {% endif %}
+                                        {% if program.Saturday != 0 %} S {% endif %}
+                                        {% if program.Sunday != 0 %} Su {% endif %}
+                                    </span> <br/>
+                                        {{ program.timeSlotStart.format('h:ia') }} to
+                                        {{ program.timeSlotEnd.format('h:ia') }}
+                                    </p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="spot-column row-information spot-count">
+                            <div class="col-heading">DP/<br/>Len</div>
+                            {% for program in worksheet.programs %}
+                                <div class="spot-date-day-part-length">
+                                    <p>
+                                        {{ program.dayPart }}<br/>
+                                        {{ program.spotLength }}
+                                    </p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="spot-column row-information spot-count">
+                            <div class="col-heading">Rate/<br/>Total</div>
+                            {% set i = 1 %}
+                            {% for program in worksheet.programs %}
+                                <div class="spot-date-rate-cost">
+                                    <p>
+                                        $<span class="spot-rate-cost spot-rate-{{ i }}">{{ program.spotRate }}</span><br/>
+                                        $<span class="spot-cost-total spot-total-{{ i }}">&nbsp;</span>
+                                    </p>
+                                </div>
+                                {% set i = i + 1 %}
+                            {% endfor %}
+                            <div class="cost-total col-total col-footer">
+                                $<span class="total">0.00</span>
+                            </div>
+                        </div>
+                        <div class="monthly-totals">
+                            <h3 class="title">Monthly Totals</h3>
+                            <h4 class="sub-title">Based On Calendar Year</h4>
+                            <div class="monthly-breakdown">
+                                <div class="breakdown-row heading-row">
+                                    <div class="column month">Month<br />Ran</div>
+                                    <div class="column spot-count">Spot<br />Total</div>
+                                    <div class="column gross-total">Station<br />Gross</div>
+                                </div>
+                                {% for month,total in monthly_totals %}
+                                    <div class="breakdown-row breakdown-info-row">
+                                        <div class="column month">{{ month }}</div>
+                                        <div class="column spot-count">{{ total }}</div>
+                                        <div class="column gross-cost">0.00</div>
+                                    </div>
+                                {% endfor %}
+                                <div class="breakdown-row footer-row">
+                                    <div class="column month">&nbsp;</div>
+                                    <div class="column spot-total">Spot<br />Total</div>
+                                    <div class="column gross-total">Station<br />Gross</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weekly-information">
+                        {% if worksheet.weekInfo != null %}
+                            {% set startDate = worksheet.flightStartDate|date('U') %}
+                            {% set endDate = worksheet.flightEndDate|date('U') %}
+                            {% for d in range(startDate, endDate, 86400 ) %}
+                                {% if d|date('D') == 'Mon' %}
+                                    <div class="spot-column spot-date-column">
+                                        <div class="col-heading week-date-heading">
+                                            <span class="month">{{ d|date('M') }}</span><br/><span
+                                                    class="day">{{ d|date('d') }}</span>
+                                        </div>
+                                        {% set i = 1 %}
+                                        {% for program in worksheet.programs %}
+                                            <div class="spot-date-total">
+                                                {% if attribute(worksheet.weekInfo, 'date-' ~ d ~ '-' ~ program.id) is defined %}
+                                                    <p class="raw-spot-count row-{{ i }}">{{ attribute(worksheet.weekInfo, 'date-' ~ d ~ '-' ~ program.id) }}</p>
+                                                    <p>&nbsp;</p>
+                                                {% else %}
+                                                    <p>&nbsp;</p>
+                                                    <p>&nbsp;</p>
+                                                {% endif %}
+                                            </div>
+                                            {% set i = i + 1 %}
+                                        {% endfor %}
+                                        <p class="col-total col-footer">
+                                            <span class="spot-total"></span>
+                                        </p>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        <div class="spot-column row-information spot-count">
+                            <div class="col-heading">Spot<br/>Total</div>
+                            {% set i = 1 %}
+                            {% for program in worksheet.programs %}
+                                <div class="spot-date-rate-cost">
+                                    <p>
+                                        <span class="spot-weekly-totals weekly-total-{{ i }}">{{ program.spotRate }}</span><br/>
+                                    <p>&nbsp;</p>
+                                    </p>
+                                </div>
+                                {% set i = i + 1 %}
+                            {% endfor %}
+                            <div class="campaign-total col-total col-footer">
+                                <span class="campaign-total">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="sub-heading">
-            <div class="left">
-                <p>Estimate No: </p>
-                <p>Contract No: </p>
-                <p>Job No: </p>
-            </div>
-            <div class="middle">
-                <p>Rev #: 0</p>
-                <p>Flight From: to</p>
-            </div>
-            <div class="right">
-                <p>Buyer Name: </p>
-                <p>Sweeps: </p>
-            </div>
-        </div>
-        <div class="sub-heading">
-            <div class="left">
-                <p>Market: </p>
-                <p>Station: </p>
-                <p>Station Contact: </p>
-            </div>
-            <div class="middle">
+    {% endfor %}
 
-            </div>
-            <div class="right">
-                <p>Actg. Order No: </p>
-                <p>WS Order No: </p>
-                <p>Contact No:</p>
-            </div>
-        </div>
-    </div>
+    <script src="{{ asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var column = $('.spot-date-column');
+
+            /**
+             * Calculates The Weekly Totals For The Report
+             */
+            column.each(function () {
+                var counts = $(this).find('.raw-spot-count');
+                var count = 0;
+
+                counts.each(function () {
+                    var number = Number($(this).html());
+
+                    count = number + count;
+                });
+
+                $(this).find('.spot-total').empty().append(count);
+            });
+
+            /**
+             * Calculates The Campaigns Total Spots
+             */
+            $('.spot-date-rate-cost').each(function () {
+                var spotTotal = 0;
+
+                $('.spot-date-column').each(function () {
+                    var number = Number($(this).find('.spot-total').html());
+
+                    spotTotal = number + spotTotal;
+                });
+
+                $('.campaign-total').empty().append(spotTotal);
+            });
+
+            /**
+             * Calculates The Spot Totals For Each Campaigns
+             */
+            var totalRows = $('.spot-column .spot-date-total').length;
+            var totalColumns = column.length;
+            var rowCount = totalRows / totalColumns;
+            var row = 1;
+
+            while (row <= rowCount) {
+                var counts = $('.row-' + row);
+                var count = 0;
+                counts.each(function () {
+                    var number = Number($(this).html());
+
+                    count = number + count;
+                });
+
+                $('.weekly-total-' + row).empty().append(count);
+
+                row++;
+            }
+
+            row = 1;
+
+            while (row <= rowCount) {
+                var totalSpots = $('.weekly-total-' + row).html();
+                var spotRate = Number($('.spot-rate-' + row).html());
+                var cost = spotRate * totalSpots;
+
+                $('.spot-total-' + row).empty().append(cost.toFixed(2));
+
+                row++;
+            }
+
+            row = 1;
+            var totalRate = 0;
+
+            while (row <= rowCount) {
+                var rowValue = Number($('.spot-total-' + row).html());
+                totalRate = totalRate + rowValue;
+
+                row++;
+            }
+
+            var breakdownSpotTotal = 0;
+
+            $('.cost-total .total').empty().append(totalRate.toFixed(2));
+
+            $('.breakdown-info-row').each(function () {
+                var spotCount = Number($(this).find('.spot-count').html());
+
+                breakdownSpotTotal = breakdownSpotTotal + spotCount;
+            });
+
+            $('.breakdown-info-row').each(function () {
+                var cost = totalRate / breakdownSpotTotal;
+                var spotCount = Number($(this).find('.spot-count').html());
+
+                $(this).find('.spot-count').empty().append(Math.ceil(spotCount));
+                $(this).find('.gross-cost').empty().append('$' + Number(cost * spotCount).toFixed(2));
+            });
+
+            $('.breakdown-row.footer-row .spot-total').empty().append(Math.ceil(breakdownSpotTotal));
+            $('.breakdown-row.footer-row .gross-total').empty().append('$' + totalRate.toFixed(2));
+        });
+    </script>
 
 {% endblock %}

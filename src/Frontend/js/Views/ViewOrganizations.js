@@ -50,16 +50,19 @@ class ViewOrganizations {
                     container.empty().append('<h1 class="campaigns-title">Campaigns</h1>');
                     container.append('<ul class="campaign-list"></ul>');
                     for (var i = 0; i < resp.length; i++) {
-                        container.find('.campaign-list').append('<li class="campaign-selector campaign-selector-' + resp[i].id + '" data-id="' + resp[i].id + '">' + resp[i].name + '</li>');
-                        container.find('.campaign-selector-' + resp[i].id).append('<div class="actions">Actions: <a href="/campaigns/worksheets/' + resp[i].id + '">See Worksheets</a></div>');
+                        container.find('.campaign-list').append('<li class="campaign-selector campaign-selector-' + resp[i].id + '" data-id="' + resp[i].id + '">' +
+                                resp[i].name +
+                            '</li>');
+                        container.find('.campaign-selector-' + resp[i].id).append('<div class="actions">' +
+                                '<a href="/campaigns/worksheets/' + resp[i].id + '">See Worksheets</a>' +
+                                '<a href="/reports/station-order/' + resp[i].id + '">Gen Station Order</a>' +
+                            '</div>');
                     }
                 } else {
                     container.empty().append('<h1 class="campaigns-title">Campaigns</h1>');
                     container.append('<p class="align-center">No campaigns are currently running</p>');
                 }
             });
-
-            console.log(id);
         });
     }
 
@@ -115,10 +118,10 @@ class ViewOrganizations {
 
             for (var i = 0; i < resp.length; i++) {
                 sidebar.append('<li>' +
-                        '<label data-id="' + resp[i].id + '" data-name="' + resp[i].name + '">' +
-                            resp[i].name +
-                            '<i class="fa fa-chevron-right"></i>' +
-                        '</label>' +
+                    '<label data-id="' + resp[i].id + '" data-name="' + resp[i].name + '">' +
+                    resp[i].name +
+                    '<i class="fa fa-chevron-right"></i>' +
+                    '</label>' +
                     '</li>');
             }
 

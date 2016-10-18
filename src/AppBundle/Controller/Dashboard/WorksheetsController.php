@@ -38,6 +38,13 @@ class WorksheetsController extends Controller
 
             $worksheets[$key]['programs'] = $programs;
             $worksheets[$key]['weekInfo'] = json_decode($worksheet['weekInfo']);
+            $startDate = Carbon::createFromTimestamp($worksheet['flightStartDate']->format('U'));
+
+            if ($startDate->format('D') !== 'Mon') {
+                $startDate = Carbon::createFromTimestamp(strtotime('previous monday', strtotime($startDate)));
+            }
+
+            $worksheets[$key]['flightStartDate'] = $startDate;
         }
 
         return $this->render('dashboard/worksheets/index.html.twig', [

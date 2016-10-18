@@ -25,7 +25,8 @@ class WorksheetsRepository extends \Doctrine\ORM\EntityRepository
                                  'c.flightLength, ' .
                                  'c.name as campName, ' .
                                  'o.name as orgName, ' .
-                                 's.name as spotType ' .
+                                 's.name as spotType, ' .
+                                 'r.name as region ' .
                           'FROM AppBundle:Worksheets w ' .
                               'JOIN AppBundle:SpotTypes s ' .
                                   'WITH w.spotTypeId = s.id ' .
@@ -33,7 +34,10 @@ class WorksheetsRepository extends \Doctrine\ORM\EntityRepository
                                   'WITH w.campaignId = c.id ' .
                               'JOIN AppBundle:Organizations o ' .
                                   'WITH w.organizationId = o.id ' .
+                              'JOIN AppBundle:Regions r ' .
+                                  'WITH c.regionId = r.id ' .
                           'WHERE w.campaignId = ' . $campaignId);
+
         $data = $query->getResult();
 
         return $data;
