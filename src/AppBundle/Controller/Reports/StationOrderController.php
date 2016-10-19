@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller\Reports;
 
+use DatePeriod;
+use DateInterval;
 use Carbon\Carbon;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -21,50 +23,42 @@ class StationOrderController extends Controller
     public function pdfAction(Request $request, $campaignId)
     {
         $monthlyTotals = [];
-        $worksheets = $this->getDoctrine()
-            ->getRepository('AppBundle:Worksheets')
-            ->findAllWorksheetsWithData($campaignId);
-        $campaign = $this->getDoctrine()
-            ->getRepository('AppBundle:Campaigns')
-            ->find($campaignId);
-        $spotTypes = $this->getDoctrine()
-            ->getRepository('AppBundle:SpotTypes')
-            ->findAll();
+        $worksheets    = $this->getDoctrine()
+                              ->getRepository('AppBundle:Worksheets')
+                              ->findAllWorksheetsWithData($campaignId);
+        $campaign      = $this->getDoctrine()
+                              ->getRepository('AppBundle:Campaigns')
+                              ->find($campaignId);
+        $spotTypes     = $this->getDoctrine()
+                              ->getRepository('AppBundle:SpotTypes')
+                              ->findAll();
 
         foreach ($worksheets as $key => $worksheet) {
             $programs = $this->getDoctrine()
-                ->getRepository('AppBundle:Programs')
-                ->findByWorksheetId($worksheet['id']);
+                             ->getRepository('AppBundle:Programs')
+                             ->findByWorksheetId($worksheet['id']);
 
             $worksheets[$key]['programs'] = $programs;
             $worksheets[$key]['weekInfo'] = json_decode($worksheet['weekInfo']);
-            $startDate = Carbon::createFromTimestamp($worksheet['flightStartDate']->format('U'));
+            $starTimeStamp                = $worksheet['flightStartDate']->format('U');
+            $startDate                    = Carbon::createFromTimestamp($starTimeStamp);
 
             if ($startDate->format('D') !== 'Mon') {
-                $startDate = Carbon::createFromTimestamp(strtotime('previous monday', strtotime($startDate)));
+                $starTimeStamp = strtotime('previous monday', strtotime($startDate));
+                $startDate     = Carbon::createFromTimestamp($starTimeStamp);
             }
 
             $worksheets[$key]['flightStartDate'] = $startDate;
         }
 
         foreach ($worksheets as $key => $worksheet) {
-            $startDate = Carbon::createFromTimestamp($worksheet['flightStartDate']->format('U'));
-
-            if ($startDate->format('D') !== 'Mon') {
-                $startDate = Carbon::createFromTimestamp(strtotime('previous monday', strtotime($startDate)));
-            }
-
-            $endDate = Carbon::createFromTimestamp($worksheet['flightEndDate']->format('U'));
-            $interval = \DateInterval::createFromDateString('1 day');
-            $period = new \DatePeriod($startDate, $interval, $endDate);
-            $totalDays = $startDate->diffInDays($endDate);
-            $totalSpots = 0;
-
-            foreach ($worksheet['weekInfo'] as $count) {
-                $totalSpots = $totalSpots + (int)$count;
-            }
-
-            $dayCount = $totalSpots / $totalDays;
+            $startDate     = Carbon::createFromTimestamp($worksheet['flightStartDate']->format('U'));
+            $endDate       = Carbon::createFromTimestamp($worksheet['flightEndDate']->format('U'));
+            $interval      = DateInterval::createFromDateString('1 day');
+            $period        = new DatePeriod($startDate, $interval, $endDate);
+            $totalDays     = $startDate->diffInDays($endDate);
+            $totalSpots    = array_sum((array)$worksheet['weekInfo']);
+            $dayCount      = $totalSpots / $totalDays;
             $monthlyTotals = [];
 
             foreach ($period as $keyTwo => $date) {
@@ -77,9 +71,9 @@ class StationOrderController extends Controller
         }
 
         return $this->render('reports/stationOrder.html.twig', [
-            'worksheets' => $worksheets,
-            'campaign' => $campaign,
-            'spot_types' => $spotTypes,
+            'worksheets'     => $worksheets,
+            'campaign'       => $campaign,
+            'spot_types'     => $spotTypes,
             'monthly_totals' => $monthlyTotals,
         ]);
     }

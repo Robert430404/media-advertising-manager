@@ -123,17 +123,21 @@
         .monthly-totals {
             overflow: hidden;
             clear: both;
+            position: relative;
+            top: -20px;
+            border: 1px solid #000;
+            padding: 5px;
         }
 
         .monthly-totals .title {
-            font-size: 18px;
+            font-size: 14px;
             text-transform: uppercase;
             margin: 0;
             padding: 0;
             text-align: center;
         }
         .monthly-totals .sub-title {
-            font-size: 14px;
+            font-size: 10px;
             font-weight: 400;
             margin: 0 0 15px;
             text-align: center;
@@ -149,13 +153,6 @@
             text-align: center;
         }
 
-        .monthly-totals {
-            position: relative;
-            top: -20px;
-            border: 1px solid #000;
-            padding: 10px;
-        }
-
         .monthly-breakdown {
             overflow: hidden;
         }
@@ -166,7 +163,7 @@
         }
         .monthly-breakdown .heading-row .column{
             font-weight: bold;
-            margin: 0 0 15px 0;
+            margin: 0 0 5px 0;
             border-bottom: 1px solid #000;
         }
         .monthly-breakdown .column {
@@ -179,7 +176,7 @@
         }
         .monthly-breakdown .footer-row .column{
             border-top: 1px solid #000;
-            margin: 10px 0 0 0;
+            margin: 0;
             padding: 5px 10px 0;
         }
     </style>
@@ -199,10 +196,14 @@
                     <h1>Station Order</h1>
                 </div>
                 <div class="right">
-                    {% if worksheets.0.orgName == 'Dollar Loan Center' %}
+                    {% if worksheet.orgName == 'Dollar Loan Center' %}
                         <p>Dollar Loan Center, LLC<br>8860 Sunset Road</p>
                         <p>Las Vegas, NV 89148</p>
                         <p>702-947-4381</p>
+                    {% else %}
+                        <p>Badlands Pawn, LLC<br>1600 W. Russell Street</p>
+                        <p>Sioux Falls, SD 57104</p>
+                        <p>605-884-7296</p>
                     {% endif %}
                 </div>
             </div>
