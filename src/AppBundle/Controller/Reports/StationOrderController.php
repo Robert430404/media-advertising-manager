@@ -32,26 +32,25 @@ class StationOrderController extends Controller
         $spotTypes     = $this->getDoctrine()
                               ->getRepository('AppBundle:SpotTypes')
                               ->findAll();
-
-        foreach ($worksheets as $key => $worksheet) {
+        $worksheets    = array_map(function ($worksheet) {
             $programs = $this->getDoctrine()
-                             ->getRepository('AppBundle:Programs')
-                             ->findByWorksheetId($worksheet['id']);
-
-            $worksheets[$key]['programs'] = $programs;
-            $worksheets[$key]['weekInfo'] = json_decode($worksheet['weekInfo']);
-            $starTimeStamp                = $worksheet['flightStartDate']->format('U');
-            $startDate                    = Carbon::createFromTimestamp($starTimeStamp);
+                ->getRepository('AppBundle:Programs')
+                ->findByWorksheetId($worksheet['id']);
+            $worksheet['programs'] = $programs;
+            $worksheet['weekInfo'] = json_decode($worksheet['weekInfo']);
+            $starTimeStamp         = $worksheet['flightStartDate']->format('U');
+            $startDate             = Carbon::createFromTimestamp($starTimeStamp);
 
             if ($startDate->format('D') !== 'Mon') {
                 $starTimeStamp = strtotime('previous monday', strtotime($startDate));
                 $startDate     = Carbon::createFromTimestamp($starTimeStamp);
             }
 
-            $worksheets[$key]['flightStartDate'] = $startDate;
-        }
+            $worksheet['flightStartDate'] = $startDate;
 
-        foreach ($worksheets as $key => $worksheet) {
+            return $worksheet;
+        }, $worksheets);
+        $worksheets    = array_map(function ($worksheet) {
             $startDate     = Carbon::createFromTimestamp($worksheet['flightStartDate']->format('U'));
             $endDate       = Carbon::createFromTimestamp($worksheet['flightEndDate']->format('U'));
             $interval      = DateInterval::createFromDateString('1 day');
@@ -68,7 +67,9 @@ class StationOrderController extends Controller
                     $monthlyTotals[$date->format('M')] = $dayCount;
                 }
             }
-        }
+
+            return $worksheet;
+        }, $worksheets);
 
         return $this->render('reports/stationOrder.html.twig', [
             'worksheets'     => $worksheets,
