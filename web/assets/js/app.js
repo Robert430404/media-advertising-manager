@@ -432,7 +432,7 @@ var ViewOrganizations = function () {
                             container.find('.campaign-selector-' + resp[i].id).append('<div class="actions">' + '<a href="/campaigns/worksheets/' + resp[i].id + '">See Worksheets</a>' + '<a href="/reports/station-order/' + resp[i].id + '">Gen Station Order</a>' + '</div>');
                         }
                     } else {
-                        container.empty().append('<h1 class="campaigns-title">Campaigns</h1>');
+                        container.empty().append('<h1 class="campaigns-title">' + regionName + ' Campaigns</h1>');
                         container.append('<p class="align-center">No campaigns are currently running in ' + regionName + '.</p>');
                     }
                 });

@@ -60,7 +60,7 @@ class ViewOrganizations {
                             '</div>');
                     }
                 } else {
-                    container.empty().append('<h1 class="campaigns-title">Campaigns</h1>');
+                    container.empty().append('<h1 class="campaigns-title">' + regionName + ' Campaigns</h1>');
                     container.append('<p class="align-center">No campaigns are currently running in ' + regionName + '.</p>');
                 }
             });
