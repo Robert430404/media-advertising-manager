@@ -832,7 +832,8 @@ div {
       background: #ECEDEE;
       border-radius: 4px;
       padding: 10px 15px;
-      border: 1px solid #cbcbcb; }
+      border: 1px solid #cbcbcb;
+      margin-right: 15px; }
     .primary-content .region-campaigns .campaign-list {
       margin: 0 15px 0 0;
       padding: 0;
