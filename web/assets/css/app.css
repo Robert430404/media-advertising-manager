@@ -245,7 +245,8 @@ div {
             font-size: 14px;
             text-transform: uppercase;
             margin-top: 5px; }
-        .current-worksheets ul li .week-information .info-inner .spot-date-total p {
+        .current-worksheets ul li .week-information .info-inner .spot-date-total .spot-info-wrapper {
+          position: relative;
           text-align: left;
           line-height: 1.25;
           font-size: 12px;
@@ -257,24 +258,44 @@ div {
           border-radius: 4px;
           border: 1px solid #cbcbcb;
           background: #FFF; }
-          .current-worksheets ul li .week-information .info-inner .spot-date-total p strong {
+          .current-worksheets ul li .week-information .info-inner .spot-date-total .spot-info-wrapper strong {
             min-width: 75px;
             display: inline-block; }
-          .current-worksheets ul li .week-information .info-inner .spot-date-total p span {
+          .current-worksheets ul li .week-information .info-inner .spot-date-total .spot-info-wrapper span {
             font-weight: 800;
             color: #000; }
-            .current-worksheets ul li .week-information .info-inner .spot-date-total p span.days {
+            .current-worksheets ul li .week-information .info-inner .spot-date-total .spot-info-wrapper span.days {
               font-weight: 300;
               letter-spacing: 0;
               text-transform: capitalize;
               color: #6b6b6b; }
+            .current-worksheets ul li .week-information .info-inner .spot-date-total .spot-info-wrapper span.extra-detail {
+              font-weight: 300; }
+          .current-worksheets ul li .week-information .info-inner .spot-date-total .spot-info-wrapper .detail-wrapper {
+            display: none;
+            margin-bottom: 10px; }
+          .current-worksheets ul li .week-information .info-inner .spot-date-total .spot-info-wrapper .extra-detail-expander {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            cursor: pointer;
+            height: 15px;
+            width: 20px;
+            text-align: center;
+            line-height: 14px;
+            background: #cbcbcb;
+            border-radius: 4px;
+            letter-spacing: 0px;
+            transition: all .3s; }
+            .current-worksheets ul li .week-information .info-inner .spot-date-total .spot-info-wrapper .extra-detail-expander.rotated {
+              transform: rotate(180deg); }
         .current-worksheets ul li .week-information .info-inner .spot-date-input input {
           background: #C9FFBD;
           text-align: center;
           color: #000;
           height: auto;
-          line-height: 79px;
-          font-size: 42px; }
+          line-height: 19px;
+          font-size: 16px; }
         .current-worksheets ul li .week-information .info-inner .spot-date-input:last-child {
           padding-bottom: 27px; }
     .current-worksheets ul li .actions,

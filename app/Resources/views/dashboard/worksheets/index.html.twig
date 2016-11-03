@@ -54,27 +54,35 @@
                                                         </div>
                                                         {% for program in worksheet.programs %}
                                                             <div class="spot-date-total">
-                                                                <p>
-                                                                    <strong>Station:</strong> {{ program.station }}
-                                                                    <br/>
-                                                                    <strong>Start:</strong> {{ program.timeSlotStart.format('h:i a') }}
-                                                                    <br/>
-                                                                    <strong>End:</strong> {{ program.timeSlotEnd.format('h:i a') }}
-                                                                    <br/>
-                                                                    <strong>Days:</strong> <span class="days">
-                                                                        {% if program.Monday != 0 %} M {% endif %}
-                                                                        {% if program.Tuesday != 0 %} T {% endif %}
-                                                                        {% if program.Wednesday != 0 %} W {% endif %}
-                                                                        {% if program.Thursday != 0 %} Thu {% endif %}
-                                                                        {% if program.Friday != 0 %} F {% endif %}
-                                                                        {% if program.Saturday != 0 %} S {% endif %}
-                                                                        {% if program.Sunday != 0 %} Su {% endif %}
-                                                                    </span> <br/>
+                                                                <div class="spot-info-wrapper">
+                                                                    <div class="detail-wrapper">
+                                                                        <span class="extra-detail">
+                                                                            <strong>Station:</strong> {{ program.station }}
+                                                                        </span>
+                                                                        <span class="extra-detail">
+                                                                            <strong>Start:</strong> {{ program.timeSlotStart.format('h:i a') }}
+                                                                        </span>
+                                                                        <span class="extra-detail">
+                                                                            <strong>End:</strong> {{ program.timeSlotEnd.format('h:i a') }}
+                                                                        </span>
+                                                                        <span class="extra-detail">
+                                                                            <strong>Days:</strong> <span class="days">
+                                                                            {% if program.Monday != 0 %} M {% endif %}
+                                                                                {% if program.Tuesday != 0 %} T {% endif %}
+                                                                                {% if program.Wednesday != 0 %} W {% endif %}
+                                                                                {% if program.Thursday != 0 %} Thu {% endif %}
+                                                                                {% if program.Friday != 0 %} F {% endif %}
+                                                                                {% if program.Saturday != 0 %} S {% endif %}
+                                                                                {% if program.Sunday != 0 %} Su {% endif %}
+                                                                            </span>
+                                                                        </span>
+                                                                    </div>
                                                                     <strong>Total:</strong>
                                                                     <span class="total program-{{ program.id }}-total">
                                                                         0
                                                                     </span>
-                                                                </p>
+                                                                    <i class="fa fa-chevron-down extra-detail-expander"></i>
+                                                                </div>
                                                             </div>
                                                         {% endfor %}
                                                         <a class="update-week-information button"

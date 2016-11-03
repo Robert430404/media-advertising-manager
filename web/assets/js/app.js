@@ -632,6 +632,7 @@ var ViewWorksheets = function () {
         _classCallCheck(this, ViewWorksheets);
 
         this.persisAction();
+        this.expandSpotDetails();
 
         this.Worksheets = new WorksheetsController();
     }
@@ -669,6 +670,16 @@ var ViewWorksheets = function () {
                         }, 100);
                     });
                 }
+            });
+        }
+    }, {
+        key: 'expandSpotDetails',
+        value: function expandSpotDetails() {
+            var object = this;
+
+            $('.extra-detail-expander').click(function () {
+                $(this).toggleClass('rotated');
+                $(this).parent().find('.detail-wrapper').slideToggle();
             });
         }
     }]);

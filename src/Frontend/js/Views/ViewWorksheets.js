@@ -1,6 +1,7 @@
 class ViewWorksheets {
     constructor() {
         this.persisAction();
+        this.expandSpotDetails();
 
         this.Worksheets = new WorksheetsController();
     }
@@ -37,6 +38,15 @@ class ViewWorksheets {
                     }, 100);
                 });
             }
+        });
+    }
+
+    expandSpotDetails() {
+        var object = this;
+
+        $('.extra-detail-expander').click(function () {
+            $(this).toggleClass('rotated');
+            $(this).parent().find('.detail-wrapper').slideToggle();
         });
     }
 }
