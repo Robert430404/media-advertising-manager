@@ -76,7 +76,7 @@ class WorksheetsController extends Controller
         $worksheet->setCreatedAt(Carbon::now());
         $worksheet->setUpdatedAt(Carbon::now());
 
-        $orm = $this->get('doctrine')->getEntityManager();
+        $orm = $this->get('doctrine')->getManager();
         $orm->persist($worksheet);
         $orm->flush();
 
@@ -103,7 +103,7 @@ class WorksheetsController extends Controller
             ->getRepository('AppBundle:Programs')
             ->findByWorksheetId($worksheetId);
 
-        $orm = $this->get('doctrine')->getEntityManager();
+        $orm = $this->get('doctrine')->getManager();
         $orm->remove($worksheet);
 
         foreach ($programs as $program) {

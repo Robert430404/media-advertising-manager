@@ -99,7 +99,7 @@ class ProgramsController extends Controller
         $program->setCreatedAt(Carbon::now());
         $program->setUpdatedAt(Carbon::now());
 
-        $orm = $this->get('doctrine')->getEntityManager();
+        $orm = $this->get('doctrine')->getManager();
         $orm->persist($program);
         $orm->flush();
 
@@ -121,7 +121,7 @@ class ProgramsController extends Controller
             ->getRepository('AppBundle:Programs')
             ->find($programId);
 
-        $orm = $this->get('doctrine')->getEntityManager();
+        $orm = $this->get('doctrine')->getManager();
         $orm->remove($program);
         $orm->flush();
 

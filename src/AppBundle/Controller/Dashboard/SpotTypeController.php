@@ -47,7 +47,7 @@ class SpotTypeController extends Controller
         $type->setCreatedAt(Carbon::now());
         $type->setUpdatedAt(Carbon::now());
 
-        $orm = $this->get('doctrine')->getEntityManager();
+        $orm = $this->get('doctrine')->getManager();
         $orm->persist($type);
         $orm->flush();
 
@@ -70,7 +70,7 @@ class SpotTypeController extends Controller
             ->getRepository('AppBundle:SpotTypes')
             ->find($spotId);
 
-        $orm = $this->get('doctrine')->getEntityManager();
+        $orm = $this->get('doctrine')->getManager();
         $orm->remove($type);
         $orm->flush();
 

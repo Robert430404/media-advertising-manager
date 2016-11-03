@@ -58,7 +58,7 @@ class CampaignsController extends Controller
         $campaign->setCreatedAt(Carbon::now());
         $campaign->setUpdatedAt(Carbon::now());
 
-        $orm = $this->get('doctrine')->getEntityManager();
+        $orm = $this->get('doctrine')->getManager();
         $orm->persist($campaign);
         $orm->flush();
 
@@ -92,7 +92,7 @@ class CampaignsController extends Controller
             ->getRepository('AppBundle:Programs')
             ->findByWorksheetId($worksheetIds);
 
-        $orm = $this->get('doctrine')->getEntityManager();
+        $orm = $this->get('doctrine')->getManager();
         $orm->remove($campaign);
 
         foreach ($worksheets as $worksheet) {

@@ -49,7 +49,7 @@ class OrganizationsController extends Controller
         $organization->setCreatedAt(Carbon::now());
         $organization->setUpdatedAt(Carbon::now());
 
-        $orm = $this->get('doctrine')->getEntityManager();
+        $orm = $this->get('doctrine')->getManager();
         $orm->persist($organization);
         $orm->flush();
 

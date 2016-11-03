@@ -76,7 +76,7 @@ class RegionsController extends Controller
             return $this->json($response);
         }
 
-        $orm = $this->get('doctrine')->getEntityManager();
+        $orm = $this->get('doctrine')->getManager();
         $orm->persist($region);
         $orm->flush();
 

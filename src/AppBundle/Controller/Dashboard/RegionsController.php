@@ -53,7 +53,7 @@ class RegionsController extends Controller
         $region->setCreatedAt(Carbon::now());
         $region->setUpdatedAt(Carbon::now());
 
-        $orm = $this->get('doctrine')->getEntityManager();
+        $orm = $this->get('doctrine')->getManager();
         $orm->persist($region);
         $orm->flush();
 
@@ -75,7 +75,7 @@ class RegionsController extends Controller
             ->find($regionId);
         $organizationId = $region->getOrganizationId();
 
-        $orm = $this->get('doctrine')->getEntityManager();
+        $orm = $this->get('doctrine')->getManager();
         $orm->remove($region);
         $orm->flush();
 

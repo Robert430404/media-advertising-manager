@@ -70,7 +70,7 @@ class CreateUserCommand extends ContainerAwareCommand
         $user->setCreatedAt(Carbon::now());
         $user->setUpdatedAt(Carbon::now());
 
-        $orm = $this->getContainer()->get('doctrine')->getEntityManager();
+        $orm = $this->getContainer()->get('doctrine')->getManager();
         $orm->persist($user);
         $orm->flush();
 
