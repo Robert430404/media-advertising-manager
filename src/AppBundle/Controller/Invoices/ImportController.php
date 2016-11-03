@@ -24,4 +24,14 @@ class ImportController extends Controller
             'organizations' => $organizations,
         ]);
     }
+
+    /**
+     * @param Request $request
+     *
+     * @Route("/invoices/insert", name="invoice-insert")
+     */
+    public function insertAction(Request $request)
+    {
+
+    }
 }

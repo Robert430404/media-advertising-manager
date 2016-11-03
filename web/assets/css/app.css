@@ -222,7 +222,7 @@ div {
           width: 240px !important; }
         .current-worksheets ul li .week-information .info-inner .spot-column {
           float: left;
-          width: 170px;
+          width: 100px;
           padding: 10px; }
           .current-worksheets ul li .week-information .info-inner .spot-column .spot-count-heading {
             background: #C9FFBD;

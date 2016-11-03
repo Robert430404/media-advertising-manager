@@ -101,7 +101,7 @@
                                                                             {% if d|date('D') == 'Mon' %}
                                                                                 <div class="spot-column spot-date-column">
                                                                                     <div class="spot-date-heading">
-                                                                                        {{ d|date('m/d/Y l') }}
+                                                                                        {{ d|date('m/d D') }}
                                                                                     </div>
                                                                                     {% for program in worksheet.programs %}
                                                                                         <div class="spot-date-input">
@@ -133,7 +133,7 @@
                                                                             {% if d|date('D') == 'Mon' %}
                                                                                 <div class="spot-column spot-date-column">
                                                                                     <div class="spot-date-heading">
-                                                                                        {{ d|date('m/d/Y l') }}
+                                                                                        {{ d|date('m/d D') }}
                                                                                     </div>
                                                                                     {% for program in worksheet.programs %}
                                                                                         <div class="spot-date-input">
