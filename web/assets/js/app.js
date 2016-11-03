@@ -7,6 +7,7 @@ $(document).ready(function () {
     new ViewWorksheets();
     new ViewSpotTypes();
     new ViewRegions();
+    new ViewInvoices();
 });
 'use strict';
 
@@ -25,6 +26,13 @@ var CampaignsController = function () {
         key: 'loadCampaignRegions',
         value: function loadCampaignRegions(organization) {
             var endpoint = '/api/v1/regions/' + organization;
+
+            return this.AjaxHelpers.getCall(endpoint);
+        }
+    }, {
+        key: 'loadRegionCampaigns',
+        value: function loadRegionCampaigns(region) {
+            var endpoint = '/api/v1/campaigns/' + region;
 
             return this.AjaxHelpers.getCall(endpoint);
         }
@@ -339,6 +347,88 @@ var ViewCampaigns = function () {
     }]);
 
     return ViewCampaigns;
+}();
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ViewInvoices = function () {
+    function ViewInvoices() {
+        _classCallCheck(this, ViewInvoices);
+
+        this.setInvoiceRegions();
+        this.setInvoiceCampaigns();
+
+        this.CampaignsController = new CampaignsController();
+    }
+
+    _createClass(ViewInvoices, [{
+        key: 'setInvoiceRegions',
+        value: function setInvoiceRegions() {
+            var object = this;
+            var target = document.querySelector('#organizations');
+            var container = $('#regions');
+
+            if (target) {
+                target.onchange = function () {
+                    var value = this.value;
+
+                    container.empty();
+
+                    if (value == '') {
+                        container.append('<option value="">Select Organization</option>');
+                    } else {
+                        object.CampaignsController.loadCampaignRegions(value).then(function (resp) {
+                            container.append('<option value="">Select Region</option>');
+
+                            for (var i = 0; i < resp.length; i++) {
+                                container.append('<option value="' + resp[i].id + '">' + resp[i].name + '</option>');
+                            }
+
+                            if (resp.length == 0) {
+                                container.append('<option value="">No Available Regions</option>');
+                            }
+                        });
+                    }
+                };
+            }
+        }
+    }, {
+        key: 'setInvoiceCampaigns',
+        value: function setInvoiceCampaigns() {
+            var object = this;
+            var target = document.querySelector('#regions');
+            var container = $('#campaigns');
+
+            if (target) {
+                target.onchange = function () {
+                    var value = this.value;
+
+                    container.empty();
+
+                    if (value == '') {
+                        container.append('<option value="">Select Organization</option>');
+                    } else {
+                        object.CampaignsController.loadRegionCampaigns(value).then(function (resp) {
+                            container.append('<option value="">Select Campaign</option>');
+
+                            for (var i = 0; i < resp.length; i++) {
+                                container.append('<option value="' + resp[i].id + '">' + resp[i].name + '</option>');
+                            }
+
+                            if (resp.length == 0) {
+                                container.append('<option value="">No Available Campaigns</option>');
+                            }
+                        });
+                    }
+                };
+            }
+        }
+    }]);
+
+    return ViewInvoices;
 }();
 'use strict';
 

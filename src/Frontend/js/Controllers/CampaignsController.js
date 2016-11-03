@@ -9,6 +9,12 @@ class CampaignsController {
         return this.AjaxHelpers.getCall(endpoint);
     }
 
+    loadRegionCampaigns(region) {
+        var endpoint = '/api/v1/campaigns/' + region;
+
+        return this.AjaxHelpers.getCall(endpoint);
+    }
+
     createNewCampaign(data) {
         var endpoint = '/api/v1/campaigns/new';
 

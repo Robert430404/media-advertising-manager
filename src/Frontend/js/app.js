@@ -5,4 +5,5 @@ $(document).ready(function () {
     new ViewWorksheets();
     new ViewSpotTypes();
     new ViewRegions();
+    new ViewInvoices();
 });
