@@ -421,10 +421,11 @@ var ViewOrganizations = function () {
                 var id = $(this).attr('data-id');
                 var endpoint = '/api/v1/campaigns/' + id;
                 var container = $('.region-campaigns');
+                var regionName = $(this).html();
 
                 object.AjaxHelpers.getCall(endpoint).then(function (resp) {
                     if (resp.length > 0) {
-                        container.empty().append('<h1 class="campaigns-title">Campaigns</h1>');
+                        container.empty().append('<h1 class="campaigns-title">' + regionName + ' Campaigns</h1>');
                         container.append('<ul class="campaign-list"></ul>');
                         for (var i = 0; i < resp.length; i++) {
                             container.find('.campaign-list').append('<li class="campaign-selector campaign-selector-' + resp[i].id + '" data-id="' + resp[i].id + '">' + resp[i].name + '</li>');
@@ -432,7 +433,7 @@ var ViewOrganizations = function () {
                         }
                     } else {
                         container.empty().append('<h1 class="campaigns-title">Campaigns</h1>');
-                        container.append('<p class="align-center">No campaigns are currently running</p>');
+                        container.append('<p class="align-center">No campaigns are currently running in ' + regionName + '.</p>');
                     }
                 });
             });
