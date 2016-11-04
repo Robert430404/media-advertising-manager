@@ -120,8 +120,6 @@ class WorksheetsController extends Controller
         $campaign  = $this->getDoctrine()->getRepository('AppBundle:Campaigns')->find($campaignId);
         $spotTypes = $this->getDoctrine()->getRepository('AppBundle:SpotTypes')->findAll();
 
-        var_dump($worksheet);
-
         return $this->render('dashboard/worksheets/edit.html.twig', [
             'worksheet'  => $worksheet,
             'campaign'   => $campaign,
