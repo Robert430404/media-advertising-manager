@@ -120,6 +120,8 @@ class WorksheetsController extends Controller
         $campaign  = $this->getDoctrine()->getRepository('AppBundle:Campaigns')->find($campaignId);
         $spotTypes = $this->getDoctrine()->getRepository('AppBundle:SpotTypes')->findAll();
 
+        var_dump($worksheet);
+
         return $this->render('dashboard/worksheets/edit.html.twig', [
             'worksheet'  => $worksheet,
             'campaign'   => $campaign,
@@ -145,11 +147,7 @@ class WorksheetsController extends Controller
         $worksheet = $orm->getRepository('AppBundle:Worksheets')->find($worksheetId);
 
         $worksheet->setName($data['worksheet_name']);
-        $worksheet->setCampaignId($campaignId);
-        $worksheet->setOrganizationId($data['worksheet_organization']);
-        $worksheet->setRegionId($data['worksheet_region']);
         $worksheet->setSpotTypeId($data['worksheet_spot_type']);
-        $worksheet->setWeekInformation('none available');
         $worksheet->setUpdatedAt(Carbon::now());
 
         $orm->flush();
