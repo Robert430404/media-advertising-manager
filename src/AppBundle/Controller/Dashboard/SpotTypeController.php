@@ -2,12 +2,12 @@
 
 namespace AppBundle\Controller\Dashboard;
 
-use AppBundle\Entity\SpotTypes;
 use Carbon\Carbon;
+use AppBundle\Entity\SpotTypes;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 
 class SpotTypeController extends Controller
 {
@@ -20,9 +20,7 @@ class SpotTypeController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $types = $this->getDoctrine()
-            ->getRepository('AppBundle:SpotTypes')
-            ->findAll();
+        $types = $this->getDoctrine()->getRepository('AppBundle:SpotTypes')->findAll();
 
         return $this->render('dashboard/spot-type/index.html.twig', [
             'types' => $types
@@ -41,13 +39,13 @@ class SpotTypeController extends Controller
     public function insertAction(Request $request)
     {
         $data = $request->request->all();
-
         $type = new SpotTypes();
+        $orm  = $this->get('doctrine')->getManager();
+
         $type->setName($data['spot_type_name']);
         $type->setCreatedAt(Carbon::now());
         $type->setUpdatedAt(Carbon::now());
 
-        $orm = $this->get('doctrine')->getManager();
         $orm->persist($type);
         $orm->flush();
 
@@ -66,11 +64,9 @@ class SpotTypeController extends Controller
      */
     public function deleteAction(Request $request, $spotId)
     {
-        $type = $this->getDoctrine()
-            ->getRepository('AppBundle:SpotTypes')
-            ->find($spotId);
+        $type = $this->getDoctrine()->getRepository('AppBundle:SpotTypes')->find($spotId);
+        $orm  = $this->get('doctrine')->getManager();
 
-        $orm = $this->get('doctrine')->getManager();
         $orm->remove($type);
         $orm->flush();
 
@@ -78,7 +74,7 @@ class SpotTypeController extends Controller
     }
 
     /**
-     * Deletes the selected spot type in the database
+     * Edits the selected spot type in the database
      *
      * @param Request $request
      * @param $spotId
@@ -89,9 +85,7 @@ class SpotTypeController extends Controller
      */
     public function editAction(Request $request, $spotId)
     {
-        $type = $this->getDoctrine()
-            ->getRepository('AppBundle:SpotTypes')
-            ->find($spotId);
+        $type = $this->getDoctrine()->getRepository('AppBundle:SpotTypes')->find($spotId);
 
         return $this->render('dashboard/spot-type/edit.html.twig', [
             'type' => $type,
@@ -99,7 +93,7 @@ class SpotTypeController extends Controller
     }
 
     /**
-     * Deletes the selected spot type in the database
+     * Updates the selected spot type in the database
      *
      * @param Request $request
      * @param $spotId
@@ -111,7 +105,7 @@ class SpotTypeController extends Controller
     public function updateAction(Request $request, $spotId)
     {
         $data = $request->request->all();
-        $orm = $this->getDoctrine()->getManager();
+        $orm  = $this->getDoctrine()->getManager();
         $type = $orm->getRepository('AppBundle:SpotTypes')->find($spotId);
 
         $type->setName($data['spot_type_name']);
