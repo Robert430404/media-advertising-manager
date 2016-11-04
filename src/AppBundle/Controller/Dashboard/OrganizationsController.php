@@ -2,16 +2,18 @@
 
 namespace AppBundle\Controller\Dashboard;
 
-use AppBundle\Entity\Organizations;
 use Carbon\Carbon;
+use AppBundle\Entity\Organizations;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 
 class OrganizationsController extends Controller
 {
     /**
+     * Shows the base organization view
+     *
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      *
@@ -20,9 +22,7 @@ class OrganizationsController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $organizations = $this->getDoctrine()
-            ->getRepository('AppBundle:Organizations')
-            ->findAll();
+        $organizations = $this->getDoctrine()->getRepository('AppBundle:Organizations')->findAll();
 
         return $this->render('dashboard/organizations/index.html.twig', [
             'organizations' => $organizations
@@ -40,16 +40,16 @@ class OrganizationsController extends Controller
      */
     public function insertAction(Request $request)
     {
-        $data = $request->request->all();
-        $user = $this->getUser();
-
+        $data         = $request->request->all();
+        $user         = $this->getUser();
         $organization = new Organizations();
+        $orm          = $this->get('doctrine')->getManager();
+
         $organization->setName($data['organization_name']);
         $organization->setUserId($user->getId());
         $organization->setCreatedAt(Carbon::now());
         $organization->setUpdatedAt(Carbon::now());
 
-        $orm = $this->get('doctrine')->getManager();
         $orm->persist($organization);
         $orm->flush();
 
