@@ -2,12 +2,12 @@
 
 namespace AppBundle\Controller\Dashboard;
 
-use AppBundle\Entity\Worksheets;
 use Carbon\Carbon;
+use AppBundle\Entity\Worksheets;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 
 class WorksheetsController extends Controller
 {
@@ -21,24 +21,16 @@ class WorksheetsController extends Controller
      */
     public function indexAction(Request $request, $campaignId)
     {
-        $worksheets = $this->getDoctrine()
-            ->getRepository('AppBundle:Worksheets')
-            ->findAllWorksheetsWithData($campaignId);
-        $campaign = $this->getDoctrine()
-            ->getRepository('AppBundle:Campaigns')
-            ->find($campaignId);
-        $spotTypes = $this->getDoctrine()
-            ->getRepository('AppBundle:SpotTypes')
-            ->findAll();
+        $worksheets = $this->getDoctrine()->getRepository('AppBundle:Worksheets')->findAllWorksheetsWithData($campaignId);
+        $campaign   = $this->getDoctrine()->getRepository('AppBundle:Campaigns')->find($campaignId);
+        $spotTypes  = $this->getDoctrine()->getRepository('AppBundle:SpotTypes')->findAll();
 
         foreach ($worksheets as $key => $worksheet) {
-            $programs = $this->getDoctrine()
-                ->getRepository('AppBundle:Programs')
-                ->findByWorksheetId($worksheet['id']);
+            $programs  = $this->getDoctrine()->getRepository('AppBundle:Programs')->findByWorksheetId($worksheet['id']);
+            $startDate = Carbon::createFromTimestamp($worksheet['flightStartDate']->format('U'));
 
             $worksheets[$key]['programs'] = $programs;
             $worksheets[$key]['weekInfo'] = json_decode($worksheet['weekInfo']);
-            $startDate = Carbon::createFromTimestamp($worksheet['flightStartDate']->format('U'));
 
             if ($startDate->format('D') !== 'Mon') {
                 $startDate = Carbon::createFromTimestamp(strtotime('previous monday', strtotime($startDate)));
@@ -49,7 +41,7 @@ class WorksheetsController extends Controller
 
         return $this->render('dashboard/worksheets/index.html.twig', [
             'worksheets' => $worksheets,
-            'campaign' => $campaign,
+            'campaign'   => $campaign,
             'spot_types' => $spotTypes,
         ]);
     }
@@ -64,9 +56,10 @@ class WorksheetsController extends Controller
      */
     public function insertAction(Request $request, $campaignId)
     {
-        $data = $request->request->all();
-
+        $data      = $request->request->all();
         $worksheet = new Worksheets();
+        $orm       = $this->get('doctrine')->getManager();
+
         $worksheet->setName($data['worksheet_name']);
         $worksheet->setCampaignId($campaignId);
         $worksheet->setOrganizationId($data['worksheet_organization']);
@@ -76,7 +69,6 @@ class WorksheetsController extends Controller
         $worksheet->setCreatedAt(Carbon::now());
         $worksheet->setUpdatedAt(Carbon::now());
 
-        $orm = $this->get('doctrine')->getManager();
         $orm->persist($worksheet);
         $orm->flush();
 
@@ -96,14 +88,10 @@ class WorksheetsController extends Controller
      */
     public function deleteAction(Request $request, $worksheetId, $campaignId)
     {
-        $worksheet = $this->getDoctrine()
-            ->getRepository('AppBundle:Worksheets')
-            ->find($worksheetId);
-        $programs = $this->getDoctrine()
-            ->getRepository('AppBundle:Programs')
-            ->findByWorksheetId($worksheetId);
+        $worksheet = $this->getDoctrine()->getRepository('AppBundle:Worksheets')->find($worksheetId);
+        $programs  = $this->getDoctrine()->getRepository('AppBundle:Programs')->findByWorksheetId($worksheetId);
+        $orm       = $this->get('doctrine')->getManager();
 
-        $orm = $this->get('doctrine')->getManager();
         $orm->remove($worksheet);
 
         foreach ($programs as $program) {
@@ -128,19 +116,13 @@ class WorksheetsController extends Controller
      */
     public function editAction(Request $request, $worksheetId, $campaignId)
     {
-        $worksheet = $this->getDoctrine()
-            ->getRepository('AppBundle:Worksheets')
-            ->find($worksheetId);
-        $campaign = $this->getDoctrine()
-            ->getRepository('AppBundle:Campaigns')
-            ->find($campaignId);
-        $spotTypes = $this->getDoctrine()
-            ->getRepository('AppBundle:SpotTypes')
-            ->findAll();
+        $worksheet = $this->getDoctrine()->getRepository('AppBundle:Worksheets')->find($worksheetId);
+        $campaign  = $this->getDoctrine()->getRepository('AppBundle:Campaigns')->find($campaignId);
+        $spotTypes = $this->getDoctrine()->getRepository('AppBundle:SpotTypes')->findAll();
 
         return $this->render('dashboard/worksheets/edit.html.twig', [
-            'worksheet' => $worksheet,
-            'campaign' => $campaign,
+            'worksheet'  => $worksheet,
+            'campaign'   => $campaign,
             'spot_types' => $spotTypes,
         ]);
     }
@@ -158,8 +140,8 @@ class WorksheetsController extends Controller
      */
     public function updateAction(Request $request, $worksheetId, $campaignId)
     {
-        $data = $request->request->all();
-        $orm = $this->getDoctrine()->getManager();
+        $data      = $request->request->all();
+        $orm       = $this->getDoctrine()->getManager();
         $worksheet = $orm->getRepository('AppBundle:Worksheets')->find($worksheetId);
 
         $worksheet->setName($data['worksheet_name']);

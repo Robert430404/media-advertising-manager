@@ -26,7 +26,7 @@ class RegionsController extends Controller
 
         return $this->render('dashboard/regions/index.html.twig', [
             'organization' => $organization,
-            'regions' => $regions
+            'regions'      => $regions
         ]);
     }
 
@@ -92,7 +92,7 @@ class RegionsController extends Controller
 
         return $this->render('dashboard/regions/edit.html.twig', [
             'organization' => $organization,
-            'region' => $region,
+            'region'       => $region,
         ]);
     }
 
