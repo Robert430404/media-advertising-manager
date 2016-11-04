@@ -114,4 +114,65 @@ class WorksheetsController extends Controller
 
         return $this->redirect('/campaigns/worksheets/' . $campaignId);
     }
+
+    /**
+     * Brings up the selected campaign from the database for editing
+     *
+     * @param Request $request
+     * @param $worksheetId
+     * @param $campaignId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @Route("/campaigns/worksheets/{campaignId}/edit/{worksheetId}", name="worksheet-edit")
+     * @Method({"GET"})
+     */
+    public function editAction(Request $request, $worksheetId, $campaignId)
+    {
+        $worksheet = $this->getDoctrine()
+            ->getRepository('AppBundle:Worksheets')
+            ->find($worksheetId);
+        $campaign = $this->getDoctrine()
+            ->getRepository('AppBundle:Campaigns')
+            ->find($campaignId);
+        $spotTypes = $this->getDoctrine()
+            ->getRepository('AppBundle:SpotTypes')
+            ->findAll();
+
+        return $this->render('dashboard/worksheets/edit.html.twig', [
+            'worksheet' => $worksheet,
+            'campaign' => $campaign,
+            'spot_types' => $spotTypes,
+        ]);
+    }
+
+    /**
+     * Brings up the selected campaign from the database for editing
+     *
+     * @param Request $request
+     * @param $worksheetId
+     * @param $campaignId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @Route("/campaigns/worksheets/{campaignId}/update/{worksheetId}", name="worksheet-update")
+     * @Method({"POST"})
+     */
+    public function updateAction(Request $request, $worksheetId, $campaignId)
+    {
+        $data = $request->request->all();
+        $orm = $this->getDoctrine()->getManager();
+        $worksheet = $orm->getRepository('AppBundle:Worksheets')->find($worksheetId);
+
+        $worksheet->setName($data['worksheet_name']);
+        $worksheet->setCampaignId($campaignId);
+        $worksheet->setOrganizationId($data['worksheet_organization']);
+        $worksheet->setRegionId($data['worksheet_region']);
+        $worksheet->setSpotTypeId($data['worksheet_spot_type']);
+        $worksheet->setWeekInformation('none available');
+        $worksheet->setCreatedAt(Carbon::now());
+        $worksheet->setUpdatedAt(Carbon::now());
+
+        $orm->flush();
+
+        return $this->redirect('/campaigns/worksheets/' . $campaignId . '/edit/' . $worksheetId);
+    }
 }

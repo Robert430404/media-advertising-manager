@@ -29,7 +29,7 @@ class ProgramsController extends Controller
             ->getRepository('AppBundle:Worksheets')
             ->find($worksheetId);
 
-        return $this->render('dashboard/worksheets/programs.html.twig', [
+        return $this->render('dashboard/worksheets/programs/index.html.twig', [
             'programs' => $programs,
             'worksheet' => $worksheet
         ]);
@@ -146,7 +146,7 @@ class ProgramsController extends Controller
             ->getRepository('AppBundle:Worksheets')
             ->find($worksheetId);
 
-        return $this->render('dashboard/worksheets/editProgram.html.twig', [
+        return $this->render('dashboard/worksheets/programs/edit.html.twig', [
             'program' => $program,
             'worksheet' => $worksheet
         ]);
