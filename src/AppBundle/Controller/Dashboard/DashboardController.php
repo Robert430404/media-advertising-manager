@@ -19,19 +19,18 @@ class DashboardController extends Controller
     public function indexAction(Request $request)
     {
         $organizations = $this->getDoctrine()->getRepository('AppBundle:Organizations')->findAll();
-        $spotTypes = $this->getDoctrine()->getRepository('AppBundle:SpotTypes')->findAll();
-        $regions = [];
+        $spotTypes     = $this->getDoctrine()->getRepository('AppBundle:SpotTypes')->findAll();
+        $regions       = [];
 
         foreach ($organizations as $key => $organization) {
-            $regions[$key] = $this->getDoctrine()
-                ->getRepository('AppBundle:Regions')
-                ->findByOrganizationId($organization->getId());
+            $orgId         = $organization->getId();
+            $regions[$key] = $this->getDoctrine()->getRepository('AppBundle:Regions')->findByOrganizationId($orgId);
         }
 
         return $this->render('dashboard/index.html.twig', [
             'organizations' => $organizations,
-            'regions' => $regions,
-            'types' => $spotTypes,
+            'regions'       => $regions,
+            'types'         => $spotTypes,
         ]);
     }
 }
