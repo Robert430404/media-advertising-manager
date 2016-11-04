@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 class ProgramsController extends Controller
 {
     /**
+     * Displays a list of current programs from the database
+     *
      * @param Request $request
      * @param integer $worksheetId
      * @return \Symfony\Component\HttpFoundation\Response
@@ -22,20 +24,18 @@ class ProgramsController extends Controller
      */
     public function indexAction(Request $request, $worksheetId)
     {
-        $programs = $this->getDoctrine()
-            ->getRepository('AppBundle:Programs')
-            ->findByWorksheetId($worksheetId);
-        $worksheet = $this->getDoctrine()
-            ->getRepository('AppBundle:Worksheets')
-            ->find($worksheetId);
+        $programs  = $this->getDoctrine()->getRepository('AppBundle:Programs')->findByWorksheetId($worksheetId);
+        $worksheet = $this->getDoctrine()->getRepository('AppBundle:Worksheets')->find($worksheetId);
 
         return $this->render('dashboard/worksheets/programs/index.html.twig', [
-            'programs' => $programs,
+            'programs'  => $programs,
             'worksheet' => $worksheet
         ]);
     }
 
     /**
+     * Inserts the new program into the database
+     *
      * @param Request $request
      * @param integer $worksheetId
      * @return \Symfony\Component\HttpFoundation\Response
@@ -45,47 +45,54 @@ class ProgramsController extends Controller
      */
     public function insertAction(Request $request, $worksheetId)
     {
-        $data = $request->request->all();
-
+        $data    = $request->request->all();
         $program = new Programs();
+        $orm     = $this->get('doctrine')->getManager();
+
         $program->setWorksheetId($worksheetId);
         $program->setName($data['program_name']);
         $program->setDayPart($data['day_part']);
         $program->setStation($data['station']);
         $program->setNetwork($data['network']);
         $program->setProgram($data['program']);
-
         $program->setMonday(false);
+
         if (isset($data['monday'])) {
             $program->setMonday(true);
         }
 
         $program->setTuesday(false);
+
         if (isset($data['tuesday'])) {
             $program->setTuesday(true);
         }
 
         $program->setWednesday(false);
+
         if (isset($data['wednesday'])) {
             $program->setWednesday(true);
         }
 
         $program->setThursday(false);
+
         if (isset($data['thursday'])) {
             $program->setThursday(true);
         }
 
         $program->setFriday(false);
+
         if (isset($data['friday'])) {
             $program->setFriday(true);
         }
 
         $program->setSaturday(false);
+
         if (isset($data['saturday'])) {
             $program->setSaturday(true);
         }
 
         $program->setSunday(false);
+
         if (isset($data['sunday'])) {
             $program->setSunday(true);
         }
@@ -99,7 +106,6 @@ class ProgramsController extends Controller
         $program->setCreatedAt(Carbon::now());
         $program->setUpdatedAt(Carbon::now());
 
-        $orm = $this->get('doctrine')->getManager();
         $orm->persist($program);
         $orm->flush();
 
@@ -107,6 +113,8 @@ class ProgramsController extends Controller
     }
 
     /**
+     * Deletes the selected program from the database
+     *
      * @param Request $request
      * @param integer $worksheetId
      * @param integer $programId
@@ -129,6 +137,8 @@ class ProgramsController extends Controller
     }
 
     /**
+     * Brings up the selected program for editing
+     *
      * @param Request $request
      * @param integer $worksheetId
      * @param integer $programId
@@ -139,20 +149,18 @@ class ProgramsController extends Controller
      */
     public function editAction(Request $request, $worksheetId, $programId)
     {
-        $program = $this->getDoctrine()
-            ->getRepository('AppBundle:Programs')
-            ->find($programId);
-        $worksheet = $this->getDoctrine()
-            ->getRepository('AppBundle:Worksheets')
-            ->find($worksheetId);
+        $program   = $this->getDoctrine()->getRepository('AppBundle:Programs')->find($programId);
+        $worksheet = $this->getDoctrine()->getRepository('AppBundle:Worksheets')->find($worksheetId);
 
         return $this->render('dashboard/worksheets/programs/edit.html.twig', [
-            'program' => $program,
+            'program'   => $program,
             'worksheet' => $worksheet
         ]);
     }
 
     /**
+     * Updates the program inside of the database
+     *
      * @param Request $request
      * @param integer $worksheetId
      * @param integer $programId
@@ -163,8 +171,8 @@ class ProgramsController extends Controller
      */
     public function updateAction(Request $request, $worksheetId, $programId)
     {
-        $data = $request->request->all();
-        $orm = $this->getDoctrine()->getManager();
+        $data    = $request->request->all();
+        $orm     = $this->getDoctrine()->getManager();
         $program = $orm->getRepository('AppBundle:Programs')->find($programId);
 
         $program->setWorksheetId($worksheetId);
@@ -173,38 +181,44 @@ class ProgramsController extends Controller
         $program->setStation($data['station']);
         $program->setNetwork($data['network']);
         $program->setProgram($data['program']);
-
         $program->setMonday(false);
+
         if (isset($data['monday'])) {
             $program->setMonday(true);
         }
 
         $program->setTuesday(false);
+
         if (isset($data['tuesday'])) {
             $program->setTuesday(true);
         }
 
         $program->setWednesday(false);
+
         if (isset($data['wednesday'])) {
             $program->setWednesday(true);
         }
 
         $program->setThursday(false);
+
         if (isset($data['thursday'])) {
             $program->setThursday(true);
         }
 
         $program->setFriday(false);
+
         if (isset($data['friday'])) {
             $program->setFriday(true);
         }
 
         $program->setSaturday(false);
+
         if (isset($data['saturday'])) {
             $program->setSaturday(true);
         }
 
         $program->setSunday(false);
+
         if (isset($data['sunday'])) {
             $program->setSunday(true);
         }
@@ -215,7 +229,6 @@ class ProgramsController extends Controller
         $program->setSpotRate((int)$data['spot_rate']);
         $program->setBreakCode($data['break_code']);
         $program->setComment($data['comments']);
-        $program->setCreatedAt(Carbon::now());
         $program->setUpdatedAt(Carbon::now());
 
         $orm->flush();
