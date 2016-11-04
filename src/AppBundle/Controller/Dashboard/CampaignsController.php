@@ -140,7 +140,7 @@ class CampaignsController extends Controller
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      *
      * @Route("/campaigns/update/{campaignId}", name="campaign-update")
-     * @Method({"GET"})
+     * @Method({"POST"})
      */
     public function updateAction(Request $request, $campaignId)
     {
