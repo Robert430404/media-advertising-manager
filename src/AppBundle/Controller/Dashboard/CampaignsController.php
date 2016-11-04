@@ -131,4 +131,35 @@ class CampaignsController extends Controller
             'organizations' => $organizations,
         ]);
     }
+
+    /**
+     * Edits the selected campaign from the database
+     *
+     * @param Request $request
+     * @param $campaignId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @Route("/campaigns/update/{campaignId}", name="campaign-update")
+     * @Method({"GET"})
+     */
+    public function updateAction(Request $request, $campaignId)
+    {
+        $data = $request->request->all();
+        $orm = $this->getDoctrine()->getManager();
+        $campaign = $orm->getRepository('AppBundle:Campaigns')->find($campaignId);
+        $start = Carbon::parse($data['flight_start']);
+        $end = Carbon::parse($data['flight_end']);
+
+        $campaign->setName($data['campaign_name']);
+        $campaign->setOrganizationId($data['campaign_organization']);
+        $campaign->setRegionId($data['campaign_region']);
+        $campaign->setFlightStartDate($start);
+        $campaign->setFlightEndDate($end);
+        $campaign->setFlightLength((int)$data['flight_length']);
+        $campaign->setUpdatedAt(Carbon::now());
+
+        $orm->flush();
+
+        return $this->redirect('/campaigns/edit/' . $campaignId);
+    }
 }
