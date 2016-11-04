@@ -32,34 +32,34 @@ class StationOrderController extends Controller
         $spotTypes     = $this->getDoctrine()
                               ->getRepository('AppBundle:SpotTypes')
                               ->findAll();
-        $worksheets    = array_map(function ($worksheet) {
+
+        foreach ($worksheets as $key => $worksheet) {
             $programs = $this->getDoctrine()
                 ->getRepository('AppBundle:Programs')
                 ->findByWorksheetId($worksheet['id']);
-            $worksheet['programs'] = $programs;
-            $worksheet['weekInfo'] = json_decode($worksheet['weekInfo']);
-            $starTimeStamp         = $worksheet['flightStartDate']->format('U');
-            $startDate             = Carbon::createFromTimestamp($starTimeStamp);
-
+            $worksheets[$key]['programs'] = $programs;
+            $worksheets[$key]['weekInfo'] = json_decode($worksheet['weekInfo']);
+            $startDate = Carbon::createFromTimestamp($worksheet['flightStartDate']->format('U'));
             if ($startDate->format('D') !== 'Mon') {
-                $starTimeStamp = strtotime('previous monday', strtotime($startDate));
-                $startDate     = Carbon::createFromTimestamp($starTimeStamp);
+                $startDate = Carbon::createFromTimestamp(strtotime('previous monday', strtotime($startDate)));
             }
-
-            $worksheet['flightStartDate'] = $startDate;
-
-            return $worksheet;
-        }, $worksheets);
-        $worksheets    = array_map(function ($worksheet) {
-            $startDate     = Carbon::createFromTimestamp($worksheet['flightStartDate']->format('U'));
-            $endDate       = Carbon::createFromTimestamp($worksheet['flightEndDate']->format('U'));
-            $interval      = DateInterval::createFromDateString('1 day');
-            $period        = new DatePeriod($startDate, $interval, $endDate);
-            $totalDays     = $startDate->diffInDays($endDate);
-            $totalSpots    = array_sum((array)$worksheet['weekInfo']);
-            $dayCount      = $totalSpots / $totalDays;
+            $worksheets[$key]['flightStartDate'] = $startDate;
+        }
+        foreach ($worksheets as $key => $worksheet) {
+            $startDate = Carbon::createFromTimestamp($worksheet['flightStartDate']->format('U'));
+            if ($startDate->format('D') !== 'Mon') {
+                $startDate = Carbon::createFromTimestamp(strtotime('previous monday', strtotime($startDate)));
+            }
+            $endDate = Carbon::createFromTimestamp($worksheet['flightEndDate']->format('U'));
+            $interval = \DateInterval::createFromDateString('1 day');
+            $period = new \DatePeriod($startDate, $interval, $endDate);
+            $totalDays = $startDate->diffInDays($endDate);
+            $totalSpots = 0;
+            foreach ($worksheet['weekInfo'] as $count) {
+                $totalSpots = $totalSpots + (int)$count;
+            }
+            $dayCount = $totalSpots / $totalDays;
             $monthlyTotals = [];
-
             foreach ($period as $keyTwo => $date) {
                 if (isset($monthlyTotals[$date->format('M')])) {
                     $monthlyTotals[$date->format('M')] = $monthlyTotals[$date->format('M')] + $dayCount;
@@ -67,9 +67,7 @@ class StationOrderController extends Controller
                     $monthlyTotals[$date->format('M')] = $dayCount;
                 }
             }
-
-            return $worksheet;
-        }, $worksheets);
+        }
 
         return $this->render('reports/stationOrder.html.twig', [
             'worksheets'     => $worksheets,
