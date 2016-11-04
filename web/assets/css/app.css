@@ -362,7 +362,7 @@ div {
           line-height: 28px;
           text-transform: uppercase; }
       .current-programs ul li .action {
-        margin-left: 10px;
+        margin-left: 10px !important;
         float: right;
         background: #0E690F;
         color: #FFF;
@@ -371,7 +371,6 @@ div {
         font-weight: 300;
         font-size: 14px;
         padding: 3px 7px;
-        min-width: 200px;
         transition: all .3s; }
         .current-programs ul li .action:hover {
           background: #FFF;
@@ -393,7 +392,7 @@ div {
         displaY: block;
         float: right;
         background: #cbcbcb;
-        margin: 0 10px; }
+        margin: 2px 0 0 !important; }
       .current-programs ul li:nth-child(even) {
         background: #FFF; }
       .current-programs ul li .info {

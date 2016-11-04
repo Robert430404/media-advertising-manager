@@ -1,0 +1,129 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+    Programs - Media Manager
+{% endblock %}
+{% block body %}
+    <div class="container row">
+        <div class="columns large-12 medium-12 small-12">
+            <div class="primary-content">
+                <h1 class="content-title">Edit Program: {{ program.name }}</h1>
+                <div class="row">
+                    <div class="columns large-12 medium-12 small-12">
+                        <div class="current-programs">
+                            <div class="form-wrapper">
+                                <form action="/campaigns/worksheets/programs/{{ worksheet.id }}/add" method="post" class="worksheet-form" id="worksheet-form">
+                                    <div class="form-group row">
+                                        <div class="columns large-6 medium-6 small-12">
+                                            <label for="program_name">Program Name *
+                                                <input type="text" class="form-control program-name" id="program-name" name="program_name" value="{{ program.name }}"/>
+                                            </label>
+                                        </div>
+                                        <div class="columns large-6 medium-6 small-12">
+                                            <label for="day_part">Day Part *
+                                                <input type="text" class="form-control day-part" id="day-part" name="day_part" value="{{ program.dayPart }}" />
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="columns large-6 medium-6 small-12">
+                                            <label for="station">Station *
+                                                <input type="text" class="station form-control" id="station" name="station" value="{{ program.station }}" />
+                                            </label>
+                                        </div>
+                                        <div class="columns large-6 medium-6 small-12">
+                                            <label for="network">Network *
+                                                <input type="text" class="form-control network" id="network" name="network" value="{{ program.network }}" />
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="columns large-6 medium-6 small-12">
+                                            <label for="program">Running Program *
+                                                <input type="text" class="form-control program" id="program" name="program" value="{{ program.program }}" />
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div class="form-group row">
+                                        <div class="columns large-12 medium-12 small-12">
+                                            <label for="running_days">What Days Are The Spots Running *</label>
+                                            <div class="input-group">
+                                                <label for="monday">Monday
+                                                    <input type="checkbox" class="monday" id="monday" name="monday" {% if program.monday %}checked{% endif %} />
+                                                </label>
+                                                <label for="tuesday">tuesday
+                                                    <input type="checkbox" class="tuesday" id="tuesday" name="tuesday" {% if program.tuesday %}checked{% endif %} />
+                                                </label>
+                                                <label for="wednesday">wednesday
+                                                    <input type="checkbox" class="wednesday" id="wednesday" name="wednesday" {% if program.wednesday %}checked{% endif %} />
+                                                </label>
+                                                <label for="thursday">thursday
+                                                    <input type="checkbox" class="thursday" id="thursday" name="thursday" {% if program.thursday %}checked{% endif %} />
+                                                </label>
+                                                <label for="friday">friday
+                                                    <input type="checkbox" class="friday" id="friday" name="friday" {% if program.friday %}checked{% endif %} />
+                                                </label>
+                                                <label for="saturday">saturday
+                                                    <input type="checkbox" class="saturday" id="saturday" name="saturday" {% if program.saturday %}checked{% endif %} />
+                                                </label>
+                                                <label for="sunday">sunday
+                                                    <input type="checkbox" class="sunday" id="sunday" name="sunday" {% if program.sunday %}checked{% endif %} />
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div class="form-group row">
+                                        <div class="columns large-6 medium-6 small-12">
+                                            <label for="start_time">Spot Start Time *
+                                                <input type="text" class="start-time form-control" id="start-time" name="start_time" value="{{ program.timeSlotStart.format('h:i a') }}" />
+                                            </label>
+                                        </div>
+                                        <div class="columns large-6 medium-6 small-12">
+                                            <label for="end_time">Spot End Time *
+                                                <input type="text" class="end-time form-control" id="end-time" name="end_time" value="{{ program.timeSlotEnd.format('h:i a') }}" />
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="columns large-6 medium-6 small-12">
+                                            <label for="spot_length">Spot Length (seconds) *
+                                                <input type="number" class="spot-length form-control" id="spot-length" name="spot_length" value="{{ program.spotLength }}" />
+                                            </label>
+                                        </div>
+                                        <div class="columns large-6 medium-6 small-12">
+                                            <label for="spot_rate">Spot Rate *
+                                                <input type="number" class="spot-rate form-control" id="spot-rate" name="spot_rate" step="0.01" value="{{ program.spotRate }}" />
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="columns large-6 medium-6 small-12">
+                                            <label for="break_code">Break Code *
+                                                <input type="text" class="break-code form-control" id="break-code" name="break_code" value="{{ program.breakCode }}" />
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="columns large-12 medium-12 small-12">
+                                            <label for="comments">Comments *
+                                                <textarea name="comments" id="comments" cols="30" rows="10" class="form-control comments">{{ program.comment }}</textarea>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="column large-12 medium-12 small-12">
+                                            <input type="submit" class="submit form-button" id="submit" value="Update Program"
+                                                   name="submit"/>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

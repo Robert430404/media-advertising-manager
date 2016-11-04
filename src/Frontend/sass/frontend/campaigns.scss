@@ -343,7 +343,7 @@
         }
       }
       .action {
-        margin-left: 10px;
+        margin-left: 10px !important;
         float: right;
         background: $highlight-dark;
         color: $white;
@@ -352,7 +352,6 @@
         font-weight: 300;
         font-size: 14px;
         padding: 3px 7px;
-        min-width: 200px;
         transition: all .3s;
         &:hover {
           background: $white;
@@ -377,7 +376,7 @@
         displaY: block;
         float: right;
         background: $lighter-grey;
-        margin: 0 10px;
+        margin: 2px 0 0 !important;
       }
       &:nth-child(even) {
         background: $white;

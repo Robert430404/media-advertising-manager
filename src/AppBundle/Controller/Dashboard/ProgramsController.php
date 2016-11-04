@@ -130,13 +130,25 @@ class ProgramsController extends Controller
 
     /**
      * @param Request $request
+     * @param integer $worksheetId
+     * @param integer $programId
      * @return \Symfony\Component\HttpFoundation\Response
      *
-     * @Route("/campaigns/worksheets/station-order", name="generate-order")
+     * @Route("/campaigns/worksheets/programs/{worksheetId}/edit/{programId}", name="program-edit")
      * @Method({"GET"})
      */
-    public function pdfAction(Request $request)
+    public function editAction(Request $request, $worksheetId, $programId)
     {
-        echo 'test';
+        $program = $this->getDoctrine()
+            ->getRepository('AppBundle:Programs')
+            ->find($programId);
+        $worksheet = $this->getDoctrine()
+            ->getRepository('AppBundle:Worksheets')
+            ->find($worksheetId);
+
+        return $this->render('dashboard/worksheets/editProgram.html.twig', [
+            'program' => $program,
+            'worksheet' => $worksheet
+        ]);
     }
 }
