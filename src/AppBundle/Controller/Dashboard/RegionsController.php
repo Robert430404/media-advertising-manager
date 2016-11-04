@@ -81,4 +81,50 @@ class RegionsController extends Controller
 
         return $this->redirect('/regions/' . $organizationId, 302);
     }
+
+    /**
+     * @param Request $request
+     * @param integer $regionId
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/regions/edit/{regionId}", name="region-edit")
+     * @Method({"GET"})
+     */
+    public function editAction(Request $request, $regionId)
+    {
+        $region = $this->getDoctrine()
+            ->getRepository('AppBundle:Regions')
+            ->find($regionId);
+        $organizationId = $region->getOrganizationId();
+        $organization = $this->getDoctrine()
+            ->getRepository('AppBundle:Organizations')
+            ->find($organizationId);
+
+        return $this->render('dashboard/regions/edit.html.twig', [
+            'organization' => $organization,
+            'region' => $region,
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param integer $regionId
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/regions/update/{regionId}", name="region-update")
+     * @Method({"POST"})
+     */
+    public function updateAction(Request $request, $regionId)
+    {
+        $data = $request->request->all();
+        $orm = $this->getDoctrine()->getManager();
+        $region = $orm->getRepository('AppBundle:Regions')->find($regionId);
+
+        $region->setName($data['region_name']);
+        $region->setUpdatedAt(Carbon::now());
+
+        $orm->flush();
+
+        return $this->redirect('/regions/edit/' . $regionId);
+    }
 }
