@@ -2,12 +2,12 @@
 
 namespace AppBundle\Controller\Dashboard;
 
-use AppBundle\Entity\Regions;
 use Carbon\Carbon;
+use AppBundle\Entity\Regions;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 
 class RegionsController extends Controller
 {
@@ -21,12 +21,8 @@ class RegionsController extends Controller
      */
     public function indexAction(Request $request, $organizationId)
     {
-        $organization = $this->getDoctrine()
-            ->getRepository('AppBundle:Organizations')
-            ->find($organizationId);
-        $regions = $this->getDoctrine()
-            ->getRepository('AppBundle:Regions')
-            ->findByOrganizationId($organizationId);
+        $organization = $this->getDoctrine()->getRepository('AppBundle:Organizations')->find($organizationId);
+        $regions      = $this->getDoctrine()->getRepository('AppBundle:Regions')->findByOrganizationId($organizationId);
 
         return $this->render('dashboard/regions/index.html.twig', [
             'organization' => $organization,
@@ -45,15 +41,15 @@ class RegionsController extends Controller
      */
     public function insertAction(Request $request)
     {
-        $data = $request->request->all();
-
+        $data   = $request->request->all();
+        $orm    = $this->getDoctrine()->getManager();
         $region = new Regions();
+
         $region->setName($data['region_name']);
         $region->setOrganizationId($data['organization_id']);
         $region->setCreatedAt(Carbon::now());
         $region->setUpdatedAt(Carbon::now());
 
-        $orm = $this->get('doctrine')->getManager();
         $orm->persist($region);
         $orm->flush();
 
@@ -70,12 +66,10 @@ class RegionsController extends Controller
      */
     public function deleteAction(Request $request, $regionId)
     {
-        $region = $this->getDoctrine()
-            ->getRepository('AppBundle:Regions')
-            ->find($regionId);
+        $region         = $this->getDoctrine()->getRepository('AppBundle:Regions')->find($regionId);
         $organizationId = $region->getOrganizationId();
+        $orm            = $this->getDoctrine()->getManager();
 
-        $orm = $this->get('doctrine')->getManager();
         $orm->remove($region);
         $orm->flush();
 
@@ -92,13 +86,9 @@ class RegionsController extends Controller
      */
     public function editAction(Request $request, $regionId)
     {
-        $region = $this->getDoctrine()
-            ->getRepository('AppBundle:Regions')
-            ->find($regionId);
+        $region         = $this->getDoctrine()->getRepository('AppBundle:Regions')->find($regionId);
         $organizationId = $region->getOrganizationId();
-        $organization = $this->getDoctrine()
-            ->getRepository('AppBundle:Organizations')
-            ->find($organizationId);
+        $organization   = $this->getDoctrine()->getRepository('AppBundle:Organizations')->find($organizationId);
 
         return $this->render('dashboard/regions/edit.html.twig', [
             'organization' => $organization,
@@ -116,8 +106,8 @@ class RegionsController extends Controller
      */
     public function updateAction(Request $request, $regionId)
     {
-        $data = $request->request->all();
-        $orm = $this->getDoctrine()->getManager();
+        $data   = $request->request->all();
+        $orm    = $this->getDoctrine()->getManager();
         $region = $orm->getRepository('AppBundle:Regions')->find($regionId);
 
         $region->setName($data['region_name']);
