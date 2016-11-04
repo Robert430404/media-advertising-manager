@@ -40,19 +40,19 @@ class StationOrderController extends Controller
             $worksheets[$key]['programs'] = $programs;
             $worksheets[$key]['weekInfo'] = json_decode($worksheet['weekInfo']);
             $startDate = Carbon::createFromTimestamp($worksheet['flightStartDate']->format('U'));
+
             if ($startDate->format('D') !== 'Mon') {
                 $startDate = Carbon::createFromTimestamp(strtotime('previous monday', strtotime($startDate)));
             }
+
             $worksheets[$key]['flightStartDate'] = $startDate;
         }
+
         foreach ($worksheets as $key => $worksheet) {
             $startDate = Carbon::createFromTimestamp($worksheet['flightStartDate']->format('U'));
-            if ($startDate->format('D') !== 'Mon') {
-                $startDate = Carbon::createFromTimestamp(strtotime('previous monday', strtotime($startDate)));
-            }
             $endDate = Carbon::createFromTimestamp($worksheet['flightEndDate']->format('U'));
-            $interval = \DateInterval::createFromDateString('1 day');
-            $period = new \DatePeriod($startDate, $interval, $endDate);
+            $interval = DateInterval::createFromDateString('1 day');
+            $period = new DatePeriod($startDate, $interval, $endDate);
             $totalDays = $startDate->diffInDays($endDate);
             $totalSpots = 0;
 
@@ -64,6 +64,7 @@ class StationOrderController extends Controller
 
             $dayCount = $totalSpots / $totalDays;
             $monthlyTotals = [];
+
             foreach ($period as $keyTwo => $date) {
                 if (isset($monthlyTotals[$date->format('M')])) {
                     $monthlyTotals[$date->format('M')] = $monthlyTotals[$date->format('M')] + $dayCount;
@@ -71,13 +72,14 @@ class StationOrderController extends Controller
                     $monthlyTotals[$date->format('M')] = $dayCount;
                 }
             }
+
+            $worksheets[$key]['monthly_totals'] = $monthlyTotals;
         }
 
         return $this->render('reports/stationOrder.html.twig', [
             'worksheets'     => $worksheets,
             'campaign'       => $campaign,
             'spot_types'     => $spotTypes,
-            'monthly_totals' => $monthlyTotals,
         ]);
     }
 }

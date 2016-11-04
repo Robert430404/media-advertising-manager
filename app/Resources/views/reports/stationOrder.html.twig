@@ -210,7 +210,7 @@
             <div class="sub-heading">
                 <div class="left">
                     <p>Market: {{ worksheet.region }}</p>
-                    <p>Station: {{ worksheet.programs.0.station }}</p>
+                    <p>Station: {% if worksheet.programs is not empty %}{{ worksheet.programs.0.station }}{% endif %}</p>
                     <p>Station Contact: ADD TO CAMPAIGN</p>
                 </div>
                 <div class="middle">
@@ -293,7 +293,7 @@
                                     <div class="column spot-count">Spot<br />Total</div>
                                     <div class="column gross-total">Station<br />Gross</div>
                                 </div>
-                                {% for month,total in monthly_totals %}
+                                {% for month,total in worksheet.monthly_totals %}
                                     <div class="breakdown-row breakdown-info-row">
                                         <div class="column month">{{ month }}</div>
                                         <div class="column spot-count">{{ total }}</div>
@@ -455,11 +455,11 @@
                 var cost = totalRate / breakdownSpotTotal;
                 var spotCount = Number($(this).find('.spot-count').html());
 
-                $(this).find('.spot-count').empty().append(Math.ceil(spotCount));
+                $(this).find('.spot-count').empty().append(Math.round(spotCount));
                 $(this).find('.gross-cost').empty().append('$' + Number(cost * spotCount).toFixed(2));
             });
 
-            $('.breakdown-row.footer-row .spot-total').empty().append(Math.ceil(breakdownSpotTotal));
+            $('.breakdown-row.footer-row .spot-total').empty().append(Math.round(breakdownSpotTotal));
             $('.breakdown-row.footer-row .gross-total').empty().append('$' + totalRate.toFixed(2));
         });
     </script>
