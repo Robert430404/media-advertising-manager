@@ -76,4 +76,49 @@ class SpotTypeController extends Controller
 
         return $this->redirectToRoute('spot-type');
     }
+
+    /**
+     * Deletes the selected spot type in the database
+     *
+     * @param Request $request
+     * @param $spotId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @Route("/spot-types/edit/{spotId}", name="spot-type-edit")
+     * @Method({"GET"})
+     */
+    public function editAction(Request $request, $spotId)
+    {
+        $type = $this->getDoctrine()
+            ->getRepository('AppBundle:SpotTypes')
+            ->find($spotId);
+
+        return $this->render('dashboard/spot-type/edit.html.twig', [
+            'type' => $type,
+        ]);
+    }
+
+    /**
+     * Deletes the selected spot type in the database
+     *
+     * @param Request $request
+     * @param $spotId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @Route("/spot-types/update/{spotId}", name="spot-type-update")
+     * @Method({"POST"})
+     */
+    public function updateAction(Request $request, $spotId)
+    {
+        $data = $request->request->all();
+        $orm = $this->getDoctrine()->getManager();
+        $type = $orm->getRepository('AppBundle:SpotTypes')->find($spotId);
+
+        $type->setName($data['spot_type_name']);
+        $type->setUpdatedAt(Carbon::now());
+
+        $orm->flush();
+
+        return $this->redirect('/spot-types/edit/' . $spotId);
+    }
 }

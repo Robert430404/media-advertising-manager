@@ -168,7 +168,6 @@ class WorksheetsController extends Controller
         $worksheet->setRegionId($data['worksheet_region']);
         $worksheet->setSpotTypeId($data['worksheet_spot_type']);
         $worksheet->setWeekInformation('none available');
-        $worksheet->setCreatedAt(Carbon::now());
         $worksheet->setUpdatedAt(Carbon::now());
 
         $orm->flush();

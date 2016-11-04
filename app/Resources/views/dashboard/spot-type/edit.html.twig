@@ -6,33 +6,20 @@
     <div class="container row">
         <div class="columns large-12 medium-12 small-12">
             <div class="primary-content">
-                <h1 class="content-title">Current Spot Types</h1>
+                <h1 class="content-title">Editing Spot Type: {{ type.name }}</h1>
                 <div class="row">
                     <div class="columns large-12 medium-12 small-12">
                         <div class="current-spot-types">
-                            {% if types is empty %}
-                                <p>There are currently no spot types. Add a new one below.</p>
-                            {% else %}
-                                <ul>
-                                    {% for type in types %}
-                                        <li>
-                                            <span class="spot-type-name">{{ type.name }}</span>
-                                            <a href="/spot-types/delete/{{ type.id }}" class="action">Delete</a>
-                                            <a href="/spot-types/edit/{{ type.id }}" class="action">Edit</a>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
                             <div class="form-wrapper">
-                                <form action="/spot-types/add" method="post" class="spot-type-form"
+                                <form action="/spot-types/update/{{ type.id }}" method="post" class="spot-type-form"
                                       id="spot-type-form">
                                     <label for="spot_type_name">Spot Type Name *
                                         <input type="text" class="form-control spot-type-name"
-                                               id="spot-type-name" name="spot_type_name"/>
+                                               id="spot-type-name" name="spot_type_name" value="{{ type.name }}"/>
                                     </label>
                                     <div class="form-group row">
                                         <div class="column large-12 medium-12 small-12">
-                                            <input type="submit" class="submit form-button" id="submit" value="Add New Spot Type"
+                                            <input type="submit" class="submit form-button" id="submit" value="Update Spot Type"
                                                    name="submit"/>
                                         </div>
                                     </div>
