@@ -151,4 +151,75 @@ class ProgramsController extends Controller
             'worksheet' => $worksheet
         ]);
     }
+
+    /**
+     * @param Request $request
+     * @param integer $worksheetId
+     * @param integer $programId
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/campaigns/worksheets/programs/{worksheetId}/update/{programId}", name="program-update")
+     * @Method({"POST"})
+     */
+    public function updateAction(Request $request, $worksheetId, $programId)
+    {
+        $data = $request->request->all();
+        $orm = $this->getDoctrine()->getManager();
+        $program = $orm->getRepository('AppBundle:Programs')->find($programId);
+
+        $program->setWorksheetId($worksheetId);
+        $program->setName($data['program_name']);
+        $program->setDayPart($data['day_part']);
+        $program->setStation($data['station']);
+        $program->setNetwork($data['network']);
+        $program->setProgram($data['program']);
+
+        $program->setMonday(false);
+        if (isset($data['monday'])) {
+            $program->setMonday(true);
+        }
+
+        $program->setTuesday(false);
+        if (isset($data['tuesday'])) {
+            $program->setTuesday(true);
+        }
+
+        $program->setWednesday(false);
+        if (isset($data['wednesday'])) {
+            $program->setWednesday(true);
+        }
+
+        $program->setThursday(false);
+        if (isset($data['thursday'])) {
+            $program->setThursday(true);
+        }
+
+        $program->setFriday(false);
+        if (isset($data['friday'])) {
+            $program->setFriday(true);
+        }
+
+        $program->setSaturday(false);
+        if (isset($data['saturday'])) {
+            $program->setSaturday(true);
+        }
+
+        $program->setSunday(false);
+        if (isset($data['sunday'])) {
+            $program->setSunday(true);
+        }
+
+        $program->setTimeSlotStart(Carbon::parse($data['start_time']));
+        $program->setTimeSlotEnd(Carbon::parse($data['end_time']));
+        $program->setSpotLength((int)$data['spot_length']);
+        $program->setSpotRate((int)$data['spot_rate']);
+        $program->setBreakCode($data['break_code']);
+        $program->setComment($data['comments']);
+        $program->setCreatedAt(Carbon::now());
+        $program->setUpdatedAt(Carbon::now());
+
+        $orm->flush();
+
+        return $this->redirect('/campaigns/worksheets/programs/' . $worksheetId . '/edit/' . $programId);
+    }
 }
