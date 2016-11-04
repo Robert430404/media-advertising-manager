@@ -136,6 +136,7 @@
             padding: 0;
             text-align: center;
         }
+
         .monthly-totals .sub-title {
             font-size: 10px;
             font-weight: 400;
@@ -161,11 +162,13 @@
             float: none;
             overflow: hidden;
         }
-        .monthly-breakdown .heading-row .column{
+
+        .monthly-breakdown .heading-row .column {
             font-weight: bold;
             margin: 0 0 5px 0;
             border-bottom: 1px solid #000;
         }
+
         .monthly-breakdown .column {
             float: left;
             font-size: 12px;
@@ -174,7 +177,8 @@
             padding: 0 10px 5px;
             margin: 0;
         }
-        .monthly-breakdown .footer-row .column{
+
+        .monthly-breakdown .footer-row .column {
             border-top: 1px solid #000;
             margin: 0;
             padding: 5px 10px 0;
@@ -210,7 +214,8 @@
             <div class="sub-heading">
                 <div class="left">
                     <p>Market: {{ worksheet.region }}</p>
-                    <p>Station: {% if worksheet.programs is not empty %}{{ worksheet.programs.0.station }}{% endif %}</p>
+                    <p>
+                        Station: {% if worksheet.programs is not empty %}{{ worksheet.programs.0.station }}{% endif %}</p>
                     <p>Station Contact: ADD TO CAMPAIGN</p>
                 </div>
                 <div class="middle">
@@ -289,9 +294,9 @@
                             <h4 class="sub-title">Based On Calendar Year</h4>
                             <div class="monthly-breakdown">
                                 <div class="breakdown-row heading-row">
-                                    <div class="column month">Month<br />Ran</div>
-                                    <div class="column spot-count">Spot<br />Total</div>
-                                    <div class="column gross-total">Station<br />Gross</div>
+                                    <div class="column month">Month<br/>Ran</div>
+                                    <div class="column spot-count">Spot<br/>Total</div>
+                                    <div class="column gross-total">Station<br/>Gross</div>
                                 </div>
                                 {% for month,total in worksheet.monthly_totals %}
                                     <div class="breakdown-row breakdown-info-row">
@@ -302,8 +307,8 @@
                                 {% endfor %}
                                 <div class="breakdown-row footer-row">
                                     <div class="column month">&nbsp;</div>
-                                    <div class="column spot-total">Spot<br />Total</div>
-                                    <div class="column gross-total">Station<br />Gross</div>
+                                    <div class="column spot-total">Spot<br/>Total</div>
+                                    <div class="column gross-total">Station<br/>Gross</div>
                                 </div>
                             </div>
                         </div>
@@ -431,36 +436,38 @@
                 row++;
             }
 
-            row = 1;
-            var totalRate = 0;
+            $('.page').each(function () {
+                row = 1;
+                var totalRate = 0;
 
-            while (row <= rowCount) {
-                var rowValue = Number($('.spot-total-' + row).html());
-                totalRate = totalRate + rowValue;
+                while (row <= rowCount) {
+                    var rowValue = Number($(this).find('.spot-total-' + row).html());
+                    totalRate = totalRate + rowValue;
 
-                row++;
-            }
+                    row++;
+                }
 
-            var breakdownSpotTotal = 0;
+                var breakdownSpotTotal = 0;
 
-            $('.cost-total .total').empty().append(totalRate.toFixed(2));
+                $(this).find('.cost-total .total').empty().append(totalRate.toFixed(2));
 
-            $('.breakdown-info-row').each(function () {
-                var spotCount = Number($(this).find('.spot-count').html());
+                $(this).find('.breakdown-info-row').each(function () {
+                    var spotCount = Number($(this).find('.spot-count').html());
 
-                breakdownSpotTotal = breakdownSpotTotal + spotCount;
+                    breakdownSpotTotal = breakdownSpotTotal + spotCount;
+                });
+
+                $(this).find('.breakdown-info-row').each(function () {
+                    var cost = totalRate / breakdownSpotTotal;
+                    var spotCount = Number($(this).find('.spot-count').html());
+
+                    $(this).find('.spot-count').empty().append(Math.round(spotCount));
+                    $(this).find('.gross-cost').empty().append('$' + Number(cost * spotCount).toFixed(2));
+                });
+
+                $(this).find('.breakdown-row.footer-row .spot-total').empty().append(Math.round(breakdownSpotTotal));
+                $(this).find('.breakdown-row.footer-row .gross-total').empty().append('$' + totalRate.toFixed(2));
             });
-
-            $('.breakdown-info-row').each(function () {
-                var cost = totalRate / breakdownSpotTotal;
-                var spotCount = Number($(this).find('.spot-count').html());
-
-                $(this).find('.spot-count').empty().append(Math.round(spotCount));
-                $(this).find('.gross-cost').empty().append('$' + Number(cost * spotCount).toFixed(2));
-            });
-
-            $('.breakdown-row.footer-row .spot-total').empty().append(Math.round(breakdownSpotTotal));
-            $('.breakdown-row.footer-row .gross-total').empty().append('$' + totalRate.toFixed(2));
         });
     </script>
 
