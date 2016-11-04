@@ -74,7 +74,7 @@ class SpotTypeController extends Controller
     }
 
     /**
-     * Edits the selected spot type in the database
+     * Brings up the selected spot type for editing
      *
      * @param Request $request
      * @param $spotId

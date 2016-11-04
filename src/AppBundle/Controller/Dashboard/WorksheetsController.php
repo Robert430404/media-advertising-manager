@@ -128,7 +128,7 @@ class WorksheetsController extends Controller
     }
 
     /**
-     * Brings up the selected campaign from the database for editing
+     * Updates the selected campaign in the database
      *
      * @param Request $request
      * @param $worksheetId

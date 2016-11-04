@@ -12,6 +12,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 class RegionsController extends Controller
 {
     /**
+     * Displays the index view for regions based on organization
+     *
      * @param Request $request
      * @param integer $organizationId
      * @return \Symfony\Component\HttpFoundation\Response
@@ -57,6 +59,8 @@ class RegionsController extends Controller
     }
 
     /**
+     * Deletes the selected region from the database
+     *
      * @param Request $request
      * @param integer $regionId
      * @return \Symfony\Component\HttpFoundation\Response
@@ -77,6 +81,8 @@ class RegionsController extends Controller
     }
 
     /**
+     * Brings up the selected region for editing
+     *
      * @param Request $request
      * @param integer $regionId
      * @return \Symfony\Component\HttpFoundation\Response
@@ -97,6 +103,8 @@ class RegionsController extends Controller
     }
 
     /**
+     * Updates the selected region inside of the database
+     *
      * @param Request $request
      * @param integer $regionId
      * @return \Symfony\Component\HttpFoundation\Response
