@@ -55,9 +55,13 @@ class StationOrderController extends Controller
             $period = new \DatePeriod($startDate, $interval, $endDate);
             $totalDays = $startDate->diffInDays($endDate);
             $totalSpots = 0;
-            foreach ($worksheet['weekInfo'] as $count) {
-                $totalSpots = $totalSpots + (int)$count;
+
+            if (isset($worksheet['weekInfo']) && !empty($worksheet['weekInfo'])) {
+                foreach ($worksheet['weekInfo'] as $count) {
+                    $totalSpots = $totalSpots + (int)$count;
+                }
             }
+
             $dayCount = $totalSpots / $totalDays;
             $monthlyTotals = [];
             foreach ($period as $keyTwo => $date) {
