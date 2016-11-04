@@ -3,40 +3,20 @@
     Campaigns - Media Manager
 {% endblock %}
 {% block body %}
-    <div class="container row">
+    <div class="container row campaign-edit">
         <div class="columns large-12 medium-12 small-12">
             <div class="primary-content">
-                <h1 class="content-title">Current Campaigns</h1>
+                <h1 class="content-title">Editing Campaign: {{ campaign.name }}</h1>
                 <div class="row">
                     <div class="columns large-12 medium-12 small-12">
                         <div class="current-campaigns">
-                            {% if campaigns is empty %}
-                                <p>There are currently no campaigns. Add a new one below.</p>
-                            {% else %}
-                                <ul>
-                                    {% for campaign in campaigns %}
-                                        <li>
-                                            <span class="campaign-name">{{ campaign.name }}</span>
-                                            <div class="actions">
-                                                <label>Actions: </label>
-                                                <a href="/campaigns/worksheets/{{ campaign.id }}" class="action">Manage Worksheets</a>
-                                                <a href="/campaigns/delete/{{ campaign.id }}" class="action">Delete</a>
-                                                <a href="/campaigns/edit/{{ campaign.id }}" class="action">Edit</a>
-                                            </div>
-                                            <span class="divider"></span>
-                                            <div class="tags">
-                                                <label>Info: </label><span class="tag">{{ campaign.regionName }}</span><span class="tag">{{ campaign.orgName }}</span>
-                                            </div>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
                             <div class="form-wrapper">
                                 <form action="/campaigns/add" method="post" class="campaign-form" id="campaign-form">
                                     <div class="form-group row">
                                         <div class="columns large-4 medium-4 small-12">
                                             <label for="campaign_name">Campaign Name *
-                                                <input type="text" class="form-control campaign-name" id="campaign-name" name="campaign_name"/>
+                                                <input type="text" class="form-control campaign-name" id="campaign-name"
+                                                       name="campaign_name" value="{{ campaign.name }}"/>
                                             </label>
                                         </div>
                                         <div class="columns large-4 medium-4 small-12">
@@ -44,7 +24,7 @@
                                                 <select name="campaign_organization" id="campaign-organization">
                                                     <option value="">Select Organization</option>
                                                     {% for organization in organizations %}
-                                                        <option value="{{ organization.id }}">{{ organization.name }}</option>
+                                                        <option value="{{ organization.id }}" {% if campaign.organizationId == organization.id %}selected="selected"{% endif %}>{{ organization.name }}</option>
                                                     {% endfor %}
                                                 </select>
                                             </label>
@@ -60,23 +40,29 @@
                                     <div class="form-group row">
                                         <div class="columns large-4 medium-4 small-12">
                                             <label for="flight_start">Flight Start Date (YYYY-MM-DD) *
-                                                <input type="text" class="flight-start form-control" id="flight-start" name="flight_start" placeholder="YYYY-MM-DD" />
+                                                <input type="text" class="flight-start form-control" id="flight-start"
+                                                       name="flight_start" placeholder="YYYY-MM-DD"
+                                                       value="{{ campaign.flightStartDate.format('Y-m-d') }}"/>
                                             </label>
                                         </div>
                                         <div class="columns large-4 medium-4 small-12">
                                             <label for="flight_end">Flight End Date (YYYY-MM-DD) *
-                                                <input type="text" class="flight-end form-control" id="flight-end" name="flight_end" placeholder="YYYY-MM-DD" />
+                                                <input type="text" class="flight-end form-control" id="flight-end"
+                                                       name="flight_end" placeholder="YYYY-MM-DD"
+                                                       value="{{ campaign.flightEndDate.format('Y-m-d') }}"/>
                                             </label>
                                         </div>
                                         <div class="columns large-4 medium-4 small-12">
                                             <label for="flight_length">Flight Length (in weeks)
-                                                <input type="text" class="flight-length form-control" id="flight-length" name="flight_length" readonly>
+                                                <input type="text" class="flight-length form-control" id="flight-length"
+                                                       name="flight_length" readonly value="{{ campaign.flightLength }} Weeks">
                                             </label>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <div class="column large-12 medium-12 small-12">
-                                            <input type="submit" class="submit form-button" id="submit" value="Add New Campaign"
+                                            <input type="submit" class="submit form-button" id="submit"
+                                                   value="Update Campaign"
                                                    name="submit"/>
                                         </div>
                                     </div>

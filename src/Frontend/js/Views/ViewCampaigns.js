@@ -6,6 +6,7 @@ class ViewCampaigns {
         this.setInnerOverflow();
         this.setSpotTotals();
         this.dashboardCreateCampaign();
+        this.campaignEditGetRegions();
 
         this.CampaignsController = new CampaignsController();
     }
@@ -156,7 +157,7 @@ class ViewCampaigns {
             var data = $(this).serialize();
 
             object.CampaignsController.createNewCampaign(data).then(function (resp) {
-                if(resp.success == true) {
+                if (resp.success == true) {
                     form[0].reset();
                     form.addClass('successful');
 
@@ -172,5 +173,35 @@ class ViewCampaigns {
                 }
             });
         });
+    }
+
+    campaignEditGetRegions() {
+        var campaignsController = new CampaignsController();
+        var target = document.querySelector('.campaign-edit');
+
+        if (target !== null) {
+            var selector = document.querySelector('#campaign-organization');
+            var container = $('#campaign-region');
+            var value = selector.value;
+
+            container.empty();
+            console.log(value);
+            if (value == '') {
+                container.append('<option value="">Select Organization</option>');
+            }
+            else {
+                container.append('<option value="">Select Region</option>');
+                campaignsController.loadCampaignRegions(value).then(function (resp) {
+                    for (var i = 0; i < resp.length; i++) {
+                        if (value == resp[i].id) {
+                            container.append('<option value="' + resp[i].id + '" selected="selected">' + resp[i].name + '</option>');
+                        }
+                        else {
+                            container.append('<option value="' + resp[i].id + '">' + resp[i].name + '</option>');
+                        }
+                    }
+                });
+            }
+        }
     }
 }

@@ -107,4 +107,28 @@ class CampaignsController extends Controller
 
         return $this->redirectToRoute('campaigns');
     }
+
+    /**
+     * Edits the selected campaign from the database
+     *
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @Route("/campaigns/edit/{campaignId}", name="campaign-edit")
+     * @Method({"GET"})
+     */
+    public function editAction(Request $request, $campaignId)
+    {
+        $campaign = $this->getDoctrine()
+            ->getRepository('AppBundle:Campaigns')
+            ->find($campaignId);
+        $organizations = $this->getDoctrine()
+            ->getRepository('AppBundle:Organizations')
+            ->findAll();
+
+        return $this->render('dashboard/campaigns/edit.html.twig', [
+            'campaign' => $campaign,
+            'organizations' => $organizations,
+        ]);
+    }
 }
