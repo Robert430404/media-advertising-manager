@@ -99,98 +99,6 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var ActionHelpers = function () {
-    function ActionHelpers() {
-        _classCallCheck(this, ActionHelpers);
-
-        this.confirmDelete();
-    }
-
-    _createClass(ActionHelpers, [{
-        key: 'confirmDelete',
-        value: function confirmDelete() {
-            $('a.delete-button').click(function (e) {
-                e.preventDefault();
-                var link = $(this).attr('href');
-                var confirmation = confirm('Do you really want to delete this?');
-
-                if (confirmation) {
-                    window.location = link;
-                }
-            });
-        }
-    }]);
-
-    return ActionHelpers;
-}();
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var AjaxHelpers = function () {
-    function AjaxHelpers() {
-        _classCallCheck(this, AjaxHelpers);
-    }
-
-    _createClass(AjaxHelpers, [{
-        key: 'getCall',
-        value: function getCall(url) {
-            return new Promise(function (resolve, reject) {
-                var request = new XMLHttpRequest();
-
-                request.open('GET', url);
-
-                request.onload = function () {
-                    if (request.status === 200) {
-                        resolve(JSON.parse(request.response));
-                    } else {
-                        reject(new Error(request.statusText));
-                    }
-                };
-
-                request.onerror = function () {
-                    reject(new Error('Network Error'));
-                };
-
-                request.send();
-            });
-        }
-    }, {
-        key: 'postCall',
-        value: function postCall(url, data) {
-            return new Promise(function (resolve, reject) {
-                var request = new XMLHttpRequest();
-
-                request.open('POST', url, true);
-                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-                request.onload = function () {
-                    if (request.status === 200) {
-                        resolve(JSON.parse(request.response));
-                    } else {
-                        reject(new Error(request.statusText));
-                    }
-                };
-
-                request.onerror = function () {
-                    reject(new Error('Network Error'));
-                };
-
-                request.send(data);
-            });
-        }
-    }]);
-
-    return AjaxHelpers;
-}();
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 var ViewCampaigns = function () {
     function ViewCampaigns() {
         _classCallCheck(this, ViewCampaigns);
@@ -591,7 +499,7 @@ var ViewOrganizations = function () {
                         container.append('<ul class="campaign-list"></ul>');
                         for (var i = 0; i < resp.length; i++) {
                             container.find('.campaign-list').append('<li class="campaign-selector campaign-selector-' + resp[i].id + '" data-id="' + resp[i].id + '">' + resp[i].name + '</li>');
-                            container.find('.campaign-selector-' + resp[i].id).append('<div class="actions">' + '<a href="/campaigns/worksheets/' + resp[i].id + '">See Worksheets</a>' + '<a href="/reports/station-order/' + resp[i].id + '">Gen Station Order</a>' + '</div>');
+                            container.find('.campaign-selector-' + resp[i].id).append('<div class="actions">' + '<a href="/campaigns/worksheets/' + resp[i].id + '">See Worksheets</a>' + '<a href="/reports/station-order/' + resp[i].id + '" target="_blank">Gen Station Order</a>' + '</div>');
                         }
                     } else {
                         container.empty().append('<h1 class="campaigns-title">' + regionName + ' Campaigns</h1>');
@@ -848,4 +756,96 @@ var ViewWorksheets = function () {
     }]);
 
     return ViewWorksheets;
+}();
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ActionHelpers = function () {
+    function ActionHelpers() {
+        _classCallCheck(this, ActionHelpers);
+
+        this.confirmDelete();
+    }
+
+    _createClass(ActionHelpers, [{
+        key: 'confirmDelete',
+        value: function confirmDelete() {
+            $('a.delete-button').click(function (e) {
+                e.preventDefault();
+                var link = $(this).attr('href');
+                var confirmation = confirm('Do you really want to delete this?');
+
+                if (confirmation) {
+                    window.location = link;
+                }
+            });
+        }
+    }]);
+
+    return ActionHelpers;
+}();
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var AjaxHelpers = function () {
+    function AjaxHelpers() {
+        _classCallCheck(this, AjaxHelpers);
+    }
+
+    _createClass(AjaxHelpers, [{
+        key: 'getCall',
+        value: function getCall(url) {
+            return new Promise(function (resolve, reject) {
+                var request = new XMLHttpRequest();
+
+                request.open('GET', url);
+
+                request.onload = function () {
+                    if (request.status === 200) {
+                        resolve(JSON.parse(request.response));
+                    } else {
+                        reject(new Error(request.statusText));
+                    }
+                };
+
+                request.onerror = function () {
+                    reject(new Error('Network Error'));
+                };
+
+                request.send();
+            });
+        }
+    }, {
+        key: 'postCall',
+        value: function postCall(url, data) {
+            return new Promise(function (resolve, reject) {
+                var request = new XMLHttpRequest();
+
+                request.open('POST', url, true);
+                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+                request.onload = function () {
+                    if (request.status === 200) {
+                        resolve(JSON.parse(request.response));
+                    } else {
+                        reject(new Error(request.statusText));
+                    }
+                };
+
+                request.onerror = function () {
+                    reject(new Error('Network Error'));
+                };
+
+                request.send(data);
+            });
+        }
+    }]);
+
+    return AjaxHelpers;
 }();
