@@ -168,7 +168,9 @@ var ViewCampaigns = function () {
         this.setFlightFieldFormats();
         this.setFlightWeeks();
         this.setInnerOverflow();
-        this.setSpotTotals();
+        if (document.querySelector('.info-inner')) {
+            this.setSpotTotals();
+        }
         this.dashboardCreateCampaign();
         this.campaignEditGetRegions();
 
