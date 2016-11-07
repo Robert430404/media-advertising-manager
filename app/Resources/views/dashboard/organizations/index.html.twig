@@ -17,7 +17,8 @@
                                     {% for organization in organizations %}
                                         <li>
                                             <span class="organization-name">{{ organization.name }}</span>
-                                            <a class="action" href="/regions/{{ organization.id }}">Edit Regions</a>
+                                            <a class="action" href="/regions/{{ organization.id }}">Manage Regions</a>
+                                            <a class="action" href="/organizations/edit/{{ organization.id }}">Edit</a>
                                         </li>
                                     {% endfor %}
                                 </ul>

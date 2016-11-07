@@ -95,45 +95,53 @@ class ViewCampaigns {
     }
 
     setSpotTotals() {
-        var object = this;
-        var container = $('.info-inner');
-        var inputs = container.find('input.date-count');
-        var columns = container.find('.spot-column');
-        var count = 0;
-        var weekCount = 0;
+        var object    = this;
+        var container = document.querySelector('.info-inner');
+        var inputs    = container.querySelectorAll('input.date-count');
+        var columns   = container.querySelectorAll('.spot-column');
 
-        inputs.each(function () {
-            var program = $(this).attr('data-program');
+        for (var i = 0; i < inputs.length; i++) {
+            object.setWeekTotals(container, columns, inputs[i].dataset.program);
 
-            object.setBuyTotals(container, 0, columns, program);
-
-            $(this).keyup(function () {
-                object.setBuyTotals(container, 0, columns, program);
-            });
-        });
+            inputs[i].onkeyup = function () {
+                object.setWeekTotals(container, columns, this.dataset.program);
+            }
+        }
     }
 
-    setBuyTotals(container, count, columns, program) {
-        var sectionedInputs = container.find('input.date-count[data-program=' + program + ']');
-        count = 0;
-
-        sectionedInputs.each(function () {
-            count = Number($(this).val()) + Number(count);
-        });
-
-        columns.each(function () {
-            var inputs = $(this).find('input');
+    setWeekTotals(container, columns, programId) {
+        for (var c = 0; c < columns.length; c++) {
+            var inputs = columns[c].querySelectorAll('input');
             var sum = 0;
 
-            inputs.each(function () {
-                var value = $(this).val();
-                sum = Number(value) + Number(sum);
-            });
+            for (var i = 0; i < inputs.length; i++) {
+                sum = Number(inputs[i].value) + Number(sum);
+            }
 
-            $(this).find('.week-total .total').empty().append(sum);
-        });
+            if (columns[c].querySelector('.week-total .total')) {
+                columns[c].querySelector('.week-total .total').innerHTML = sum;
+            }
+        }
 
-        $('.spot-date-total .program-' + program + '-total').empty().append(count);
+        this.setBuyTotals(container, programId);
+    }
+
+    setBuyTotals(container, programId) {
+        var allInputs = container.querySelectorAll('input.date-count');
+        var sectionedInputs = [];
+        var count = 0;
+
+        for (var a = 0; a < allInputs.length; a++) {
+            if (allInputs[a].dataset.program == programId) {
+                sectionedInputs.push(allInputs[a]);
+            }
+        }
+
+        for (var b = 0; b < sectionedInputs.length; b++) {
+            count = Number(sectionedInputs[b].value) + Number(count);
+        }
+
+        document.querySelector('.spot-date-total .program-' + programId + '-total').innerHTML = count;
     }
 
     dashboardCreateCampaign() {
@@ -185,7 +193,7 @@ class ViewCampaigns {
             var value = selector.value;
 
             container.empty();
-            console.log(value);
+
             if (value == '') {
                 container.append('<option value="">Select Organization</option>');
             }

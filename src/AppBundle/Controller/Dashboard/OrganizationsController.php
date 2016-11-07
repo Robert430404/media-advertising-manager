@@ -55,4 +55,47 @@ class OrganizationsController extends Controller
 
         return $this->redirectToRoute('organizations');
     }
+
+    /**
+     * Brings the selected organization up for editing
+     *
+     * @param Request $request
+     * @param $organizationId
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/organizations/edit/{organizationId}", name="organization-edit")
+     * @Method({"GET"})
+     */
+    public function editAction(Request $request, $organizationId)
+    {
+        $organization = $this->getDoctrine()->getRepository('AppBundle:Organizations')->find($organizationId);
+
+        return $this->render('/dashboard/organizations/edit.html.twig', [
+            'organization' => $organization,
+        ]);
+    }
+
+    /**
+     * Updates the selected organization
+     *
+     * @param Request $request
+     * @param $organizationId
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/organizations/update/{organizationId}", name="organization-update")
+     * @Method({"POST"})
+     */
+    public function updateAction(Request $request, $organizationId)
+    {
+        $orm = $this->getDoctrine()->getManager();
+        $organization = $orm->getRepository('AppBundle:Organizations')->find($organizationId);
+        $data = $request->request->all();
+
+        $organization->setName($data['organization_name']);
+        $organization->setUpdatedAt(Carbon::now());
+
+        $orm->flush();
+
+        return $this->redirect('/organizations/edit/' . $organizationId);
+    }
 }

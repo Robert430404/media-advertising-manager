@@ -13,6 +13,7 @@ class StationOrderController extends Controller
      * Generates the station order from the selected campaign
      *
      * @param Request $request
+     * @param integer $campaignId
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @Route("/reports/station-order/{campaignId}", name="generate-order")

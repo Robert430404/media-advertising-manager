@@ -1,12 +1,12 @@
 class ViewWorksheets {
     constructor() {
-        this.persisAction();
+        this.persistAction();
         this.expandSpotDetails();
 
         this.Worksheets = new WorksheetsController();
     }
 
-    persisAction() {
+    persistAction() {
         var object = this;
 
         $('.update-week-information').click(function () {
