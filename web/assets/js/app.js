@@ -8,6 +8,7 @@ $(document).ready(function () {
     new ViewSpotTypes();
     new ViewRegions();
     new ViewInvoices();
+    new ActionHelpers();
 });
 'use strict';
 
@@ -91,6 +92,36 @@ var WorksheetsController = function () {
     }]);
 
     return WorksheetsController;
+}();
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ActionHelpers = function () {
+    function ActionHelpers() {
+        _classCallCheck(this, ActionHelpers);
+
+        this.confirmDelete();
+    }
+
+    _createClass(ActionHelpers, [{
+        key: 'confirmDelete',
+        value: function confirmDelete() {
+            $('a.delete-button').click(function (e) {
+                e.preventDefault();
+                var link = $(this).attr('href');
+                var confirmation = confirm('Do you really want to delete this?');
+
+                if (confirmation) {
+                    window.location = link;
+                }
+            });
+        }
+    }]);
+
+    return ActionHelpers;
 }();
 'use strict';
 

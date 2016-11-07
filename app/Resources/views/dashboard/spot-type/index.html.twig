@@ -17,7 +17,7 @@
                                     {% for type in types %}
                                         <li>
                                             <span class="spot-type-name">{{ type.name }}</span>
-                                            <a href="/spot-types/delete/{{ type.id }}" class="action">Delete</a>
+                                            <a href="/spot-types/delete/{{ type.id }}" class="action delete-button">Delete</a>
                                             <a href="/spot-types/edit/{{ type.id }}" class="action">Edit</a>
                                         </li>
                                     {% endfor %}

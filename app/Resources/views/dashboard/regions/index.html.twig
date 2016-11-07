@@ -17,7 +17,7 @@
                                     {% for region in regions %}
                                         <li>
                                             <span class="region-name">{{ region.name }}</span>
-                                            <a href="/regions/delete/{{ region.id }}" class="action">Delete</a>
+                                            <a href="/regions/delete/{{ region.id }}" class="action delete-button">Delete</a>
                                             <a href="/regions/edit/{{ region.id }}" class="action">Edit</a>
                                         </li>
                                     {% endfor %}

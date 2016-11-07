@@ -6,4 +6,5 @@ $(document).ready(function () {
     new ViewSpotTypes();
     new ViewRegions();
     new ViewInvoices();
+    new ActionHelpers();
 });
