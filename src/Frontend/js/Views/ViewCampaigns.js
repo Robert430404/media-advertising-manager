@@ -97,18 +97,23 @@ class ViewCampaigns {
     }
 
     setSpotTotals() {
-        var object    = this;
-        var container = document.querySelector('.info-inner');
-        var inputs    = container.querySelectorAll('input.date-count');
-        var columns   = container.querySelectorAll('.spot-column');
+        var object     = this;
+        var containers = document.querySelectorAll('.info-inner');
 
-        for (var i = 0; i < inputs.length; i++) {
-            object.setWeekTotals(container, columns, inputs[i].dataset.program);
+        containers.forEach( function (element) {
+            console.log(element);
 
-            inputs[i].onkeyup = function () {
-                object.setWeekTotals(container, columns, this.dataset.program);
+            var inputs  = element.querySelectorAll('input.date-count');
+            var columns = element.querySelectorAll('.spot-column');
+
+            for (var b = 0; b < inputs.length; b++) {
+                object.setWeekTotals(element, columns, inputs[b].dataset.program);
+
+                inputs[b].onkeyup = function () {
+                    object.setWeekTotals(element, columns, this.dataset.program);
+                }
             }
-        }
+        });
     }
 
     setWeekTotals(container, columns, programId) {
