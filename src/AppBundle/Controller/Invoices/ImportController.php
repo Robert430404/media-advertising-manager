@@ -27,11 +27,18 @@ class ImportController extends Controller
 
     /**
      * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      *
      * @Route("/invoices/insert", name="invoice-insert")
+     * @Method({"POST"})
      */
     public function insertAction(Request $request)
     {
+        $data = $request->request->all();
 
+        var_dump($data);
+        die();
+
+        return $this->redirect('invoices');
     }
 }

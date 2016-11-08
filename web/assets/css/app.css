@@ -1071,6 +1071,9 @@ div {
     .form-wrapper select[readonly]:focus {
       box-shadow: none;
       background: #ECEDEE; }
+  .form-wrapper .form-control[type=file],
+  .form-wrapper select[type=file] {
+    padding: 10px; }
 
 .form-wrapper .form-button {
   width: 100%;
@@ -1089,3 +1092,13 @@ div {
   .form-wrapper .form-button:hover {
     background: #FFF;
     color: #0E690F; }
+
+.form-wrapper .label-row label {
+  margin-bottom: 0; }
+
+.form-wrapper .file-row {
+  margin-bottom: 15px; }
+  .form-wrapper .file-row .columns {
+    float: left !important; }
+  .form-wrapper .file-row .form-control {
+    margin-bottom: 0; }

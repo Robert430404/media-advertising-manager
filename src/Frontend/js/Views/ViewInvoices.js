@@ -2,6 +2,7 @@ class ViewInvoices {
     constructor() {
         this.setInvoiceRegions();
         this.setInvoiceCampaigns();
+        this.addMoreInvoices();
 
         this.CampaignsController = new CampaignsController();
     }
@@ -66,5 +67,19 @@ class ViewInvoices {
                 }
             }
         }
+    }
+
+    addMoreInvoices() {
+        var inputs = $('.file-inputs');
+
+        $('.add-more-invoices').click(function () {
+            var lastInput = inputs.find('.columns:last-child').find('input');
+            var currentId = lastInput.attr('data-id');
+            var newId     = Number(currentId) + 1;
+
+            inputs.append('<div class="columns large-4 medium-4 small-12">' +
+                               '<input type="file" class="form-control" name="invoice-' + newId + '" data-id="' + newId + '" />' +
+                          '</div>');
+        });
     }
 }

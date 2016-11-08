@@ -66,6 +66,9 @@
         background: $off-white;
       }
     }
+    &[type=file] {
+      padding: 10px;
+    }
   }
   .form-button {
     width: 100%;
@@ -84,6 +87,20 @@
     &:hover {
       background: $white;
       color: $highlight-dark;
+    }
+  }
+  .label-row {
+    label {
+      margin-bottom: 0;
+    }
+  }
+  .file-row {
+    margin-bottom: 15px;
+    .columns {
+      float: left !important;
+    }
+    .form-control {
+      margin-bottom: 0;
     }
   }
 }
