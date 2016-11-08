@@ -57,6 +57,60 @@ class OrganizationsController extends Controller
     }
 
     /**
+     * Deletes The Selected Organization And It's Associated Data
+     *
+     * @param Request $request
+     * @param $organizationId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @Route("/organizations/delete/{organizationId}", name="organization-delete")
+     * @Method({"GET"})
+     */
+    public function deleteAction(Request $request, $organizationId)
+    {
+        $organization = $this->getDoctrine()->getRepository('AppBundle:Organizations')->find($organizationId);
+        $regions      = $this->getDoctrine()->getRepository('AppBundle:Regions')->findByOrganizationId($organizationId);
+        $campaigns    = $this->getDoctrine()->getRepository('AppBundle:Campaigns')->findByOrganizationId($organizationId);
+        $campaignIds  = [];
+        $worksheetIds = [];
+
+        foreach ($campaigns as $key => $campaign) {
+            $campaignIds[$key] = $campaign->getId();
+        }
+
+        $worksheets   = $this->getDoctrine()->getRepository('AppBundle:Worksheets')->findByCampaignId($campaignIds);
+
+        foreach ($worksheets as $key => $worksheet) {
+            $worksheetIds[$key] = $worksheet->getId();
+        }
+
+        $programs = $this->getDoctrine()->getRepository('AppBundle:Programs')->findByWorksheetId($worksheetIds);
+        $orm      = $this->get('doctrine')->getManager();
+
+        $orm->remove($organization);
+
+        foreach ($regions as $region) {
+            $orm->remove($region);
+        }
+
+        foreach ($campaigns as $campaign) {
+            $orm->remove($campaign);
+        }
+
+        foreach ($worksheets as $worksheet) {
+            $orm->remove($worksheet);
+        }
+
+        foreach ($programs as $program) {
+            $orm->remove($program);
+        }
+
+        $orm->flush();
+
+        return $this->redirectToRoute('organizations');
+    }
+
+    /**
      * Brings the selected organization up for editing
      *
      * @param Request $request

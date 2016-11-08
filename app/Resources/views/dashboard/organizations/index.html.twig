@@ -19,6 +19,7 @@
                                             <span class="organization-name">{{ organization.name }}</span>
                                             <a class="action" href="/regions/{{ organization.id }}">Manage Regions</a>
                                             <a class="action" href="/organizations/edit/{{ organization.id }}">Edit</a>
+                                            <a class="action delete-button" href="/organizations/delete/{{ organization.id }}">Delete</a>
                                         </li>
                                     {% endfor %}
                                 </ul>
