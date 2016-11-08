@@ -171,4 +171,31 @@ class InvoiceHelpers
 
         return $spotData;
     }
+
+    public function getSpotDataWithDateTime($fileData)
+    {
+        $data    = [];
+        $tempKey = 0;
+
+        // Structures Data Into Useable Structure
+        foreach ($fileData as $key => $file) {
+            if (!empty($file[0])) {
+                if ($file[0] === '41') {
+                    $tempKey = $key; // Sets Data Parent Key
+                    $data[$tempKey][$key] = $file;
+                }
+
+                if ($file[0] === '51') {
+                    $data[$tempKey][$key] = $file;
+                }
+            }
+        }
+
+        // Resets Array Keys Inside Of Data
+        foreach ($data as $key => $array) {
+            $data[$key] = array_values($array);
+        }
+
+        return $data;
+    }
 }

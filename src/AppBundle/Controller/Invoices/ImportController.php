@@ -34,23 +34,21 @@ class ImportController extends Controller
      */
     public function insertAction(Request $request)
     {
-        $data          = $request->request->all();
-        $files         = $request->files->all();
-        $fileData      = $this->get('app.invoice_helpers')->formatFileData($files);
-        $orgData       = $this->get('app.invoice_helpers')->getOrganizationData($fileData);
-        $stationData   = $this->get('app.invoice_helpers')->getStationData($fileData);
-        $marketData    = $this->get('app.invoice_helpers')->getMarketData($fileData);
-        $timeFrameData = $this->get('app.invoice_helpers')->getTimeFrameData($fileData);
-        $spotData      = $this->get('app.invoice_helpers')->getSpotData($fileData);
+        $data         = $request->request->all();
+        $files        = $request->files->all();
+        $fileData     = $this->get('app.invoice_helpers')->formatFileData($files);
+        $spotData     = $this->get('app.invoice_helpers')->getSpotDataWithDateTime($fileData);
+        $organization = $this->getDoctrine()->getRepository('AppBundle:Organizations')->find($data['organizations']);
+        $region       = $this->getDoctrine()->getRepository('AppBundle:Regions')->find($data['regions']);
+        $campaign     = $this->getDoctrine()->getRepository('AppBundle:Campaigns')->find($data['campaigns']);
 
         var_dump($spotData);
 
         return $this->render('/invoices/output.html.twig', [
-            'organization' => $orgData,
-            'station'      => $stationData,
-            'market'       => $marketData,
-            'timeFrame'    => $timeFrameData,
-            'spots'        => $spotData
+            'spots'        => $spotData,
+            'organization' => $organization,
+            'region'       => $region,
+            'campaign'     => $campaign,
         ]);
     }
 }
