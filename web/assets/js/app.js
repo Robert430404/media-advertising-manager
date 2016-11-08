@@ -198,7 +198,7 @@ var ViewCampaigns = function () {
                 var dateCount = dates.length;
 
                 $(this).find('.scrollable').css({
-                    'min-width': colWidth * dateCount + 'px'
+                    'width': colWidth * dateCount + 'px'
                 });
             });
         }
