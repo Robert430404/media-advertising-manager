@@ -9,7 +9,7 @@
             <div class="primary-content">
                 <h1 class="content-title">Invoice Processor</h1>
                 <div class="form-wrapper">
-                    <form action="/invoices/insert" method="post" class="invoice-form">
+                    <form action="/invoices/insert" method="post" class="invoice-form" enctype="multipart/form-data">
                         <div class="row">
                             <div class="columns large-4 medium-4 small-12">
                                 <label>Select Organization *
@@ -44,7 +44,7 @@
                         </div>
                         <div class="row file-row file-inputs">
                             <div class="columns large-4 medium-4 small-12">
-                                <input type="file" class="form-control" name="invoice-1" data-id="1" />
+                                <input type="file" class="form-control" name="invoices-1" data-id="1" />
                             </div>
                         </div>
                         <div class="row file-row">

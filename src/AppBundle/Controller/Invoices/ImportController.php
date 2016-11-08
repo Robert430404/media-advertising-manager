@@ -34,11 +34,32 @@ class ImportController extends Controller
      */
     public function insertAction(Request $request)
     {
-        $data = $request->request->all();
+        $data  = $request->request->all();
+        $files = $request->files->all();
 
-        var_dump($data);
-        die();
+        foreach ($files as $file) {
+            $path     = $file->getPathName();
+            $size     = $file->getSize();
+            $openFile = fopen($path, 'r');
+            $readFile = fread($openFile, $size);
+            $fileData = explode("\n", $readFile);
 
-        return $this->redirect('invoices');
+            foreach ($fileData as $key => $line) {
+                $fileData[$key] = explode(';', $line);
+
+                foreach ($fileData[$key] as $keyTWo => $set) {
+                    if (empty($set)) {
+                        unset($fileData[$key][$keyTWo]);
+                    }
+                }
+
+                $fileData[$key] = array_values($fileData[$key]);
+            }
+
+            fclose($openFile);
+            var_dump($fileData);
+        }
+
+        return $this->render('/invoices/output.html.twig');
     }
 }

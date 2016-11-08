@@ -514,7 +514,7 @@ var ViewInvoices = function () {
                 var currentId = lastInput.attr('data-id');
                 var newId = Number(currentId) + 1;
 
-                inputs.append('<div class="columns large-4 medium-4 small-12">' + '<input type="file" class="form-control" name="invoice-' + newId + '" data-id="' + newId + '" />' + '</div>');
+                inputs.append('<div class="columns large-4 medium-4 small-12">' + '<input type="file" class="form-control" name="invoices-' + newId + '" data-id="' + newId + '" />' + '</div>');
             });
         }
     }]);
