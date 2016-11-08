@@ -42,8 +42,6 @@ class ImportController extends Controller
         $region       = $this->getDoctrine()->getRepository('AppBundle:Regions')->find($data['regions']);
         $campaign     = $this->getDoctrine()->getRepository('AppBundle:Campaigns')->find($data['campaigns']);
 
-        var_dump($spotData);
-
         return $this->render('/invoices/output.html.twig', [
             'spots'        => $spotData,
             'organization' => $organization,

@@ -172,30 +172,80 @@ class InvoiceHelpers
         return $spotData;
     }
 
+    /**
+     * Filters the data down to the spot data with the first array in the set being the time frame data
+     *
+     * @param $fileData
+     * @return array
+     */
     public function getSpotDataWithDateTime($fileData)
     {
-        $data    = [];
+        $indexed = [];
+        $associative = [];
+        $assIndex = 0;
         $tempKey = 0;
 
         // Structures Data Into Useable Structure
         foreach ($fileData as $key => $file) {
             if (!empty($file[0])) {
-                if ($file[0] === '41') {
+                if ($file[0] === '41') { // 41: Key For Time Frame Information In Invoice Files
                     $tempKey = $key; // Sets Data Parent Key
-                    $data[$tempKey][$key] = $file;
+                    $indexed[$tempKey][$key] = $file;
                 }
 
-                if ($file[0] === '51') {
-                    $data[$tempKey][$key] = $file;
+                if ($file[0] === '51') { // 51: Key For Spot Information In Invoice Files
+                    $indexed[$tempKey][$key] = $file;
                 }
             }
         }
 
         // Resets Array Keys Inside Of Data
-        foreach ($data as $key => $array) {
-            $data[$key] = array_values($array);
+        foreach ($indexed as $key => $array) {
+            $indexed[$key] = array_values($array);
+        }
+        array_values($indexed);
+
+        // Formats Indexed Array To Associative Array
+        foreach ($indexed as $key => $array) {
+            foreach ($array as $keyTwo => $inner) {
+                if ($inner[0] === '41') {
+                    $days = explode(' ', $inner[2]);
+
+                    foreach ($days as $keyThree => $day) {
+                        if (empty($day)) {
+                            unset($days[$keyThree]);
+                        }
+                    }
+
+                    $associative[$assIndex]['dateInformation']['id']         = $keyTwo;
+                    $associative[$assIndex]['dateInformation']['order']      = (int)$inner[1];
+                    $associative[$assIndex]['dateInformation']['days']       = $days;
+                    $associative[$assIndex]['dateInformation']['startTime']  = $inner[3];
+                    $associative[$assIndex]['dateInformation']['endTime']    = $inner[4];
+                    $associative[$assIndex]['dateInformation']['spotPrice']  = (int)$inner[5];
+                    $associative[$assIndex]['dateInformation']['totalSpots'] = (int)$inner[6];
+                    $associative[$assIndex]['dateInformation']['startDate']  = $inner[7];
+                    $associative[$assIndex]['dateInformation']['endDate']    = $inner[8];
+                }
+
+                if ($inner[0] === '51') {
+                    $associative[$assIndex]['spotInformation' . $keyTwo]['id']         = $keyTwo;
+                    $associative[$assIndex]['spotInformation' . $keyTwo]['unsure_1']   = $inner[1];
+                    $associative[$assIndex]['spotInformation' . $keyTwo]['dateRan']    = $inner[2];
+                    $associative[$assIndex]['spotInformation' . $keyTwo]['unsure_2']   = (int)$inner[3];
+                    $associative[$assIndex]['spotInformation' . $keyTwo]['timeRan']    = $inner[4];
+                    $associative[$assIndex]['spotInformation' . $keyTwo]['spotLength'] = (int)$inner[5];
+                    $associative[$assIndex]['spotInformation' . $keyTwo]['spotName']   = $inner[6];
+                    $associative[$assIndex]['spotInformation' . $keyTwo]['spotPrice']  = (int)$inner[7];
+                    $associative[$assIndex]['spotInformation' . $keyTwo]['unsure_3']   = $inner[8];
+                    $associative[$assIndex]['spotInformation' . $keyTwo]['unsure_4']   = $inner[9];
+                }
+            }
+            $assIndex++;
         }
 
-        return $data;
+        var_dump($associative);
+
+        return $indexed;
     }
 }
