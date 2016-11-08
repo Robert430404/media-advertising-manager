@@ -7,3 +7,6 @@ services:
   app.report_helpers:
     class:     AppBundle\Helpers\ReportHelpers
     arguments: ['@doctrine.orm.default_entity_manager']
+  app.invoice_helpers:
+    class:     AppBundle\Helpers\InvoiceHelpers
+    arguments:

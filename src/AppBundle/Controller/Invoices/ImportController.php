@@ -34,32 +34,23 @@ class ImportController extends Controller
      */
     public function insertAction(Request $request)
     {
-        $data  = $request->request->all();
-        $files = $request->files->all();
+        $data          = $request->request->all();
+        $files         = $request->files->all();
+        $fileData      = $this->get('app.invoice_helpers')->formatFileData($files);
+        $orgData       = $this->get('app.invoice_helpers')->getOrganizationData($fileData);
+        $stationData   = $this->get('app.invoice_helpers')->getStationData($fileData);
+        $marketData    = $this->get('app.invoice_helpers')->getMarketData($fileData);
+        $timeFrameData = $this->get('app.invoice_helpers')->getTimeFrameData($fileData);
+        $spotData      = $this->get('app.invoice_helpers')->getSpotData($fileData);
 
-        foreach ($files as $file) {
-            $path     = $file->getPathName();
-            $size     = $file->getSize();
-            $openFile = fopen($path, 'r');
-            $readFile = fread($openFile, $size);
-            $fileData = explode("\n", $readFile);
+        var_dump($spotData);
 
-            foreach ($fileData as $key => $line) {
-                $fileData[$key] = explode(';', $line);
-
-                foreach ($fileData[$key] as $keyTWo => $set) {
-                    if (empty($set)) {
-                        unset($fileData[$key][$keyTWo]);
-                    }
-                }
-
-                $fileData[$key] = array_values($fileData[$key]);
-            }
-
-            fclose($openFile);
-            var_dump($fileData);
-        }
-
-        return $this->render('/invoices/output.html.twig');
+        return $this->render('/invoices/output.html.twig', [
+            'organization' => $orgData,
+            'station'      => $stationData,
+            'market'       => $marketData,
+            'timeFrame'    => $timeFrameData,
+            'spots'        => $spotData
+        ]);
     }
 }
