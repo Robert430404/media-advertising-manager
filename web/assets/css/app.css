@@ -1102,3 +1102,57 @@ div {
     float: left !important; }
   .form-wrapper .file-row .form-control {
     margin-bottom: 0; }
+
+.site-content h2.sub-title {
+  font-size: 16px;
+  text-transform: uppercase;
+  text-align: center;
+  background: #ECEDEE;
+  border-bottom: 1px solid #cbcbcb;
+  margin: -15px -15px 15px -15px;
+  padding: 15px; }
+
+.site-content .breakdown-wrapper .run-dates {
+  background: #ECEDEE;
+  border: 1px solid #cbcbcb;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  padding: 15px; }
+  .site-content .breakdown-wrapper .run-dates hr {
+    margin: 10px 0; }
+  .site-content .breakdown-wrapper .run-dates .label-main {
+    background: transparent;
+    font-size: 16px;
+    font-weight: 300;
+    min-width: 110px;
+    display: inline-block;
+    text-align: left;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #000; }
+  .site-content .breakdown-wrapper .run-dates:last-child {
+    margin-bottom: 0; }
+
+.site-content .breakdown-wrapper .spot-count {
+  background: #ECEDEE;
+  border: 1px solid #cbcbcb;
+  border-radius: 4px;
+  padding: 15px;
+  margin-bottom: 15px; }
+  .site-content .breakdown-wrapper .spot-count .title {
+    text-transform: uppercase;
+    border-bottom: 1px solid #cbcbcb;
+    font-weight: 400;
+    text-align: center;
+    margin: -15px -15px 15px -15px;
+    padding: 5px; }
+  .site-content .breakdown-wrapper .spot-count.spot-valid .title {
+    background: #C9FFBD; }
+  .site-content .breakdown-wrapper .spot-count.spot-invalid .title {
+    background: #FFC9BD; }
+  .site-content .breakdown-wrapper .spot-count .count {
+    font-size: 64px;
+    font-weight: bold;
+    line-height: 75px;
+    margin: 0;
+    text-align: center; }

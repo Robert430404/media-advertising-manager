@@ -2,9 +2,13 @@
 
 namespace AppBundle\Helpers;
 
+use AppBundle\AppBundle;
+use AppBundle\Entity\Campaigns;
 use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\EntityManager;
+use Symfony\Component\Config\Definition\IntegerNode;
 
 class InvoiceHelpers
 {
@@ -14,13 +18,20 @@ class InvoiceHelpers
     protected $invoiceDataHelpers;
 
     /**
+     * @var EntityManager
+     */
+    protected $entityManager;
+
+    /**
      * InvoiceHelpers constructor.
      *
      * @param InvoiceDataHelpers $invoiceDataHelpers
+     * @param EntityManager      $entityManager
      */
-    public function __construct(InvoiceDataHelpers $invoiceDataHelpers)
+    public function __construct(InvoiceDataHelpers $invoiceDataHelpers, EntityManager $entityManager)
     {
         $this->invoiceDataHelpers = $invoiceDataHelpers;
+        $this->entityManager      = $entityManager;
     }
 
     /**
@@ -191,5 +202,26 @@ class InvoiceHelpers
         $collection = new ArrayCollection($assocArray);
 
         return $collection;
+    }
+
+    /**
+     * Calculates the spot totals (invalid spots and valid spots) for
+     * the invoice received vs the defined campaign totals
+     *
+     * @param $spotData
+     * @param $campaign
+     * @param $threshold
+     * @return array
+     */
+    public function calculateValidSpots($spotData, $campaign, $threshold)
+    {
+        $counts = [];
+        $programs = $this->entityManager->getRepository('AppBundle:Worksheets')->findByCampaignId($campaign->getId());
+
+        var_dump($campaign);
+        var_dump($programs);
+        var_dump($threshold);
+
+        return $counts;
     }
 }

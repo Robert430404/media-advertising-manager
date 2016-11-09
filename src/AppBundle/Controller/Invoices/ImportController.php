@@ -38,17 +38,20 @@ class ImportController extends Controller
     {
         $data         = $request->request->all();
         $files        = $request->files->all();
-        $fileData     = $this->get('app.invoice_helpers')->formatFileData($files);
-        $spotData     = $this->get('app.invoice_helpers')->getSpotDataWithDateTime($fileData);
         $organization = $this->getDoctrine()->getRepository('AppBundle:Organizations')->find($data['organizations']);
         $region       = $this->getDoctrine()->getRepository('AppBundle:Regions')->find($data['regions']);
         $campaign     = $this->getDoctrine()->getRepository('AppBundle:Campaigns')->find($data['campaigns']);
+        $fileData     = $this->get('app.invoice_helpers')->formatFileData($files);
+        $spotData     = $this->get('app.invoice_helpers')->getSpotDataWithDateTime($fileData);
+        $spotCounts   = $this->get('app.invoice_helpers')->calculateValidSpots($spotData, $campaign, 15);
 
         return $this->render('/invoices/insert.html.twig', [
             'spots'        => $spotData,
             'organization' => $organization,
             'region'       => $region,
             'campaign'     => $campaign,
+            'files'        => $files,
+            'spotCounts'   => $spotCounts,
         ]);
     }
 }

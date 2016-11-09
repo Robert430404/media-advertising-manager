@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+    Invoices - Media Manager
+{% endblock %}
+{% block body %}
+
+    <div class="container row">
+        <div class="columns large-12 medium-12 small-12">
+            <div class="primary-content">
+                <h1 class="content-title">Invoice: <strong>{{ attribute(files, 'invoices-1').getClientOriginalName }}</strong></h1>
+                <h2 class="sub-title">
+                    Organization: <strong>{{ organization.name }}</strong> //
+                    Campaign: <strong>{{ campaign.name }}</strong> //
+                    Region: <strong>{{ region.name }}</strong>
+                </h2>
+                <div class="breakdown-wrapper row">
+                    <div class="columns large-3 medium-3 small-6">
+                        {% for spot in spots  %}
+                            {% if spot.dateInformation %}
+                                <div class="run-dates">
+                                    <div class="run-date">
+                                        <span class="label-main">Start Date:</span> <strong>{{ spot.dateInformation.startDate.format("M d, Y") }}</strong>
+                                    </div>
+                                    <hr />
+                                    <div class="run-date">
+                                        <span class="label-main">End Date:</span> <strong>{{ spot.dateInformation.endDate.format("M d, Y") }}</strong>
+                                    </div>
+                                    <hr />
+                                    <div class="days-ran">
+                                        <span class="label-main">Days Run:</span> <strong>{{ spot.dateInformation.daysRan|join(', ') }}</strong>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="columns large-9 medium-9 small-6">
+                        <div class="row">
+                            <div class="columns large-6 medium-6 small-6">
+                                <div class="spot-count spot-valid">
+                                    <p class="title">Valid Spots</p>
+                                    <p class="count">0</p>
+                                </div>
+                            </div>
+                            <div class="columns large-6 medium-6 small-6">
+                                <div class="spot-count spot-invalid">
+                                    <p class="title">In-Valid Spots</p>
+                                    <p class="count">0</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+

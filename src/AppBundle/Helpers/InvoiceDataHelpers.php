@@ -136,6 +136,8 @@ class InvoiceDataHelpers
             }
         }
 
+        $days = array_values($days);
+
         return $days;
     }
 }

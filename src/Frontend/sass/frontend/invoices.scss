@@ -1,0 +1,72 @@
+.site-content {
+  h2 {
+    &.sub-title {
+      font-size: 16px;
+      text-transform: uppercase;
+      text-align: center;
+      background: $off-white;
+      border-bottom: 1px solid $lighter-grey;
+      margin: -15px -15px 15px -15px;
+      padding: 15px;
+    }
+  }
+
+  .breakdown-wrapper {
+    .run-dates {
+      background: $off-white;
+      border: 1px solid $lighter-grey;
+      border-radius: $border-radius;
+      margin-bottom: 15px;
+      padding: 15px;
+      hr {
+        margin: 10px 0;
+      }
+      .label-main {
+        background: transparent;
+        font-size: 16px;
+        font-weight: 300;
+        min-width: 110px;
+        display: inline-block;
+        text-align: left;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: $black;
+      }
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+    .spot-count {
+      background: $off-white;
+      border: 1px solid $lighter-grey;
+      border-radius: $border-radius;
+      padding: 15px;
+      margin-bottom: 15px;
+      .title {
+        text-transform: uppercase;
+        border-bottom: 1px solid $lighter-grey;
+        font-weight: 400;
+        text-align: center;
+        margin: -15px -15px 15px -15px;
+        padding: 5px;
+      }
+      &.spot-valid {
+        .title {
+          background: $highlight-light;
+        }
+      }
+      &.spot-invalid {
+        .title {
+          background: $highlight-light-error;
+        }
+      }
+      .count {
+        font-size: 64px;
+        font-weight: bold;
+        line-height: 75px;
+        margin: 0;
+        text-align: center;
+      }
+    }
+  }
+}
