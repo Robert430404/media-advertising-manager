@@ -26,6 +26,8 @@ class ImportController extends Controller
     }
 
     /**
+     * Processes Provided Invoice
+     *
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      *

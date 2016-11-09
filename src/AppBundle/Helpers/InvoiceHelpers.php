@@ -3,14 +3,24 @@
 namespace AppBundle\Helpers;
 
 use Carbon\Carbon;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 class InvoiceHelpers
 {
     /**
-     * InvoiceHelpers constructor.
+     * @var InvoiceDataHelpers
      */
-    public function __construct()
+    protected $invoiceDataHelpers;
+
+    /**
+     * InvoiceHelpers constructor.
+     *
+     * @param InvoiceDataHelpers $invoiceDataHelpers
+     */
+    public function __construct(InvoiceDataHelpers $invoiceDataHelpers)
     {
+        $this->invoiceDataHelpers = $invoiceDataHelpers;
     }
 
     /**
@@ -32,13 +42,6 @@ class InvoiceHelpers
 
             foreach ($fileData as $key => $line) {
                 $fileData[$key] = explode(';', $line);
-
-                foreach ($fileData[$key] as $keyTWo => $set) {
-                    if (empty($set) || $set == "\n" || $set == "\r") {
-                        unset($fileData[$key][$keyTWo]);
-                    }
-                }
-
                 $fileData[$key] = array_values($fileData[$key]);
             }
 
@@ -175,80 +178,19 @@ class InvoiceHelpers
     }
 
     /**
-     * Filters the data down to the spot data with the first array in the set being the time frame data
+     * Filters the data down to the spot data with the first element
+     * in the child collections being the time frame data
      *
      * @param $fileData
-     * @return array
+     * @return Collection
      */
     public function getSpotDataWithDateTime($fileData)
     {
-        $indexed     = [];
-        $associative = [];
-        $assocIndex  = 0;
-        $tempKey     = 0;
+        $indexed    = $this->invoiceDataHelpers->structureData($fileData);
+        $assocArray = $this->invoiceDataHelpers->associateData($indexed);
+        $collection = new ArrayCollection($assocArray);
+        var_dump($collection->current());
 
-        // Structures Data Into Useable Structure
-        foreach ($fileData as $key => $file) {
-            if (!empty($file[0])) {
-                if ($file[0] === '41') { // 41: Key For Time Frame Information In Invoice Files
-                    $tempKey = $key; // Sets Data Parent Key
-                    $indexed[$tempKey][$key] = $file;
-                }
-
-                if ($file[0] === '51') { // 51: Key For Spot Information In Invoice Files
-                    $indexed[$tempKey][$key] = $file;
-                }
-            }
-        }
-
-        // Resets Array Keys Inside Of Data
-        foreach ($indexed as $key => $array) {
-            $indexed[$key] = array_values($array);
-        }
-        array_values($indexed);
-
-        // Formats Indexed Array To Associative Array
-        foreach ($indexed as $key => $array) {
-            foreach ($array as $keyTwo => $inner) {
-                if ($inner[0] === '41') {
-                    $days = explode(' ', $inner[2]);
-
-                    foreach ($days as $keyThree => $day) {
-                        if (empty($day)) {
-                            unset($days[$keyThree]);
-                        }
-                    }
-
-                    $associative[$assocIndex]['dateInformation']['id']         = $keyTwo;
-                    $associative[$assocIndex]['dateInformation']['order']      = (int)$inner[1];
-                    $associative[$assocIndex]['dateInformation']['days']       = $days;
-                    $associative[$assocIndex]['dateInformation']['startTime']  = $inner[3];
-                    $associative[$assocIndex]['dateInformation']['endTime']    = $inner[4];
-                    $associative[$assocIndex]['dateInformation']['spotPrice']  = (int)$inner[5];
-                    $associative[$assocIndex]['dateInformation']['totalSpots'] = (int)$inner[6];
-                    $associative[$assocIndex]['dateInformation']['startDate']  = $inner[7];
-                    $associative[$assocIndex]['dateInformation']['endDate']    = $inner[8];
-                }
-
-                if ($inner[0] === '51') {
-                    $associative[$assocIndex]['spotInformation' . $keyTwo]['id']         = $keyTwo;
-                    $associative[$assocIndex]['spotInformation' . $keyTwo]['unsure_1']   = $inner[1];
-                    $associative[$assocIndex]['spotInformation' . $keyTwo]['dateRan']    = $inner[2];
-                    $associative[$assocIndex]['spotInformation' . $keyTwo]['unsure_2']   = (int)$inner[3];
-                    $associative[$assocIndex]['spotInformation' . $keyTwo]['timeRan']    = $inner[4];
-                    $associative[$assocIndex]['spotInformation' . $keyTwo]['spotLength'] = (int)$inner[5];
-                    $associative[$assocIndex]['spotInformation' . $keyTwo]['spotName']   = $inner[6];
-                    $associative[$assocIndex]['spotInformation' . $keyTwo]['spotPrice']  = (int)$inner[7];
-                    $associative[$assocIndex]['spotInformation' . $keyTwo]['unsure_3']   = $inner[8];
-                    $associative[$assocIndex]['spotInformation' . $keyTwo]['unsure_4']   = $inner[9];
-                }
-            }
-            $assocIndex++;
-        }
-
-        echo '<pre>';
-        print_r($associative);
-
-        return $indexed;
+        return $collection;
     }
 }
