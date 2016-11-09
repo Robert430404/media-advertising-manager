@@ -2,6 +2,8 @@
 
 namespace AppBundle\Helpers;
 
+use Carbon\Carbon;
+
 class InvoiceHelpers
 {
     /**
@@ -180,10 +182,10 @@ class InvoiceHelpers
      */
     public function getSpotDataWithDateTime($fileData)
     {
-        $indexed = [];
+        $indexed     = [];
         $associative = [];
-        $assIndex = 0;
-        $tempKey = 0;
+        $assocIndex  = 0;
+        $tempKey     = 0;
 
         // Structures Data Into Useable Structure
         foreach ($fileData as $key => $file) {
@@ -217,34 +219,35 @@ class InvoiceHelpers
                         }
                     }
 
-                    $associative[$assIndex]['dateInformation']['id']         = $keyTwo;
-                    $associative[$assIndex]['dateInformation']['order']      = (int)$inner[1];
-                    $associative[$assIndex]['dateInformation']['days']       = $days;
-                    $associative[$assIndex]['dateInformation']['startTime']  = $inner[3];
-                    $associative[$assIndex]['dateInformation']['endTime']    = $inner[4];
-                    $associative[$assIndex]['dateInformation']['spotPrice']  = (int)$inner[5];
-                    $associative[$assIndex]['dateInformation']['totalSpots'] = (int)$inner[6];
-                    $associative[$assIndex]['dateInformation']['startDate']  = $inner[7];
-                    $associative[$assIndex]['dateInformation']['endDate']    = $inner[8];
+                    $associative[$assocIndex]['dateInformation']['id']         = $keyTwo;
+                    $associative[$assocIndex]['dateInformation']['order']      = (int)$inner[1];
+                    $associative[$assocIndex]['dateInformation']['days']       = $days;
+                    $associative[$assocIndex]['dateInformation']['startTime']  = $inner[3];
+                    $associative[$assocIndex]['dateInformation']['endTime']    = $inner[4];
+                    $associative[$assocIndex]['dateInformation']['spotPrice']  = (int)$inner[5];
+                    $associative[$assocIndex]['dateInformation']['totalSpots'] = (int)$inner[6];
+                    $associative[$assocIndex]['dateInformation']['startDate']  = $inner[7];
+                    $associative[$assocIndex]['dateInformation']['endDate']    = $inner[8];
                 }
 
                 if ($inner[0] === '51') {
-                    $associative[$assIndex]['spotInformation' . $keyTwo]['id']         = $keyTwo;
-                    $associative[$assIndex]['spotInformation' . $keyTwo]['unsure_1']   = $inner[1];
-                    $associative[$assIndex]['spotInformation' . $keyTwo]['dateRan']    = $inner[2];
-                    $associative[$assIndex]['spotInformation' . $keyTwo]['unsure_2']   = (int)$inner[3];
-                    $associative[$assIndex]['spotInformation' . $keyTwo]['timeRan']    = $inner[4];
-                    $associative[$assIndex]['spotInformation' . $keyTwo]['spotLength'] = (int)$inner[5];
-                    $associative[$assIndex]['spotInformation' . $keyTwo]['spotName']   = $inner[6];
-                    $associative[$assIndex]['spotInformation' . $keyTwo]['spotPrice']  = (int)$inner[7];
-                    $associative[$assIndex]['spotInformation' . $keyTwo]['unsure_3']   = $inner[8];
-                    $associative[$assIndex]['spotInformation' . $keyTwo]['unsure_4']   = $inner[9];
+                    $associative[$assocIndex]['spotInformation' . $keyTwo]['id']         = $keyTwo;
+                    $associative[$assocIndex]['spotInformation' . $keyTwo]['unsure_1']   = $inner[1];
+                    $associative[$assocIndex]['spotInformation' . $keyTwo]['dateRan']    = $inner[2];
+                    $associative[$assocIndex]['spotInformation' . $keyTwo]['unsure_2']   = (int)$inner[3];
+                    $associative[$assocIndex]['spotInformation' . $keyTwo]['timeRan']    = $inner[4];
+                    $associative[$assocIndex]['spotInformation' . $keyTwo]['spotLength'] = (int)$inner[5];
+                    $associative[$assocIndex]['spotInformation' . $keyTwo]['spotName']   = $inner[6];
+                    $associative[$assocIndex]['spotInformation' . $keyTwo]['spotPrice']  = (int)$inner[7];
+                    $associative[$assocIndex]['spotInformation' . $keyTwo]['unsure_3']   = $inner[8];
+                    $associative[$assocIndex]['spotInformation' . $keyTwo]['unsure_4']   = $inner[9];
                 }
             }
-            $assIndex++;
+            $assocIndex++;
         }
 
-        var_dump($associative);
+        echo '<pre>';
+        print_r($associative);
 
         return $indexed;
     }
