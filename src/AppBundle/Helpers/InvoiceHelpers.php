@@ -189,7 +189,6 @@ class InvoiceHelpers
         $indexed    = $this->invoiceDataHelpers->structureData($fileData);
         $assocArray = $this->invoiceDataHelpers->associateData($indexed);
         $collection = new ArrayCollection($assocArray);
-        var_dump($collection->current());
 
         return $collection;
     }
