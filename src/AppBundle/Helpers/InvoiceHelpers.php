@@ -218,10 +218,6 @@ class InvoiceHelpers
         $counts = [];
         $programs = $this->entityManager->getRepository('AppBundle:Worksheets')->findByCampaignId($campaign->getId());
 
-        var_dump($campaign);
-        var_dump($programs);
-        var_dump($threshold);
-
         return $counts;
     }
 }
