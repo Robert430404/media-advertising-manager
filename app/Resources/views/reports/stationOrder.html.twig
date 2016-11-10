@@ -223,7 +223,7 @@
                     <p>Market: {{ worksheet.region }}</p>
                     <p>
                         Station: {% if worksheet.programs is not empty %}{{ worksheet.programs.0.station }}{% endif %}</p>
-                    <p>Station Contact: ADD TO CAMPAIGN</p>
+                    <p>Station Contact:</p>
                 </div>
                 <div class="middle">
                     <p>Flight From: {{ campaign.flightStartDate.format('m/d/Y') }}
@@ -327,9 +327,10 @@
                         {% if worksheet.weekInfo != null %}
                             {% set startDate = worksheet.flightStartDate|date('U') %}
                             {% set endDate = worksheet.flightEndDate|date('U') %}
+                            {% set colCounter = 0 %}
                             {% for d in range(startDate, endDate, 86400 ) %}
                                 {% if d|date('D') == 'Mon' %}
-                                    <div class="spot-column spot-date-column">
+                                    <div class="spot-column spot-date-column columns-{{ colCounter }}">
                                         <div class="col-heading week-date-heading">
                                             <span class="month">{{ d|date('M') }}</span><br/><span
                                                     class="day">{{ d|date('d') }}</span>
@@ -351,6 +352,7 @@
                                             <span class="spot-total"></span>
                                         </p>
                                     </div>
+                                    {% set colCounter = colCounter + 1 %}
                                 {% endif %}
                             {% endfor %}
                         {% endif %}
