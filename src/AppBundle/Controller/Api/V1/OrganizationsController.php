@@ -20,17 +20,14 @@ class OrganizationsController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $organizations = $this->getDoctrine()
-            ->getRepository('AppBundle:Organizations')
-            ->findAll();
-
-        $data = [];
+        $data          = [];
+        $organizations = $this->getDoctrine()->getRepository('AppBundle:Organizations')->findAll();
 
         foreach ($organizations as $key => $organization) {
             $data[$key] = [
-                'id' => $organization->getId(),
-                'name' => $organization->getName(),
-                'user_id' => $organization->getUserId(),
+                'id'         => $organization->getId(),
+                'name'       => $organization->getName(),
+                'user_id'    => $organization->getUserId(),
                 'created_at' => $organization->getCreatedAt(),
                 'updated_at' => $organization->getUpdatedAt(),
             ];
@@ -48,30 +45,27 @@ class OrganizationsController extends Controller
      */
     public function insertAction(Request $request)
     {
-        $data = $request->request->all();
-        $user = $this->getUser();
-
         $organization = new Organizations();
+        $data         = $request->request->all();
+        $user         = $this->getUser();
+        $validator    = $this->get('validator');
+        $errors       = $validator->validate($organization);
+        $orm          = $this->get('doctrine')->getManager();
+
         $organization->setName($data['organization_name']);
         $organization->setUserId($user->getId());
         $organization->setCreatedAt(Carbon::now());
         $organization->setUpdatedAt(Carbon::now());
 
-        $validator = $this->get('validator');
-        $errors = $validator->validate($organization);
-
         if (count($errors) > 0) {
-            $errorString = (string)$errors;
-
             $response = [
                 'success' => false,
-                'error' => $errorString,
+                'error'   => (string)$errors,
             ];
 
             return $this->json($response);
         }
 
-        $orm = $this->get('doctrine')->getManager();
         $orm->persist($organization);
         $orm->flush();
 

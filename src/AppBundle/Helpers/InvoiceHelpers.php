@@ -2,13 +2,9 @@
 
 namespace AppBundle\Helpers;
 
-use AppBundle\AppBundle;
-use AppBundle\Entity\Campaigns;
-use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\Config\Definition\IntegerNode;
 
 class InvoiceHelpers
 {
@@ -215,7 +211,8 @@ class InvoiceHelpers
      */
     public function calculateValidSpots($spotData, $campaign, $threshold)
     {
-        $counts = [];
+        // TODO: Create algorithm that calculates spot totals against invoices once we have real data
+        $counts   = [];
         $programs = $this->entityManager->getRepository('AppBundle:Worksheets')->findByCampaignId($campaign->getId());
 
         return $counts;

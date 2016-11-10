@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 class RegionsController extends Controller
 {
     /**
+     * Returns a list of regions in JSON based upon organization ID
+     *
      * @param Request $request
      * @param integer $organization
      * @return \Symfony\Component\HttpFoundation\Response
@@ -21,22 +23,17 @@ class RegionsController extends Controller
      */
     public function indexAction(Request $request, $organization)
     {
-        $organization = $this->getDoctrine()
-            ->getRepository('AppBundle:Organizations')
-            ->find($organization);
-        $regions = $this->getDoctrine()
-            ->getRepository('AppBundle:Regions')
-            ->findByOrganizationId($organization);
-
-        $data = [];
+        $data         = [];
+        $organization = $this->getDoctrine()->getRepository('AppBundle:Organizations')->find($organization);
+        $regions      = $this->getDoctrine()->getRepository('AppBundle:Regions')->findByOrganizationId($organization);
 
         foreach ($regions as $key => $region) {
             $data[$key] = [
-                'id' => $region->getId(),
-                'name' => $region->getName(),
+                'id'              => $region->getId(),
+                'name'            => $region->getName(),
                 'organization_id' => $region->getOrganizationId(),
-                'created_at' => $region->getCreatedAt(),
-                'updated_at' => $region->getUpdatedAt(),
+                'created_at'      => $region->getCreatedAt(),
+                'updated_at'      => $region->getUpdatedAt(),
             ];
         }
 
@@ -44,7 +41,7 @@ class RegionsController extends Controller
     }
 
     /**
-     * Inserts the new region in the database
+     * Persists the new region in the database
      *
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
@@ -54,29 +51,27 @@ class RegionsController extends Controller
      */
     public function insertAction(Request $request)
     {
-        $data = $request->request->all();
+        $region    = new Regions();
+        $data      = $request->request->all();
+        $validator = $this->get('validator');
+        $errors    = $validator->validate($region);
+        $orm       = $this->get('doctrine')->getManager();
 
-        $region = new Regions();
         $region->setName($data['region_name']);
         $region->setOrganizationId($data['organization_id']);
         $region->setCreatedAt(Carbon::now());
         $region->setUpdatedAt(Carbon::now());
 
-        $validator = $this->get('validator');
-        $errors = $validator->validate($region);
 
         if (count($errors) > 0) {
-            $error_string = (string)$errors;
-
             $response = [
                 'success' => false,
-                'error' => $error_string,
+                'error'   => (string)$errors,
             ];
 
             return $this->json($response);
         }
 
-        $orm = $this->get('doctrine')->getManager();
         $orm->persist($region);
         $orm->flush();
 

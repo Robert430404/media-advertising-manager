@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 class SpotTypesController extends Controller
 {
     /**
+     * Returns a full JSON list of Spot Types
+     *
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      *
@@ -20,16 +22,13 @@ class SpotTypesController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $spotTypes = $this->getDoctrine()
-            ->getRepository('AppBundle:SpotTypes')
-            ->findAll();
-
-        $data = [];
+        $data      = [];
+        $spotTypes = $this->getDoctrine()->getRepository('AppBundle:SpotTypes')->findAll();
 
         foreach ($spotTypes as $key => $spotType) {
             $data[$key] = [
-                'id' => $spotType->getId(),
-                'name' => $spotType->getName(),
+                'id'         => $spotType->getId(),
+                'name'       => $spotType->getName(),
                 'created_at' => $spotType->getCreatedAt(),
                 'updated_at' => $spotType->getUpdatedAt(),
             ];
@@ -39,6 +38,9 @@ class SpotTypesController extends Controller
     }
 
     /**
+     * Persists the new Spot Type into the database from the provided
+     * information
+     *
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      *
@@ -47,28 +49,25 @@ class SpotTypesController extends Controller
      */
     public function insertAction(Request $request)
     {
-        $data = $request->request->all();
+        $type      = new SpotTypes();
+        $data      = $request->request->all();
+        $validator = $this->get('validator');
+        $errors    = $validator->validate($type);
+        $orm       = $this->get('doctrine')->getManager();
 
-        $type = new SpotTypes();
         $type->setName($data['spot_type_name']);
         $type->setCreatedAt(Carbon::now());
         $type->setUpdatedAt(Carbon::now());
 
-        $validator = $this->get('validator');
-        $errors = $validator->validate($type);
-
         if (count($errors) > 0) {
-            $error_string = (string)$errors;
-
             $response = [
                 'success' => false,
-                'error' => $error_string,
+                'error'   => (string)$errors,
             ];
 
             return $this->json($response);
         }
 
-        $orm = $this->get('doctrine')->getManager();
         $orm->persist($type);
         $orm->flush();
 

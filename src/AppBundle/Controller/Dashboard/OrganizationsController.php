@@ -78,7 +78,7 @@ class OrganizationsController extends Controller
             $campaignIds[$key] = $campaign->getId();
         }
 
-        $worksheets   = $this->getDoctrine()->getRepository('AppBundle:Worksheets')->findByCampaignId($campaignIds);
+        $worksheets = $this->getDoctrine()->getRepository('AppBundle:Worksheets')->findByCampaignId($campaignIds);
 
         foreach ($worksheets as $key => $worksheet) {
             $worksheetIds[$key] = $worksheet->getId();
@@ -141,9 +141,9 @@ class OrganizationsController extends Controller
      */
     public function updateAction(Request $request, $organizationId)
     {
-        $orm = $this->getDoctrine()->getManager();
+        $orm          = $this->getDoctrine()->getManager();
         $organization = $orm->getRepository('AppBundle:Organizations')->find($organizationId);
-        $data = $request->request->all();
+        $data         = $request->request->all();
 
         $organization->setName($data['organization_name']);
         $organization->setUpdatedAt(Carbon::now());

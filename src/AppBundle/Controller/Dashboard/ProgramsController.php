@@ -125,11 +125,9 @@ class ProgramsController extends Controller
      */
     public function deleteAction(Request $request, $worksheetId, $programId)
     {
-        $program = $this->getDoctrine()
-            ->getRepository('AppBundle:Programs')
-            ->find($programId);
+        $program = $this->getDoctrine()->getRepository('AppBundle:Programs')->find($programId);
+        $orm     = $this->get('doctrine')->getManager();
 
-        $orm = $this->get('doctrine')->getManager();
         $orm->remove($program);
         $orm->flush();
 

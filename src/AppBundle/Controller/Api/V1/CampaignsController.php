@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 class CampaignsController extends Controller
 {
     /**
+     * Returns a JSON list of all campaigns by region
+     *
      * @param Request $request
      * @param integer $regionId
      * @return \Symfony\Component\HttpFoundation\Response
@@ -21,19 +23,16 @@ class CampaignsController extends Controller
      */
     public function indexAction(Request $request, $regionId)
     {
-        $campaigns = $this->getDoctrine()
-            ->getRepository('AppBundle:Campaigns')
-            ->findByRegionId($regionId);
-
-        $data = [];
+        $data      = [];
+        $campaigns = $this->getDoctrine()->getRepository('AppBundle:Campaigns')->findByRegionId($regionId);
 
         foreach ($campaigns as $key => $campaign) {
             $data[$key] = [
-                'id' => $campaign->getId(),
-                'name' => $campaign->getName(),
+                'id'              => $campaign->getId(),
+                'name'            => $campaign->getName(),
                 'organization_id' => $campaign->getOrganizationId(),
-                'created_at' => $campaign->getCreatedAt(),
-                'updated_at' => $campaign->getUpdatedAt(),
+                'created_at'      => $campaign->getCreatedAt(),
+                'updated_at'      => $campaign->getUpdatedAt(),
             ];
         }
 
@@ -41,6 +40,9 @@ class CampaignsController extends Controller
     }
 
     /**
+     * Persists the provided campaign into the database and then returns
+     * a success or fail response based upon the action
+     *
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      *
@@ -49,11 +51,14 @@ class CampaignsController extends Controller
      */
     public function insertAction(Request $request)
     {
-        $data = $request->request->all();
-        $start = Carbon::parse($data['flight_start']);
-        $end = Carbon::parse($data['flight_end']);
+        $campaign  = new Campaigns();
+        $data      = $request->request->all();
+        $start     = Carbon::parse($data['flight_start']);
+        $end       = Carbon::parse($data['flight_end']);
+        $validator = $this->get('validator');
+        $errors    = $validator->validate($campaign);
+        $orm       = $this->get('doctrine')->getManager();
 
-        $campaign = new Campaigns();
         $campaign->setName($data['campaign_name']);
         $campaign->setOrganizationId($data['campaign_organization']);
         $campaign->setRegionId($data['campaign_region']);
@@ -63,21 +68,15 @@ class CampaignsController extends Controller
         $campaign->setCreatedAt(Carbon::now());
         $campaign->setUpdatedAt(Carbon::now());
 
-        $validator = $this->get('validator');
-        $errors = $validator->validate($campaign);
-
         if (count($errors) > 0) {
-            $error_string = (string)$errors;
-
             $response = [
                 'success' => false,
-                'error' => $error_string,
+                'error'   => (string)$errors,
             ];
 
             return $this->json($response);
         }
 
-        $orm = $this->get('doctrine')->getManager();
         $orm->persist($campaign);
         $orm->flush();
 

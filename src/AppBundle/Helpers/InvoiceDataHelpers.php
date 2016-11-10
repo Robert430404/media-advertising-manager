@@ -21,8 +21,8 @@ class InvoiceDataHelpers
      */
     public function structureData($fileData)
     {
-        $indexed    = [];
-        $tempKey    = 0;
+        $indexed = [];
+        $tempKey = 0;
 
         // Structures Data Into Useable Structure
         foreach ($fileData as $key => $file) {

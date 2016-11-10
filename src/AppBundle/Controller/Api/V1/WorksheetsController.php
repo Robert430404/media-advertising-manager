@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 class WorksheetsController extends Controller
 {
     /**
+     * Returns a JSON list of a worksheet by ID
+     *
      * @param Request $request
      * @param integer $worksheetId
      * @return \Symfony\Component\HttpFoundation\Response
@@ -20,8 +22,8 @@ class WorksheetsController extends Controller
      */
     public function updateAction(Request $request, $worksheetId)
     {
-        $data = $request->request->all();
-        $orm = $this->getDoctrine()->getManager();
+        $data      = $request->request->all();
+        $orm       = $this->getDoctrine()->getManager();
         $worksheet = $orm->getRepository('AppBundle:Worksheets')->find($worksheetId);
 
         if (!$worksheet) {
