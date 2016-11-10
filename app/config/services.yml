@@ -9,7 +9,7 @@ services:
     arguments: ['@doctrine.orm.default_entity_manager']
   app.invoice_data_helpers:
     class:     AppBundle\Helpers\InvoiceDataHelpers
-    arguments:
+    arguments: ['@doctrine.orm.default_entity_manager']
   app.invoice_helpers:
     class:     AppBundle\Helpers\InvoiceHelpers
     arguments: ['@app.invoice_data_helpers', '@doctrine.orm.default_entity_manager']

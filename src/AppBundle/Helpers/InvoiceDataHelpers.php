@@ -3,14 +3,23 @@
 namespace AppBundle\Helpers;
 
 use Carbon\Carbon;
+use Doctrine\ORM\EntityManager;
 
 class InvoiceDataHelpers
 {
     /**
-     * InvoiceHelpers constructor.
+     * @var EntityManager
      */
-    public function __construct()
+    protected $entityManager;
+
+    /**
+     * InvoiceDataHelpers constructor.
+     *
+     * @param EntityManager $entityManager
+     */
+    public function __construct(EntityManager $entityManager)
     {
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -139,5 +148,47 @@ class InvoiceDataHelpers
         $days = array_values($days);
 
         return $days;
+    }
+
+    /**
+     * Returns the total spots for all campaign worksheets with name
+     * and id for manipulation
+     *
+     * @param $worksheets
+     * @return array
+     */
+    public function calculateWorksheetSpotTotals($worksheets)
+    {
+        $counts = [];
+
+        foreach ($worksheets as $key => $worksheet) {
+            $data = json_decode($worksheet->getWeekInformation(), true);
+
+            $counts[$key]['id']         = $key;
+            $counts[$key]['name']       = $worksheet->getName();
+            $counts[$key]['totalSpots'] = array_sum($data);
+        }
+
+        return $counts;
+    }
+
+    /**
+     * Returns the programs associated with a worksheet in an array
+     * for further use and manipulation
+     *
+     * @param $worksheets
+     * @return array
+     */
+    public function getWorksheetPrograms($worksheets)
+    {
+        $programs = [];
+
+        foreach ($worksheets as $key => $worksheet) {
+            $program = $this->entityManager->getRepository('AppBundle:Programs')->findByWorksheetId($worksheet->getId());
+
+            $programs[$key] = $program;
+        }
+
+        return $programs;
     }
 }

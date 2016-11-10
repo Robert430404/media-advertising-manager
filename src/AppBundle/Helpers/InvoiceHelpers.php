@@ -212,8 +212,15 @@ class InvoiceHelpers
     public function calculateValidSpots($spotData, $campaign, $threshold)
     {
         // TODO: Create algorithm that calculates spot totals against invoices once we have real data
-        $counts   = [];
-        $programs = $this->entityManager->getRepository('AppBundle:Worksheets')->findByCampaignId($campaign->getId());
+        $counts     = [];
+        $worksheets = $this->entityManager->getRepository('AppBundle:Worksheets')->findByCampaignId($campaign->getId());
+        $programs   = $this->invoiceDataHelpers->getWorksheetPrograms($worksheets);
+        $spotTotals = $this->invoiceDataHelpers->calculateWorksheetSpotTotals($worksheets);
+        $campStart  = $campaign->getFlightStartDate();
+        $campEnd    = $campaign->getFlightEndDate();
+
+        var_dump($worksheets);
+        var_dump($programs);
 
         return $counts;
     }
