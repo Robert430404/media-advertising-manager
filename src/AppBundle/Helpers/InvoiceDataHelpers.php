@@ -88,7 +88,7 @@ class InvoiceDataHelpers
                     $assocArray[$assocIndex]['spotInformation' . $keyTwo]['unsure_1']   = $inner[1];
                     $assocArray[$assocIndex]['spotInformation' . $keyTwo]['dateRan']    = $this->createDateFromString($inner[2]);
                     $assocArray[$assocIndex]['spotInformation' . $keyTwo]['unsure_2']   = (int)$inner[3];
-                    $assocArray[$assocIndex]['spotInformation' . $keyTwo]['timeRan']    = $inner[4];
+                    $assocArray[$assocIndex]['spotInformation' . $keyTwo]['timeRan']    = $this->createTimeFromString($inner[4]);
                     $assocArray[$assocIndex]['spotInformation' . $keyTwo]['spotLength'] = (int)$inner[5];
                     $assocArray[$assocIndex]['spotInformation' . $keyTwo]['spotName']   = $inner[6];
                     $assocArray[$assocIndex]['spotInformation' . $keyTwo]['spotPrice']  = (int)$inner[7];
@@ -107,12 +107,11 @@ class InvoiceDataHelpers
     /**
      * Creates a date from the provided invoice string
      *
-     * @param $string
+     * @param $dateString
      * @return Carbon
      */
-    public function createDateFromString($string)
+    public function createDateFromString($dateString)
     {
-        $dateString  = $string;
         $stringYear  = substr($dateString, 0, 2);
         $intYear     = (int)$stringYear;
 
@@ -127,6 +126,21 @@ class InvoiceDataHelpers
         $dateString  = Carbon::create($intYear, $intMonth, $intDay, 0, 0 ,0);
 
         return $dateString;
+    }
+
+    /**
+     * Creates a time from the provided invoice string
+     *
+     * @param $timeString
+     * @return Carbon
+     */
+    public function createTimeFromString($timeString)
+    {
+        $hours      = substr($timeString, 0,2);
+        $minutes    = substr($timeString, 2,2);
+        $timeString = Carbon::create(0, 0, 0, $hours, $minutes, 0);
+
+        return $timeString;
     }
 
     /**

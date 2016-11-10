@@ -46,7 +46,7 @@ class ImportController extends Controller
         $spotCounts   = $this->get('app.invoice_helpers')->calculateValidSpots($spotData, $campaign, 15);
 
         return $this->render('/invoices/insert.html.twig', [
-            'spots'        => $spotData,
+            'spots'        => $spotData->toArray(),
             'organization' => $organization,
             'region'       => $region,
             'campaign'     => $campaign,
