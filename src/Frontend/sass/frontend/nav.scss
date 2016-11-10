@@ -75,7 +75,8 @@
     background: $white;
     margin: 0;
     text-align: left;
-    border-right: 1px solid $lighter-grey;
+    border-right: 0;
+    box-shadow: 0px 0px 15px $alpha-black;
     .masthead-title {
       background: $highlight-dark;
       color: $white;

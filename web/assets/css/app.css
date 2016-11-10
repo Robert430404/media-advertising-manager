@@ -727,7 +727,8 @@ div {
     background: #FFF;
     margin: 0;
     text-align: left;
-    border-right: 1px solid #cbcbcb; }
+    border-right: 0;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.35); }
     .masthead.show .masthead-title {
       background: #0E690F;
       color: #FFF;

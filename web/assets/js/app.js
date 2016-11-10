@@ -538,7 +538,7 @@ var ViewNavigation = function () {
         key: 'navigationToggle',
         value: function navigationToggle() {
             $('.hamburger').click(function () {
-                $('body').toggleClass('add-padding');
+                // $('body').toggleClass('add-padding');
                 $('.masthead').toggleClass('show');
             });
         }

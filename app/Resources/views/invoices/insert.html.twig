@@ -35,18 +35,20 @@
                     </div>
                     <div class="columns large-9 medium-9 small-6">
                         <div class="row">
-                            <div class="columns large-6 medium-6 small-6">
-                                <div class="spot-count spot-valid">
-                                    <p class="title">Valid Spots</p>
-                                    <p class="count">0</p>
+                            {% for count in spotCounts %}
+                                <div class="columns large-6 medium-6 small-6">
+                                    <div class="spot-count spot-valid">
+                                        <p class="title">Valid Spots</p>
+                                        <p class="count">{{ count.valid }}</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="columns large-6 medium-6 small-6">
-                                <div class="spot-count spot-invalid">
-                                    <p class="title">In-Valid Spots</p>
-                                    <p class="count">0</p>
+                                <div class="columns large-6 medium-6 small-6">
+                                    <div class="spot-count spot-invalid">
+                                        <p class="title">In-Valid Spots</p>
+                                        <p class="count">{{ count.invalid }}</p>
+                                    </div>
                                 </div>
-                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>

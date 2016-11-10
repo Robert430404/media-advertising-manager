@@ -32,6 +32,28 @@ class InvoiceHelpers
     }
 
     /**
+     * Returns the raw invoice data in a string for examination
+     *
+     * @param $files
+     * @return string
+     */
+    public function showRawFile($files)
+    {
+        $fileData = '';
+
+        foreach ($files as $file) {
+            $path     = $file->getPathName();
+            $size     = $file->getSize();
+            $openFile = fopen($path, 'r');
+            $readFile = fread($openFile, $size);
+            $fileData = $readFile;
+            fclose($openFile);
+        }
+
+        return $fileData;
+    }
+
+    /**
      * Formats the data from the invoice files into a monolithic array
      *
      * @param $files
@@ -220,6 +242,39 @@ class InvoiceHelpers
         $invTotals  = $this->invoiceDataHelpers->calculateInvoiceSpotTotals($spotData);
         $campStart  = $campaign->getFlightStartDate();
         $campEnd    = $campaign->getFlightEndDate();
+        $totals     = false;
+        $sameCount  = false;
+        $dateRange  = [];
+
+        // Validates The Spot Totals To Make Sure Were Not Being Invoices For More/Less Spots
+        if ($spotTotals === $invTotals) {
+            $totals    = true;
+            $sameCount = [];
+
+            foreach ($spotTotals as $key => $total) {
+                $spotTotal = $total['totalSpots'];
+                $invTotal  = $invTotals[$key]['totalSpots'];
+
+                if ($spotTotal === $invTotal) {
+                    $sameCount[$key] = true;
+                }
+            }
+        }
+
+        // Makes Sure The Dates Match Up For The Campaign And Invoice
+        foreach ($spotData as $key => $spots) {
+            foreach ($spots as $keyTwo => $spot) {
+                if ($keyTwo === 'dateInformation') {
+                    $startDate = $spot['startDate'];
+                    $endDate   = $spot['endDate'];
+
+                    if ($campStart->format('U') <= $startDate->format('U') &&
+                        $campEnd->format('U') >= $endDate->format('U')) {
+                        $dateRange[$key] = true;
+                    }
+                }
+            }
+        }
 
         return $counts;
     }

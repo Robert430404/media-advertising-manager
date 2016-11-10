@@ -5,7 +5,7 @@ class ViewNavigation {
 
     navigationToggle() {
         $('.hamburger').click(function () {
-            $('body').toggleClass('add-padding');
+            // $('body').toggleClass('add-padding');
             $('.masthead').toggleClass('show');
         });
     }
