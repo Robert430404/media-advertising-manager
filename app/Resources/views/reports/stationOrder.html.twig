@@ -327,7 +327,7 @@
                         {% if worksheet.weekInfo != null %}
                             {% set startDate = worksheet.flightStartDate|date('U') %}
                             {% set endDate = worksheet.flightEndDate|date('U') %}
-                            {% set colCounter = 0 %}
+                            {% set colCounter = 1 %}
                             {% for d in range(startDate, endDate, 86400 ) %}
                                 {% if d|date('D') == 'Mon' %}
                                     <div class="spot-column spot-date-column columns-{{ colCounter }}">
