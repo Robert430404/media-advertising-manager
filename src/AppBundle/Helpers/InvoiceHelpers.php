@@ -205,8 +205,8 @@ class InvoiceHelpers
      * Calculates the spot totals (invalid spots and valid spots) for
      * the invoice received vs the defined campaign totals
      *
-     * @param $spotData
-     * @param $campaign
+     * @param ArrayCollection $spotData
+     * @param Campaigns $campaign
      * @param $threshold
      * @return array
      */

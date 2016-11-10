@@ -192,6 +192,13 @@ class InvoiceDataHelpers
         return $programs;
     }
 
+    /**
+     * Creates a data set that contains the information about spot totals
+     * from the spot data provided to the function for comparison
+     *
+     * @param $spotData
+     * @return array
+     */
     public function calculateInvoiceSpotTotals($spotData)
     {
         $counts = [];
