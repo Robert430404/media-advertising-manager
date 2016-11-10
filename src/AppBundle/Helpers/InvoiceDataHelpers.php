@@ -191,4 +191,19 @@ class InvoiceDataHelpers
 
         return $programs;
     }
+
+    public function calculateInvoiceSpotTotals($spotData)
+    {
+        $counts = [];
+
+        foreach ($spotData as $key => $data) {
+            if (!empty($data['dateInformation'])) {
+                $counts[$key]['id']         = $key;
+                $counts[$key]['name']       = 'dateInformation-' . $key;
+                $counts[$key]['totalSpots'] = $data['dateInformation']['totalSpots'];
+            }
+        }
+
+        return $counts;
+    }
 }

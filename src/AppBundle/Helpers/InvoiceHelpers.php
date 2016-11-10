@@ -2,6 +2,7 @@
 
 namespace AppBundle\Helpers;
 
+use AppBundle\Entity\Campaigns;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManager;
@@ -209,18 +210,16 @@ class InvoiceHelpers
      * @param $threshold
      * @return array
      */
-    public function calculateValidSpots($spotData, $campaign, $threshold)
+    public function calculateValidSpots(ArrayCollection $spotData, Campaigns $campaign, $threshold)
     {
         // TODO: Create algorithm that calculates spot totals against invoices once we have real data
         $counts     = [];
         $worksheets = $this->entityManager->getRepository('AppBundle:Worksheets')->findByCampaignId($campaign->getId());
         $programs   = $this->invoiceDataHelpers->getWorksheetPrograms($worksheets);
         $spotTotals = $this->invoiceDataHelpers->calculateWorksheetSpotTotals($worksheets);
+        $invTotals  = $this->invoiceDataHelpers->calculateInvoiceSpotTotals($spotData);
         $campStart  = $campaign->getFlightStartDate();
         $campEnd    = $campaign->getFlightEndDate();
-
-        var_dump($worksheets);
-        var_dump($programs);
 
         return $counts;
     }
