@@ -422,6 +422,7 @@
     {% endfor %}
 
     <script src="{{ asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             var column = $('.spot-date-column');
@@ -466,7 +467,7 @@
                     spotTotal = number + spotTotal;
                 });
 
-                singlePage.find('.campaign-total').empty().append(spotTotal);
+                singlePage.find('.campaign-total').empty().append(accounting.formatNumber(spotTotal));
             });
 
             /**
@@ -500,7 +501,7 @@
                     var spotRate   = Number(singlePage.find('.spot-rate-' + row).html());
                     var cost       = spotRate * totalSpots;
 
-                    singlePage.find('.spot-total-' + row).empty().append(cost.toFixed(2));
+                    singlePage.find('.spot-total-' + row).empty().append(accounting.formatNumber(cost, 2));
 
                     row++;
                 }
@@ -523,7 +524,7 @@
 
                 var breakdownSpotTotal = 0;
 
-                singlePage.find('.cost-total .total').empty().append(totalRate.toFixed(2));
+                singlePage.find('.cost-total .total').empty().append(accounting.formatNumber(totalRate, 2));
 
                 singlePage.find('.breakdown-info-row').each(function () {
                     var spotCount = Number($(this).find('.spot-count').html());
@@ -536,11 +537,11 @@
                     var spotCount = Number($(this).find('.spot-count').html());
 
                     $(this).find('.spot-count').empty().append(Math.round(spotCount));
-                    $(this).find('.gross-cost').empty().append('$' + Number(cost * spotCount).toFixed(2));
+                    $(this).find('.gross-cost').empty().append('$' + accounting.formatNumber(Number(cost * spotCount), 2));
                 });
 
                 singlePage.find('.breakdown-row.footer-row .spot-total').empty().append(Math.round(breakdownSpotTotal));
-                singlePage.find('.breakdown-row.footer-row .gross-total').empty().append('$' + totalRate.toFixed(2));
+                singlePage.find('.breakdown-row.footer-row .gross-total').empty().append('$' + accounting.formatNumber(totalRate, 2));
             });
         });
     </script>
