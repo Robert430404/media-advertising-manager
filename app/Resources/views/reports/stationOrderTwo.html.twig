@@ -516,7 +516,8 @@
                 var totalRate    = 0;
 
                 while (row <= rowCount) {
-                    var rowValue = Number(singlePage.find('.spot-total-' + row).html());
+                    var rawValue = singlePage.find('.spot-total-' + row).html();
+                    var rowValue = Number(rawValue.replace(/,/g, ''));
                     totalRate    = totalRate + rowValue;
 
                     console.log(singlePage.find('.spot-total-' + row).html());
