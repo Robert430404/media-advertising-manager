@@ -100,7 +100,7 @@ class ProgramsController extends Controller
         $program->setTimeSlotStart(Carbon::parse($data['start_time']));
         $program->setTimeSlotEnd(Carbon::parse($data['end_time']));
         $program->setSpotLength((int)$data['spot_length']);
-        $program->setSpotRate((int)$data['spot_rate']);
+        $program->setSpotRate((float)$data['spot_rate']);
         $program->setBreakCode($data['break_code']);
         $program->setComment($data['comments']);
         $program->setCreatedAt(Carbon::now());
@@ -224,7 +224,7 @@ class ProgramsController extends Controller
         $program->setTimeSlotStart(Carbon::parse($data['start_time']));
         $program->setTimeSlotEnd(Carbon::parse($data['end_time']));
         $program->setSpotLength((int)$data['spot_length']);
-        $program->setSpotRate((int)$data['spot_rate']);
+        $program->setSpotRate((float)$data['spot_rate']);
         $program->setBreakCode($data['break_code']);
         $program->setComment($data['comments']);
         $program->setUpdatedAt(Carbon::now());
