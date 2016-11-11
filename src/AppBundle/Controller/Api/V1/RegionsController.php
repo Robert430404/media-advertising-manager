@@ -54,7 +54,6 @@ class RegionsController extends Controller
         $region    = new Regions();
         $data      = $request->request->all();
         $validator = $this->get('validator');
-        $errors    = $validator->validate($region);
         $orm       = $this->get('doctrine')->getManager();
 
         $region->setName($data['region_name']);
@@ -62,6 +61,7 @@ class RegionsController extends Controller
         $region->setCreatedAt(Carbon::now());
         $region->setUpdatedAt(Carbon::now());
 
+        $errors    = $validator->validate($region);
 
         if (count($errors) > 0) {
             $response = [

@@ -49,13 +49,14 @@ class OrganizationsController extends Controller
         $data         = $request->request->all();
         $user         = $this->getUser();
         $validator    = $this->get('validator');
-        $errors       = $validator->validate($organization);
         $orm          = $this->get('doctrine')->getManager();
 
         $organization->setName($data['organization_name']);
         $organization->setUserId($user->getId());
         $organization->setCreatedAt(Carbon::now());
         $organization->setUpdatedAt(Carbon::now());
+
+        $errors       = $validator->validate($organization);
 
         if (count($errors) > 0) {
             $response = [

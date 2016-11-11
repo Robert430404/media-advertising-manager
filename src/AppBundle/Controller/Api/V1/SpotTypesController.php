@@ -52,12 +52,13 @@ class SpotTypesController extends Controller
         $type      = new SpotTypes();
         $data      = $request->request->all();
         $validator = $this->get('validator');
-        $errors    = $validator->validate($type);
         $orm       = $this->get('doctrine')->getManager();
 
         $type->setName($data['spot_type_name']);
         $type->setCreatedAt(Carbon::now());
         $type->setUpdatedAt(Carbon::now());
+
+        $errors    = $validator->validate($type);
 
         if (count($errors) > 0) {
             $response = [
