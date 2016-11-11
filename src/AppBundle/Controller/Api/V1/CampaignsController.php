@@ -51,13 +51,12 @@ class CampaignsController extends Controller
      */
     public function insertAction(Request $request)
     {
-        $campaign  = new Campaigns();
         $data      = $request->request->all();
         $start     = Carbon::parse($data['flight_start']);
         $end       = Carbon::parse($data['flight_end']);
         $validator = $this->get('validator');
-        $errors    = $validator->validate($campaign);
         $orm       = $this->get('doctrine')->getManager();
+        $campaign  = new Campaigns();
 
         $campaign->setName($data['campaign_name']);
         $campaign->setOrganizationId($data['campaign_organization']);
@@ -67,6 +66,8 @@ class CampaignsController extends Controller
         $campaign->setFlightLength((int)$data['flight_length']);
         $campaign->setCreatedAt(Carbon::now());
         $campaign->setUpdatedAt(Carbon::now());
+
+        $errors    = $validator->validate($campaign);
 
         if (count($errors) > 0) {
             $response = [
