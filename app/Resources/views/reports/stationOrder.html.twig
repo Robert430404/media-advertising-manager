@@ -330,7 +330,7 @@
                             {% set colCounter = 1 %}
                             {% for d in range(startDate, endDate, 86400 ) %}
                                 {% if d|date('D') == 'Mon' %}
-                                    <div class="spot-column spot-date-column columns-{{ colCounter }}">
+                                    <div class="spot-column spot-date-column columns-{{ colCounter }}" data-column="{{ colCounter }}">
                                         <div class="col-heading week-date-heading">
                                             <span class="month">{{ d|date('M') }}</span><br/><span
                                                     class="day">{{ d|date('d') }}</span>
@@ -479,6 +479,28 @@
 
                 $(this).find('.breakdown-row.footer-row .spot-total').empty().append(Math.round(breakdownSpotTotal));
                 $(this).find('.breakdown-row.footer-row .gross-total').empty().append('$' + totalRate.toFixed(2));
+
+                var header = $(this).find('.heading').clone();
+                var subHead = $(this).find('.sub-heading').clone();
+
+                console.log(header[0].outerHTML);
+
+                $(this).find('.weekly-information .spot-date-column').each(function () {
+                    var id = $(this).attr('data-column');
+
+                    if ((id % 13) == 0) {
+                        var htmlString = '</div></div></div><div class="page">' +
+                        header[0].outerHTML +
+                        subHead[0].outerHTML +
+                        '<div class="week-information">' +
+                        '<div class="div info-inner">' +
+                        '<div class="weekly-overview">';
+
+                        $(this)[0].innerHTML = $(this)[0].innerHTML + htmlString;
+
+                        console.log($(this)[0].innerHTML);
+                    }
+                });
             });
         });
     </script>

@@ -225,6 +225,8 @@ var ViewCampaigns = function () {
                         container.append('<option value="">Select Organization</option>');
                     } else {
                         object.CampaignsController.loadCampaignRegions(value).then(function (resp) {
+                            container.append('<option value="">Select A Region</option>');
+
                             for (var i = 0; i < resp.length; i++) {
                                 container.append('<option value="' + resp[i].id + '">' + resp[i].name + '</option>');
                             }
