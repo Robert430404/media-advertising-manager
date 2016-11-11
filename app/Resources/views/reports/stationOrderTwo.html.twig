@@ -505,39 +505,43 @@
                     row++;
                 }
             });
-//
-//            $('.page').each(function () {
-//                row = 1;
-//                var totalRate = 0;
-//
-//                while (row <= rowCount) {
-//                    var rowValue = Number($(this).find('.spot-total-' + row).html());
-//                    totalRate    = totalRate + rowValue;
-//
-//                    row++;
-//                }
-//
-//                var breakdownSpotTotal = 0;
-//
-//                $(this).find('.cost-total .total').empty().append(totalRate.toFixed(2));
-//
-//                $(this).find('.breakdown-info-row').each(function () {
-//                    var spotCount = Number($(this).find('.spot-count').html());
-//
-//                    breakdownSpotTotal = breakdownSpotTotal + spotCount;
-//                });
-//
-//                $(this).find('.breakdown-info-row').each(function () {
-//                    var cost = totalRate / breakdownSpotTotal;
-//                    var spotCount = Number($(this).find('.spot-count').html());
-//
-//                    $(this).find('.spot-count').empty().append(Math.round(spotCount));
-//                    $(this).find('.gross-cost').empty().append('$' + Number(cost * spotCount).toFixed(2));
-//                });
-//
-//                $(this).find('.breakdown-row.footer-row .spot-total').empty().append(Math.round(breakdownSpotTotal));
-//                $(this).find('.breakdown-row.footer-row .gross-total').empty().append('$' + totalRate.toFixed(2));
-//            });
+
+            pageIds.forEach(function (id) {
+                var singlePage   = $('.page-' + id);
+                var totalRows    = singlePage.find('.spot-column .spot-date-total').length;
+                var totalColumns = singlePage.find('.spot-date-column').length;
+                var rowCount     = totalRows / totalColumns;
+                var row          = 1;
+                var totalRate    = 0;
+
+                while (row <= rowCount) {
+                    var rowValue = Number(singlePage.find('.spot-total-' + row).html());
+                    totalRate    = totalRate + rowValue;
+
+                    row++;
+                }
+
+                var breakdownSpotTotal = 0;
+
+                singlePage.find('.cost-total .total').empty().append(totalRate.toFixed(2));
+
+                singlePage.find('.breakdown-info-row').each(function () {
+                    var spotCount = Number($(this).find('.spot-count').html());
+
+                    breakdownSpotTotal = breakdownSpotTotal + spotCount;
+                });
+
+                singlePage.find('.breakdown-info-row').each(function () {
+                    var cost = totalRate / breakdownSpotTotal;
+                    var spotCount = Number($(this).find('.spot-count').html());
+
+                    $(this).find('.spot-count').empty().append(Math.round(spotCount));
+                    $(this).find('.gross-cost').empty().append('$' + Number(cost * spotCount).toFixed(2));
+                });
+
+                singlePage.find('.breakdown-row.footer-row .spot-total').empty().append(Math.round(breakdownSpotTotal));
+                singlePage.find('.breakdown-row.footer-row .gross-total').empty().append('$' + totalRate.toFixed(2));
+            });
         });
     </script>
 
