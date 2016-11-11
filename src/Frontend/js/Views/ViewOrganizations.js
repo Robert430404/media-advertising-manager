@@ -55,8 +55,8 @@ class ViewOrganizations {
                                 resp[i].name +
                             '</li>');
                         container.find('.campaign-selector-' + resp[i].id).append('<div class="actions">' +
-                                '<a href="/campaigns/worksheets/' + resp[i].id + '">See Worksheets</a>' +
-                                '<a href="/reports/station-order/' + resp[i].id + '" target="_blank">Gen Station Order</a>' +
+                                '<a href="/campaigns/worksheets/' + resp[i].id + '">Worksheets</a>' +
+                                '<a href="/reports/station-order/' + resp[i].id + '" target="_blank">Station Order</a>' +
                             '</div>');
                     }
                 } else {

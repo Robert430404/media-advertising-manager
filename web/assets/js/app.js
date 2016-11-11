@@ -612,7 +612,7 @@ var ViewOrganizations = function () {
                         container.append('<ul class="campaign-list"></ul>');
                         for (var i = 0; i < resp.length; i++) {
                             container.find('.campaign-list').append('<li class="campaign-selector campaign-selector-' + resp[i].id + '" data-id="' + resp[i].id + '">' + resp[i].name + '</li>');
-                            container.find('.campaign-selector-' + resp[i].id).append('<div class="actions">' + '<a href="/campaigns/worksheets/' + resp[i].id + '">See Worksheets</a>' + '<a href="/reports/station-order/' + resp[i].id + '" target="_blank">Gen Station Order</a>' + '</div>');
+                            container.find('.campaign-selector-' + resp[i].id).append('<div class="actions">' + '<a href="/campaigns/worksheets/' + resp[i].id + '">Worksheets</a>' + '<a href="/reports/station-order/' + resp[i].id + '" target="_blank">Station Order</a>' + '</div>');
                         }
                     } else {
                         container.empty().append('<h1 class="campaigns-title">' + regionName + ' Campaigns</h1>');
