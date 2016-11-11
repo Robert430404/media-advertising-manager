@@ -196,7 +196,7 @@
 {% block body %}
 
     {% for worksheet in worksheets %}
-        <div class="page">
+        <div class="page page-{% if worksheet.programs is not empty %}{{ worksheet.programs.0.station }}{% endif %}" data-id="{% if worksheet.programs is not empty %}{{ worksheet.programs.0.station }}{% endif %}">
             <div class="heading">
                 <div class="left">
                     <p>Client: {{ worksheet.orgName }}</p>
@@ -355,7 +355,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="page">
+                                        <div class="page page-{% if worksheet.programs is not empty %}{{ worksheet.programs.0.station }}{% endif %}" data-id="{% if worksheet.programs is not empty %}{{ worksheet.programs.0.station }}{% endif %}">
                                         <div class="heading">
                                             <div class="left">
                                                 <p>Client: {{ worksheet.orgName }}</p>
@@ -425,6 +425,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             var column = $('.spot-date-column');
+            var page   = $('.page');
 
             /**
              * Calculates The Weekly Totals For The Report
@@ -445,84 +446,98 @@
             /**
              * Calculates The Campaigns Total Spots
              */
-            $('.spot-date-rate-cost').each(function () {
-                var spotTotal = 0;
+            var pageIds = [];
 
-                $('.spot-date-column').each(function () {
+            page.each(function () {
+                var id = $(this).attr('data-id');
+
+                if (!pageIds.includes(id)) {
+                    pageIds.push(id);
+                }
+            });
+
+            pageIds.forEach(function (id) {
+                var spotTotal = 0;
+                var singlePage = $('.page-' + id);
+
+                singlePage.find('.spot-date-column').each(function () {
                     var number = Number($(this).find('.spot-total').html());
 
                     spotTotal = number + spotTotal;
                 });
 
-                $('.campaign-total').empty().append(spotTotal);
+                singlePage.find('.campaign-total').empty().append(spotTotal);
             });
 
             /**
              * Calculates The Spot Totals For Each Campaigns
              */
-            var totalRows = $('.spot-column .spot-date-total').length;
-            var totalColumns = column.length;
-            var rowCount = totalRows / totalColumns;
-            var row = 1;
-
-            while (row <= rowCount) {
-                var counts = $('.row-' + row);
-                var count = 0;
-                counts.each(function () {
-                    var number = Number($(this).html());
-
-                    count = number + count;
-                });
-
-                $('.weekly-total-' + row).empty().append(count);
-
-                row++;
-            }
-
-            row = 1;
-
-            while (row <= rowCount) {
-                var totalSpots = $('.weekly-total-' + row).html();
-                var spotRate = Number($('.spot-rate-' + row).html());
-                var cost = spotRate * totalSpots;
-
-                $('.spot-total-' + row).empty().append(cost.toFixed(2));
-
-                row++;
-            }
-
-            $('.page').each(function () {
-                row = 1;
-                var totalRate = 0;
+            pageIds.forEach(function (id) {
+                var singlePage   = $('.page-' + id);
+                var totalRows    = singlePage.find('.spot-column .spot-date-total').length;
+                var totalColumns = singlePage.find('.spot-date-column').length;
+                var rowCount     = totalRows / totalColumns;
+                var row          = 1;
 
                 while (row <= rowCount) {
-                    var rowValue = Number($(this).find('.spot-total-' + row).html());
-                    totalRate = totalRate + rowValue;
+                    var counts = singlePage.find('.row-' + row);
+                    var count = 0;
+                    counts.each(function () {
+                        var number = Number($(this).html());
+
+                        count = number + count;
+                    });
+
+                    singlePage.find('.weekly-total-' + row).empty().append(count);
 
                     row++;
                 }
 
-                var breakdownSpotTotal = 0;
+                row = 1;
 
-                $(this).find('.cost-total .total').empty().append(totalRate.toFixed(2));
+                while (row <= rowCount) {
+                    var totalSpots = singlePage.find('.weekly-total-' + row).html();
+                    var spotRate   = Number(singlePage.find('.spot-rate-' + row).html());
+                    var cost       = spotRate * totalSpots;
 
-                $(this).find('.breakdown-info-row').each(function () {
-                    var spotCount = Number($(this).find('.spot-count').html());
+                    singlePage.find('.spot-total-' + row).empty().append(cost.toFixed(2));
 
-                    breakdownSpotTotal = breakdownSpotTotal + spotCount;
-                });
-
-                $(this).find('.breakdown-info-row').each(function () {
-                    var cost = totalRate / breakdownSpotTotal;
-                    var spotCount = Number($(this).find('.spot-count').html());
-
-                    $(this).find('.spot-count').empty().append(Math.round(spotCount));
-                    $(this).find('.gross-cost').empty().append('$' + Number(cost * spotCount).toFixed(2));
-                });
-
-                $(this).find('.breakdown-row.footer-row .spot-total').empty().append(Math.round(breakdownSpotTotal));
-                $(this).find('.breakdown-row.footer-row .gross-total').empty().append('$' + totalRate.toFixed(2));
+                    row++;
+                }
             });
+//
+//            $('.page').each(function () {
+//                row = 1;
+//                var totalRate = 0;
+//
+//                while (row <= rowCount) {
+//                    var rowValue = Number($(this).find('.spot-total-' + row).html());
+//                    totalRate    = totalRate + rowValue;
+//
+//                    row++;
+//                }
+//
+//                var breakdownSpotTotal = 0;
+//
+//                $(this).find('.cost-total .total').empty().append(totalRate.toFixed(2));
+//
+//                $(this).find('.breakdown-info-row').each(function () {
+//                    var spotCount = Number($(this).find('.spot-count').html());
+//
+//                    breakdownSpotTotal = breakdownSpotTotal + spotCount;
+//                });
+//
+//                $(this).find('.breakdown-info-row').each(function () {
+//                    var cost = totalRate / breakdownSpotTotal;
+//                    var spotCount = Number($(this).find('.spot-count').html());
+//
+//                    $(this).find('.spot-count').empty().append(Math.round(spotCount));
+//                    $(this).find('.gross-cost').empty().append('$' + Number(cost * spotCount).toFixed(2));
+//                });
+//
+//                $(this).find('.breakdown-row.footer-row .spot-total').empty().append(Math.round(breakdownSpotTotal));
+//                $(this).find('.breakdown-row.footer-row .gross-total').empty().append('$' + totalRate.toFixed(2));
+//            });
         });
     </script>
 
