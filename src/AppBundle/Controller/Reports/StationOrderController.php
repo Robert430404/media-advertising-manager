@@ -27,7 +27,7 @@ class StationOrderController extends Controller
         $worksheets = $this->get('app.report_helpers')->formatStartDate($worksheets);
         $worksheets = $this->get('app.report_helpers')->formatWorksheetTotals($worksheets);
 
-        return $this->render('reports/stationOrder.html.twig', [
+        return $this->render('reports/stationOrderTwo.html.twig', [
             'worksheets'     => $worksheets,
             'campaign'       => $campaign,
             'spot_types'     => $spotTypes,

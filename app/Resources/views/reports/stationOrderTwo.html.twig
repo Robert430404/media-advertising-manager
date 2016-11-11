@@ -350,6 +350,51 @@
                                             <span class="spot-total"></span>
                                         </p>
                                     </div>
+                                    {% if colCounter == 10 %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="page">
+                                        <div class="heading">
+                                            <div class="left">
+                                                <p>Client: {{ worksheet.orgName }}</p>
+                                                <p>Product: {{ worksheet.spotType }}</p>
+                                                <p>Campaign: {{ campaign.name }}</p>
+                                            </div>
+                                            <div class="middle">
+                                                <h1>Station Order</h1>
+                                            </div>
+                                            <div class="right">
+                                                {% if worksheet.orgName == 'Dollar Loan Center' %}
+                                                    <p>Dollar Loan Center, LLC<br>8860 Sunset Road</p>
+                                                    <p>Las Vegas, NV 89148</p>
+                                                    <p>702-947-4381</p>
+                                                {% else %}
+                                                    <p>Badlands Pawn, LLC<br>1600 W. Russell Street</p>
+                                                    <p>Sioux Falls, SD 57104</p>
+                                                    <p>605-884-7296</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="sub-heading">
+                                            <div class="left">
+                                                <p>Market: {{ worksheet.region }}</p>
+                                                <p>Station: {% if worksheet.programs is not empty %}{{ worksheet.programs.0.station }}{% endif %}</p>
+                                            </div>
+                                            <div class="middle">
+                                                <p>Flight From: {{ campaign.flightStartDate.format('m/d/Y') }}
+                                                    to {{ campaign.flightEndDate.format('m/d/Y') }}</p>
+                                            </div>
+                                            <div class="right">
+                                                <p>Buyer Name: {{ app.user.fullName }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="week-information">
+                                        <div class="div info-inner">
+                                        <div class="weekly-overview">
+                                        </div>
+                                    {% endif %}
                                     {% set colCounter = colCounter + 1 %}
                                 {% endif %}
                             {% endfor %}
@@ -361,7 +406,7 @@
                                 <div class="spot-date-rate-cost">
                                     <p>
                                         <span class="spot-weekly-totals weekly-total-{{ i }}">{{ program.spotRate }}</span><br/>
-                                        <p>&nbsp;</p>
+                                    <p>&nbsp;</p>
                                     </p>
                                 </div>
                                 {% set i = i + 1 %}
