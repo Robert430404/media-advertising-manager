@@ -1,40 +1,52 @@
 class ViewOrganizations {
     constructor() {
-        this.loadDashboardRegions();
+        this.loadRegionsFromOrganization();
         this.loadDashboardCampaigns();
         this.dashboardCreateOrganization();
 
         this.AjaxHelpers = new AjaxHelpers();
     }
 
-    loadDashboardRegions() {
-        var object = this;
-        var targets = document.querySelectorAll('.organization-list li label');
-        var container = $('.region-information');
+    /**
+     * Loads the regions for an organization when an organization on the
+     * dashboard is clicked.
+     *
+     * Makes an AJAX call to the /api/v1/regions/ endpoint to retrieve
+     * the data
+     */
+    loadRegionsFromOrganization() {
+        var object    = this;
+        var targets   = document.querySelectorAll('.organization-list li label');
+        var container = document.querySelector('.region-information');
 
-        for (var i = 0; i < targets.length; i++) {
-            targets[i].onclick = function () {
-                var organization = this.dataset.id;
-                var organizationName = this.dataset.name;
-                var endpoint = '/api/v1/regions/' + organization;
+        targets.forEach(function (target) {
+            target.onclick = function () {
+                var orgId    = target.dataset.id;
+                var orgName  = this.dataset.name;
+                var endpoint = '/api/v1/regions/' + orgId;
 
-                object.AjaxHelpers.getCall(endpoint).then(function (resp) {
-                    container.empty().append('<h1 class="content-title">' + organizationName + ' Regions</h1>');
-                    container.append('<ul class="region-list"></ul>');
+                object.AjaxHelpers.getCall(endpoint).then( function (regions) {
+                    container.innerHTML = '<h1 class="content-title">' + orgName + ' Regions</h1>';
+                    container.innerHTML = container.innerHTML +
+                                          '<ul class="region-list"></ul>';
 
-                    if (resp.length > 0) {
-                        for (var i = 0; i < resp.length; i++) {
-                            container.find('.region-list').append('<li class="region-selector region-selector-' + resp[i].id + '" data-id="' + resp[i].id + '">' + resp[i].name + '</li>');
-                        }
+                    if (regions.length > 0) {
+                        regions.forEach( function (region) {
+                            var list = container.querySelector('.region-list');
+
+                            list.innerHTML = list.innerHTML +
+                                             '<li class="region-selector region-selector-' + region.id + '" data-id="' + region.id + '">' + region.name + '</li>';
+                        });
+                    } else {
+                        container.innerHTML = container.innerHTML +
+                                              '<p class="align-center">There Are No Regions</p>';
                     }
-                    else {
-                        container.append('<p class="align-center">There Are No Regions</p>');
-                    }
 
-                    container.append('<div class="region-campaigns"></div>');
+                    container.innerHTML = container.innerHTML +
+                                          '<div class="region-campaigns"></div>';
                 });
-            };
-        }
+            }
+        });
     }
 
     loadDashboardCampaigns() {
