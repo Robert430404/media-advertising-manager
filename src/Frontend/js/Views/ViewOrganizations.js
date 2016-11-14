@@ -73,7 +73,7 @@ class ViewOrganizations {
                     if (campaigns.length > 0) {
                         container.innerHTML = '<h1 class="campaigns-title">' + regionName + ' Campaigns</h1>';
                         container.innerHTML = container.innerHTML +
-                            '<ul class="campaign-list"></ul>';
+                                              '<ul class="campaign-list"></ul>';
 
                         campaigns.forEach( function (campaign) {
                             var list = container.querySelector('.campaign-list');
