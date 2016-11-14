@@ -559,7 +559,6 @@ var ViewOrganizations = function () {
         _classCallCheck(this, ViewOrganizations);
 
         this.loadRegionsFromOrganization();
-        this.loadDashboardCampaigns();
         this.dashboardCreateOrganization();
 
         this.AjaxHelpers = new AjaxHelpers();
@@ -602,34 +601,50 @@ var ViewOrganizations = function () {
                         }
 
                         container.innerHTML = container.innerHTML + '<div class="region-campaigns"></div>';
+                        object.loadCampaignsFromRegion();
                     });
                 };
             });
         }
+
+        /**
+         * Loads the campaigns for a region when a region on the dashboard
+         * is clicked
+         *
+         * Makes an AJAX call to the /api/v1/campaigns/ endpoint to retrieve
+         * the data
+         */
+
     }, {
-        key: 'loadDashboardCampaigns',
-        value: function loadDashboardCampaigns() {
+        key: 'loadCampaignsFromRegion',
+        value: function loadCampaignsFromRegion() {
             var object = this;
+            var regions = document.querySelectorAll('.region-selector');
 
-            $('body').on('click', '.region-selector', function () {
-                var id = $(this).attr('data-id');
-                var endpoint = '/api/v1/campaigns/' + id;
-                var container = $('.region-campaigns');
-                var regionName = $(this).html();
+            regions.forEach(function (region) {
+                region.onclick = function () {
+                    var id = region.dataset.id;
+                    var endpoint = '/api/v1/campaigns/' + id;
+                    var container = document.querySelector('.region-campaigns');
+                    var regionName = region.innerHTML;
 
-                object.AjaxHelpers.getCall(endpoint).then(function (resp) {
-                    if (resp.length > 0) {
-                        container.empty().append('<h1 class="campaigns-title">' + regionName + ' Campaigns</h1>');
-                        container.append('<ul class="campaign-list"></ul>');
-                        for (var i = 0; i < resp.length; i++) {
-                            container.find('.campaign-list').append('<li class="campaign-selector campaign-selector-' + resp[i].id + '" data-id="' + resp[i].id + '">' + resp[i].name + '</li>');
-                            container.find('.campaign-selector-' + resp[i].id).append('<div class="actions">' + '<a href="/campaigns/worksheets/' + resp[i].id + '">Worksheets</a>' + '<a href="/reports/station-order/' + resp[i].id + '" target="_blank">Station Order</a>' + '</div>');
+                    object.AjaxHelpers.getCall(endpoint).then(function (campaigns) {
+                        if (campaigns.length > 0) {
+                            container.innerHTML = '<h1 class="campaigns-title">' + regionName + ' Campaigns</h1>';
+                            container.innerHTML = container.innerHTML + '<ul class="campaign-list"></ul>';
+
+                            campaigns.forEach(function (campaign) {
+                                var list = container.querySelector('.campaign-list');
+
+                                list.innerHTML = list.innerHTML + '<li class="campaign-selector campaign-selector-' + campaign.id + '" data-id="' + campaign.id + '">' + campaign.name + '</li>';
+
+                                var button = list.querySelector('.campaign-selector-' + campaign.id);
+
+                                button.innerHTML = button.innerHTML + '<div class="actions">' + '<a href="/campaigns/worksheets/' + campaign.id + '">Worksheets</a>' + '<a href="/reports/station-order/' + campaign.id + '" target="_blank">Station Order</a>' + '</div>';
+                            });
                         }
-                    } else {
-                        container.empty().append('<h1 class="campaigns-title">' + regionName + ' Campaigns</h1>');
-                        container.append('<p class="align-center">No campaigns are currently running in ' + regionName + '.</p>');
-                    }
-                });
+                    });
+                };
             });
         }
     }, {
