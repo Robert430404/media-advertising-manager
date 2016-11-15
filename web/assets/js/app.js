@@ -99,62 +99,218 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var ActionHelpers = function () {
+    function ActionHelpers() {
+        _classCallCheck(this, ActionHelpers);
+
+        this.confirmDelete();
+    }
+
+    _createClass(ActionHelpers, [{
+        key: 'confirmDelete',
+        value: function confirmDelete() {
+            $('a.delete-button').click(function (e) {
+                e.preventDefault();
+                var link = $(this).attr('href');
+                var confirmation = confirm('Do you really want to delete this?');
+
+                if (confirmation) {
+                    window.location = link;
+                }
+            });
+        }
+    }]);
+
+    return ActionHelpers;
+}();
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var AjaxHelpers = function () {
+    function AjaxHelpers() {
+        _classCallCheck(this, AjaxHelpers);
+    }
+
+    _createClass(AjaxHelpers, [{
+        key: 'getCall',
+        value: function getCall(url) {
+            return new Promise(function (resolve, reject) {
+                var request = new XMLHttpRequest();
+
+                request.open('GET', url);
+
+                request.onload = function () {
+                    if (request.status === 200) {
+                        resolve(JSON.parse(request.response));
+                    } else {
+                        reject(new Error(request.statusText));
+                    }
+                };
+
+                request.onerror = function () {
+                    reject(new Error('Network Error'));
+                };
+
+                request.send();
+            });
+        }
+    }, {
+        key: 'postCall',
+        value: function postCall(url, data) {
+            return new Promise(function (resolve, reject) {
+                var request = new XMLHttpRequest();
+
+                request.open('POST', url, true);
+                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+                request.onload = function () {
+                    if (request.status === 200) {
+                        resolve(JSON.parse(request.response));
+                    } else {
+                        reject(new Error(request.statusText));
+                    }
+                };
+
+                request.onerror = function () {
+                    reject(new Error('Network Error'));
+                };
+
+                request.send(data);
+            });
+        }
+    }, {
+        key: 'serialize',
+        value: function serialize(form) {
+            var field = [];
+            var value = [];
+
+            if ((typeof form === 'undefined' ? 'undefined' : _typeof(form)) == 'object' && form.nodeName == "FORM") {
+                var length = form.elements.length;
+
+                for (var i = 0; i < length; i++) {
+                    field = form.elements[i];
+
+                    if (field.name && !field.disabled && field.type != 'file' && field.type != 'reset' && field.type != 'submit' && field.type != 'button') {
+                        if (field.type == 'select-multiple') {
+                            for (var j = form.elements[i].options.length - 1; j >= 0; j--) {
+                                if (field.options[j].selected) {
+                                    value[value.length] = encodeURIComponent(field.name) + "=" + encodeURIComponent(field.options[j].value);
+                                }
+                            }
+                        } else if (field.type != 'checkbox' && field.type != 'radio' || field.checked) {
+                            value[value.length] = encodeURIComponent(field.name) + "=" + encodeURIComponent(field.value);
+                        }
+                    }
+                }
+            }
+
+            return value.join('&').replace(/%20/g, '+');
+        }
+    }]);
+
+    return AjaxHelpers;
+}();
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 var ViewCampaigns = function () {
+    /**
+     * Registers all dependencies to the object, and creates checks
+     * before executing the setup functions on this object
+     */
     function ViewCampaigns() {
         _classCallCheck(this, ViewCampaigns);
 
-        this.setCampaignRegions();
+        this.CampaignsController = new CampaignsController();
+        this.CampOverlay = document.querySelector('.campaigns-overlay');
+
+        this.loadRegionsFromOrganizationForCampaign();
+        this.loadRegionsForCampaignEdit();
         this.setFlightFieldFormats();
         this.setFlightWeeks();
-        this.setInnerOverflow();
-        if (document.querySelector('.info-inner')) {
-            this.setSpotTotals();
-        }
-        this.dashboardCreateCampaign();
-        this.campaignEditGetRegions();
 
-        this.CampaignsController = new CampaignsController();
+        if (this.CampOverlay) {
+            this.createCampignFromDashboard();
+        }
     }
 
+    /**
+     * Loads the regions for the dropdown when you're creating a campaign
+     * on the campaigns page
+     *
+     * Makes an AJAX call to the /api/v1/regions/ endpoint to retrieve
+     * the data
+     */
+
+
     _createClass(ViewCampaigns, [{
-        key: 'setCampaignRegions',
-        value: function setCampaignRegions() {
+        key: 'loadRegionsFromOrganizationForCampaign',
+        value: function loadRegionsFromOrganizationForCampaign() {
             var object = this;
             var target = document.querySelector('#campaign-organization');
-            var container = $('#campaign-region');
+            var container = document.querySelector('#campaign-region');
 
             if (target) {
                 target.onchange = function () {
                     var value = this.value;
 
-                    container.empty();
+                    container.innerHTML = '<option value="">Select Organization</option>';
 
-                    if (value == '') {
-                        container.append('<option value="">Select Organization</option>');
-                    } else {
-                        object.CampaignsController.loadCampaignRegions(value).then(function (resp) {
-                            container.append('<option value="">Select A Region</option>');
+                    if (value !== '') {
+                        container.innerHTML = '';
 
-                            for (var i = 0; i < resp.length; i++) {
-                                container.append('<option value="' + resp[i].id + '">' + resp[i].name + '</option>');
-                            }
+                        object.CampaignsController.loadCampaignRegions(value).then(function (regions) {
+                            container.innerHTML = container.innerHTML + '<option value="">Select A Region</option>';
+
+                            regions.forEach(function (region) {
+                                container.innerHTML = container.innerHTML + '<option value="' + region.id + '">' + region.name + '</option>';
+                            });
                         });
                     }
                 };
             }
         }
+
+        /**
+         * Enforces the date format on the flight date fields
+         *
+         * Depends on formatter.js
+         */
+
     }, {
         key: 'setFlightFieldFormats',
         value: function setFlightFieldFormats() {
-            $('.flight-start').formatter({
-                'pattern': '{{9999}}-{{99}}-{{99}}',
-                'persist': true
-            });
-            $('.flight-end').formatter({
-                'pattern': '{{9999}}-{{99}}-{{99}}',
-                'persist': true
-            });
+            var flightStart = document.querySelector('.flight-start');
+            var flightEnd = document.querySelector('.flight-end');
+
+            if (flightStart) {
+                new Formatter(flightStart, {
+                    'pattern': '{{9999}}-{{99}}-{{99}}',
+                    'persist': true
+                });
+            }
+
+            if (flightEnd) {
+                new Formatter(flightEnd, {
+                    'pattern': '{{9999}}-{{99}}-{{99}}',
+                    'persist': true
+                });
+            }
         }
+
+        /**
+         * Sets the total flight length in weeks once you have your dates
+         * entered into the fields
+         */
+
     }, {
         key: 'setFlightWeeks',
         value: function setFlightWeeks() {
@@ -163,170 +319,112 @@ var ViewCampaigns = function () {
             var end = document.querySelector('#flight-end');
             var display = document.querySelector('#flight-length');
 
-            if (start !== null) {
+            if (start) {
                 start.onkeyup = function () {
                     var startVal = start.value;
                     var endVal = end.value;
 
                     if (startVal.length > 9 && endVal.length > 9) {
-                        var diff = object.CampaignsController.calculateFlightLength(startVal, endVal);
-
-                        display.value = diff;
+                        display.value = object.CampaignsController.calculateFlightLength(startVal, endVal) + ' Weeks';
                     }
                 };
             }
 
-            if (end !== null) {
+            if (end) {
                 end.onkeyup = function () {
                     var startVal = start.value;
                     var endVal = end.value;
 
                     if (startVal.length > 9 && endVal.length > 9) {
-                        var diff = object.CampaignsController.calculateFlightLength(startVal, endVal);
-
-                        display.value = diff + ' Weeks';
+                        display.value = object.CampaignsController.calculateFlightLength(startVal, endVal) + ' Weeks';
                     }
                 };
             }
         }
-    }, {
-        key: 'setInnerOverflow',
-        value: function setInnerOverflow() {
-            var container = $('.info-inner');
 
-            container.each(function () {
-                var dates = $(this).find('.spot-column');
-                var colWidth = dates.outerWidth();
-                var dateCount = dates.length;
+        /**
+         * Brings the create campaign form into view and persists the
+         * new campaign on the forms submission
+         *
+         * Controls the modals display and sends the data off in an AJAX
+         * call to get persisted into the database
+         */
 
-                $(this).find('.scrollable').css({
-                    'width': colWidth * dateCount + 'px'
-                });
-            });
-        }
     }, {
-        key: 'setSpotTotals',
-        value: function setSpotTotals() {
+        key: 'createCampignFromDashboard',
+        value: function createCampignFromDashboard() {
             var object = this;
-            var containers = document.querySelectorAll('.info-inner');
+            var overlay = document.querySelector('.campaigns-overlay');
+            var button = document.querySelector('.dash-create-campaign-button');
+            var close = overlay.querySelector('.close');
+            var form = overlay.querySelector('form');
 
-            containers.forEach(function (element) {
-                console.log(element);
+            button.onclick = function () {
+                overlay.style.display = 'block';
+            };
 
-                var inputs = element.querySelectorAll('input.date-count');
-                var columns = element.querySelectorAll('.spot-column');
+            close.onclick = function () {
+                overlay.style.display = 'none';
+            };
 
-                for (var b = 0; b < inputs.length; b++) {
-                    object.setWeekTotals(element, columns, inputs[b].dataset.program);
+            form.onsubmit = function (submitted) {
+                submitted.preventDefault();
 
-                    inputs[b].onkeyup = function () {
-                        object.setWeekTotals(element, columns, this.dataset.program);
-                    };
-                }
-            });
-        }
-    }, {
-        key: 'setWeekTotals',
-        value: function setWeekTotals(container, columns, programId) {
-            for (var c = 0; c < columns.length; c++) {
-                var inputs = columns[c].querySelectorAll('input');
-                var sum = 0;
-
-                for (var i = 0; i < inputs.length; i++) {
-                    sum = Number(inputs[i].value) + Number(sum);
-                }
-
-                if (columns[c].querySelector('.week-total .total')) {
-                    columns[c].querySelector('.week-total .total').innerHTML = sum;
-                }
-            }
-
-            this.setBuyTotals(container, programId);
-        }
-    }, {
-        key: 'setBuyTotals',
-        value: function setBuyTotals(container, programId) {
-            var allInputs = container.querySelectorAll('input.date-count');
-            var sectionedInputs = [];
-            var count = 0;
-
-            for (var a = 0; a < allInputs.length; a++) {
-                if (allInputs[a].dataset.program == programId) {
-                    sectionedInputs.push(allInputs[a]);
-                }
-            }
-
-            for (var b = 0; b < sectionedInputs.length; b++) {
-                count = Number(sectionedInputs[b].value) + Number(count);
-            }
-
-            document.querySelector('.spot-date-total .program-' + programId + '-total').innerHTML = count;
-        }
-    }, {
-        key: 'dashboardCreateCampaign',
-        value: function dashboardCreateCampaign() {
-            var object = this;
-            var overlay = $('.campaigns-overlay');
-            var button = $('.dash-create-campaign-button');
-            var close = $('.campaigns-overlay .close');
-            var form = $('.campaigns-overlay form');
-
-            button.click(function () {
-                overlay.fadeIn();
-            });
-
-            close.click(function () {
-                overlay.fadeOut();
-            });
-
-            form.submit(function (e) {
-                e.preventDefault();
-
-                var data = $(this).serialize();
+                var data = object.AjaxHelpers.serialize(form);
 
                 object.CampaignsController.createNewCampaign(data).then(function (resp) {
+                    var formClasses = form.classList;
+
                     if (resp.success == true) {
-                        form[0].reset();
-                        form.addClass('successful');
+                        form.reset();
+                        formClasses.add('successful');
 
                         setTimeout(function () {
-                            form.removeClass('successful');
+                            formClasses.remove('successful');
                         }, 1000);
                     } else {
-                        form.addClass('failure');
+                        formClasses.add('failure');
 
                         setTimeout(function () {
-                            form.removeClass('failure');
+                            formClasses.remove('failure');
                         }, 1000);
                     }
                 });
-            });
+            };
         }
+
+        /**
+         * Loads the regions for the selected organization as you're editing
+         * the campaign
+         *
+         * Makes an AJAX call to the /api/v1/regions/ endpoint to retrieve
+         * the data
+         */
+
     }, {
-        key: 'campaignEditGetRegions',
-        value: function campaignEditGetRegions() {
-            var campaignsController = new CampaignsController();
+        key: 'loadRegionsForCampaignEdit',
+        value: function loadRegionsForCampaignEdit() {
+            var object = this;
             var target = document.querySelector('.campaign-edit');
 
             if (target !== null) {
                 var selector = document.querySelector('#campaign-organization');
-                var container = $('#campaign-region');
+                var container = document.querySelector('#campaign-region');
                 var value = selector.value;
 
-                container.empty();
+                container.innerHTML = '<option value="">Select Organization</option>';
 
-                if (value == '') {
-                    container.append('<option value="">Select Organization</option>');
-                } else {
-                    container.append('<option value="">Select Region</option>');
-                    campaignsController.loadCampaignRegions(value).then(function (resp) {
-                        for (var i = 0; i < resp.length; i++) {
-                            if (value == resp[i].id) {
-                                container.append('<option value="' + resp[i].id + '" selected="selected">' + resp[i].name + '</option>');
+                if (value !== '') {
+                    container.innerHTML = container.innerHTML + '<option value="">Select Region</option>';
+
+                    object.CampaignsController.loadCampaignRegions(value).then(function (regions) {
+                        regions.forEach(function (region) {
+                            if (value == region.id) {
+                                container.innerHTML = container.innerHTML + '<option value="' + region.id + '" selected="selected">' + region.name + '</option>';
                             } else {
-                                container.append('<option value="' + resp[i].id + '">' + resp[i].name + '</option>');
+                                container.innerHTML = container.innerHTML + '<option value="' + region.id + '">' + region.name + '</option>';
                             }
-                        }
+                        });
                     });
                 }
             }
@@ -473,13 +571,23 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var ViewOrganizations = function () {
+    /**
+     * Registers all dependencies to the object, and creates checks
+     * before executing the setup functions on this object
+     */
     function ViewOrganizations() {
         _classCallCheck(this, ViewOrganizations);
 
-        this.loadRegionsFromOrganization();
-        this.createOrganizationFromDashboard();
-
         this.AjaxHelpers = new AjaxHelpers();
+        this.OrgList = document.querySelectorAll('.organization-list li label');
+        this.OrgOverlay = document.querySelector('.organizations-overlay');
+
+        if (this.OrgList) {
+            this.loadRegionsFromOrganizationForDashboard();
+        }
+        if (this.OrgOverlay) {
+            this.createOrganizationFromDashboard();
+        }
     }
 
     /**
@@ -492,8 +600,8 @@ var ViewOrganizations = function () {
 
 
     _createClass(ViewOrganizations, [{
-        key: 'loadRegionsFromOrganization',
-        value: function loadRegionsFromOrganization() {
+        key: 'loadRegionsFromOrganizationForDashboard',
+        value: function loadRegionsFromOrganizationForDashboard() {
             var object = this;
             var targets = document.querySelectorAll('.organization-list li label');
             var container = document.querySelector('.region-information');
@@ -780,6 +888,11 @@ var ViewWorksheets = function () {
 
         this.persistAction();
         this.expandSpotDetails();
+        this.setInnerOverflow();
+
+        if (document.querySelector('.info-inner')) {
+            this.setSpotTotals();
+        }
 
         this.Worksheets = new WorksheetsController();
     }
@@ -820,6 +933,79 @@ var ViewWorksheets = function () {
             });
         }
     }, {
+        key: 'setInnerOverflow',
+        value: function setInnerOverflow() {
+            var container = $('.info-inner');
+
+            container.each(function () {
+                var dates = $(this).find('.spot-column');
+                var colWidth = dates.outerWidth();
+                var dateCount = dates.length;
+
+                $(this).find('.scrollable').css({
+                    'width': colWidth * dateCount + 'px'
+                });
+            });
+        }
+    }, {
+        key: 'setSpotTotals',
+        value: function setSpotTotals() {
+            var object = this;
+            var containers = document.querySelectorAll('.info-inner');
+
+            containers.forEach(function (element) {
+                console.log(element);
+
+                var inputs = element.querySelectorAll('input.date-count');
+                var columns = element.querySelectorAll('.spot-column');
+
+                for (var b = 0; b < inputs.length; b++) {
+                    object.setWeekTotals(element, columns, inputs[b].dataset.program);
+
+                    inputs[b].onkeyup = function () {
+                        object.setWeekTotals(element, columns, this.dataset.program);
+                    };
+                }
+            });
+        }
+    }, {
+        key: 'setWeekTotals',
+        value: function setWeekTotals(container, columns, programId) {
+            for (var c = 0; c < columns.length; c++) {
+                var inputs = columns[c].querySelectorAll('input');
+                var sum = 0;
+
+                for (var i = 0; i < inputs.length; i++) {
+                    sum = Number(inputs[i].value) + Number(sum);
+                }
+
+                if (columns[c].querySelector('.week-total .total')) {
+                    columns[c].querySelector('.week-total .total').innerHTML = sum;
+                }
+            }
+
+            this.setBuyTotals(container, programId);
+        }
+    }, {
+        key: 'setBuyTotals',
+        value: function setBuyTotals(container, programId) {
+            var allInputs = container.querySelectorAll('input.date-count');
+            var sectionedInputs = [];
+            var count = 0;
+
+            for (var a = 0; a < allInputs.length; a++) {
+                if (allInputs[a].dataset.program == programId) {
+                    sectionedInputs.push(allInputs[a]);
+                }
+            }
+
+            for (var b = 0; b < sectionedInputs.length; b++) {
+                count = Number(sectionedInputs[b].value) + Number(count);
+            }
+
+            document.querySelector('.spot-date-total .program-' + programId + '-total').innerHTML = count;
+        }
+    }, {
         key: 'expandSpotDetails',
         value: function expandSpotDetails() {
             var object = this;
@@ -832,126 +1018,4 @@ var ViewWorksheets = function () {
     }]);
 
     return ViewWorksheets;
-}();
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var ActionHelpers = function () {
-    function ActionHelpers() {
-        _classCallCheck(this, ActionHelpers);
-
-        this.confirmDelete();
-    }
-
-    _createClass(ActionHelpers, [{
-        key: 'confirmDelete',
-        value: function confirmDelete() {
-            $('a.delete-button').click(function (e) {
-                e.preventDefault();
-                var link = $(this).attr('href');
-                var confirmation = confirm('Do you really want to delete this?');
-
-                if (confirmation) {
-                    window.location = link;
-                }
-            });
-        }
-    }]);
-
-    return ActionHelpers;
-}();
-'use strict';
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var AjaxHelpers = function () {
-    function AjaxHelpers() {
-        _classCallCheck(this, AjaxHelpers);
-    }
-
-    _createClass(AjaxHelpers, [{
-        key: 'getCall',
-        value: function getCall(url) {
-            return new Promise(function (resolve, reject) {
-                var request = new XMLHttpRequest();
-
-                request.open('GET', url);
-
-                request.onload = function () {
-                    if (request.status === 200) {
-                        resolve(JSON.parse(request.response));
-                    } else {
-                        reject(new Error(request.statusText));
-                    }
-                };
-
-                request.onerror = function () {
-                    reject(new Error('Network Error'));
-                };
-
-                request.send();
-            });
-        }
-    }, {
-        key: 'postCall',
-        value: function postCall(url, data) {
-            return new Promise(function (resolve, reject) {
-                var request = new XMLHttpRequest();
-
-                request.open('POST', url, true);
-                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-                request.onload = function () {
-                    if (request.status === 200) {
-                        resolve(JSON.parse(request.response));
-                    } else {
-                        reject(new Error(request.statusText));
-                    }
-                };
-
-                request.onerror = function () {
-                    reject(new Error('Network Error'));
-                };
-
-                request.send(data);
-            });
-        }
-    }, {
-        key: 'serialize',
-        value: function serialize(form) {
-            var field = [];
-            var value = [];
-
-            if ((typeof form === 'undefined' ? 'undefined' : _typeof(form)) == 'object' && form.nodeName == "FORM") {
-                var length = form.elements.length;
-
-                for (var i = 0; i < length; i++) {
-                    field = form.elements[i];
-
-                    if (field.name && !field.disabled && field.type != 'file' && field.type != 'reset' && field.type != 'submit' && field.type != 'button') {
-                        if (field.type == 'select-multiple') {
-                            for (var j = form.elements[i].options.length - 1; j >= 0; j--) {
-                                if (field.options[j].selected) {
-                                    value[value.length] = encodeURIComponent(field.name) + "=" + encodeURIComponent(field.options[j].value);
-                                }
-                            }
-                        } else if (field.type != 'checkbox' && field.type != 'radio' || field.checked) {
-                            value[value.length] = encodeURIComponent(field.name) + "=" + encodeURIComponent(field.value);
-                        }
-                    }
-                }
-            }
-
-            return value.join('&').replace(/%20/g, '+');
-        }
-    }]);
-
-    return AjaxHelpers;
 }();

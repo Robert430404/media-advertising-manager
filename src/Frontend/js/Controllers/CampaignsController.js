@@ -23,9 +23,9 @@ class CampaignsController {
 
     calculateFlightLength(start, end) {
         var startDate = moment(start, "YYYY-MM-DD");
-        var endDate = moment(end, "YYYY-MM-DD");
-        var duration = moment.duration(endDate.diff(startDate));
-        var weeks = duration.asWeeks().toFixed(0);
+        var endDate   = moment(end, "YYYY-MM-DD");
+        var duration  = moment.duration(endDate.diff(startDate));
+        var weeks     = duration.asWeeks().toFixed(0);
 
         if (weeks < 0 || weeks == 0) {
             return 'Invalid Dates';

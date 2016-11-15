@@ -1,9 +1,19 @@
 class ViewOrganizations {
+    /**
+     * Registers all dependencies to the object, and creates checks
+     * before executing the setup functions on this object
+     */
     constructor() {
-        this.loadRegionsFromOrganization();
-        this.createOrganizationFromDashboard();
-
         this.AjaxHelpers = new AjaxHelpers();
+        this.OrgList     = document.querySelectorAll('.organization-list li label');
+        this.OrgOverlay  = document.querySelector('.organizations-overlay');
+
+        if (this.OrgList) {
+            this.loadRegionsFromOrganizationForDashboard();
+        }
+        if (this.OrgOverlay) {
+            this.createOrganizationFromDashboard();
+        }
     }
 
     /**
@@ -13,7 +23,7 @@ class ViewOrganizations {
      * Makes an AJAX call to the /api/v1/regions/ endpoint to retrieve
      * the data
      */
-    loadRegionsFromOrganization() {
+    loadRegionsFromOrganizationForDashboard() {
         var object    = this;
         var targets   = document.querySelectorAll('.organization-list li label');
         var container = document.querySelector('.region-information');

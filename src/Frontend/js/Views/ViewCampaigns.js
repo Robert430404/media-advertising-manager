@@ -1,222 +1,197 @@
 class ViewCampaigns {
+    /**
+     * Registers all dependencies to the object, and creates checks
+     * before executing the setup functions on this object
+     */
     constructor() {
-        this.setCampaignRegions();
+        this.CampaignsController = new CampaignsController();
+        this.CampOverlay         = document.querySelector('.campaigns-overlay');
+
+        this.loadRegionsFromOrganizationForCampaign();
+        this.loadRegionsForCampaignEdit();
         this.setFlightFieldFormats();
         this.setFlightWeeks();
-        this.setInnerOverflow();
-        if (document.querySelector('.info-inner')) {
-            this.setSpotTotals();
-        }
-        this.dashboardCreateCampaign();
-        this.campaignEditGetRegions();
 
-        this.CampaignsController = new CampaignsController();
+        if (this.CampOverlay) {
+            this.createCampignFromDashboard();
+        }
     }
 
-    setCampaignRegions() {
-        var object = this;
-        var target = document.querySelector('#campaign-organization');
-        var container = $('#campaign-region');
+    /**
+     * Loads the regions for the dropdown when you're creating a campaign
+     * on the campaigns page
+     *
+     * Makes an AJAX call to the /api/v1/regions/ endpoint to retrieve
+     * the data
+     */
+    loadRegionsFromOrganizationForCampaign() {
+        var object    = this;
+        var target    = document.querySelector('#campaign-organization');
+        var container = document.querySelector('#campaign-region');
 
         if (target) {
             target.onchange = function () {
                 var value = this.value;
 
-                container.empty();
+                container.innerHTML = '<option value="">Select Organization</option>';
 
-                if (value == '') {
-                    container.append('<option value="">Select Organization</option>');
-                }
-                else {
-                    object.CampaignsController.loadCampaignRegions(value).then(function (resp) {
-                        container.append('<option value="">Select A Region</option>');
+                if (value !== '') {
+                    container.innerHTML = '';
 
-                        for (var i = 0; i < resp.length; i++) {
-                            container.append('<option value="' + resp[i].id + '">' + resp[i].name + '</option>');
-                        }
+                    object.CampaignsController.loadCampaignRegions(value).then(function (regions) {
+                        container.innerHTML = container.innerHTML +
+                                              '<option value="">Select A Region</option>';
+
+                        regions.forEach( function (region) {
+                            container.innerHTML = container.innerHTML +
+                                                  '<option value="' + region.id + '">' + region.name + '</option>';
+                        });
                     });
                 }
             }
         }
     }
 
+    /**
+     * Enforces the date format on the flight date fields
+     *
+     * Depends on formatter.js
+     */
     setFlightFieldFormats() {
-        $('.flight-start').formatter({
-            'pattern': '{{9999}}-{{99}}-{{99}}',
-            'persist': true
-        });
-        $('.flight-end').formatter({
-            'pattern': '{{9999}}-{{99}}-{{99}}',
-            'persist': true
-        });
+        var flightStart = document.querySelector('.flight-start');
+        var flightEnd   = document.querySelector('.flight-end');
+
+        if (flightStart) {
+            new Formatter(flightStart, {
+                'pattern': '{{9999}}-{{99}}-{{99}}',
+                'persist': true
+            });
+        }
+
+        if (flightEnd) {
+            new Formatter(flightEnd, {
+                'pattern': '{{9999}}-{{99}}-{{99}}',
+                'persist': true
+            });
+        }
     }
 
+    /**
+     * Sets the total flight length in weeks once you have your dates
+     * entered into the fields
+     */
     setFlightWeeks() {
-        var object = this;
-        var start = document.querySelector('#flight-start');
-        var end = document.querySelector('#flight-end');
+        var object  = this;
+        var start   = document.querySelector('#flight-start');
+        var end     = document.querySelector('#flight-end');
         var display = document.querySelector('#flight-length');
 
-        if (start !== null) {
+        if (start) {
             start.onkeyup = function () {
                 var startVal = start.value;
-                var endVal = end.value;
+                var endVal   = end.value;
 
                 if (startVal.length > 9 && endVal.length > 9) {
-                    var diff = object.CampaignsController.calculateFlightLength(startVal, endVal);
-
-                    display.value = diff;
+                    display.value = object.CampaignsController.calculateFlightLength(startVal, endVal) +
+                                    ' Weeks';
                 }
             };
         }
 
-        if (end !== null) {
+        if (end) {
             end.onkeyup = function () {
                 var startVal = start.value;
-                var endVal = end.value;
+                var endVal   = end.value;
 
                 if (startVal.length > 9 && endVal.length > 9) {
-                    var diff = object.CampaignsController.calculateFlightLength(startVal, endVal);
-
-                    display.value = diff + ' Weeks';
+                    display.value = object.CampaignsController.calculateFlightLength(startVal, endVal) +
+                                    ' Weeks';
                 }
             };
         }
     }
 
-    setInnerOverflow() {
-        var container = $('.info-inner');
+    /**
+     * Brings the create campaign form into view and persists the
+     * new campaign on the forms submission
+     *
+     * Controls the modals display and sends the data off in an AJAX
+     * call to get persisted into the database
+     */
+    createCampignFromDashboard() {
+        var object  = this;
+        var overlay = document.querySelector('.campaigns-overlay');
+        var button  = document.querySelector('.dash-create-campaign-button');
+        var close   = overlay.querySelector('.close');
+        var form    = overlay.querySelector('form');
 
-        container.each(function () {
-            var dates = $(this).find('.spot-column');
-            var colWidth = dates.outerWidth();
-            var dateCount = dates.length;
+        button.onclick = function () {
+            overlay.style.display = 'block';
+        };
 
-            $(this).find('.scrollable').css({
-                'width': colWidth * dateCount + 'px',
-            });
-        });
-    }
+        close.onclick = function () {
+            overlay.style.display = 'none';
+        };
 
-    setSpotTotals() {
-        var object     = this;
-        var containers = document.querySelectorAll('.info-inner');
+        form.onsubmit = function (submitted) {
+            submitted.preventDefault();
 
-        containers.forEach( function (element) {
-            console.log(element);
-
-            var inputs  = element.querySelectorAll('input.date-count');
-            var columns = element.querySelectorAll('.spot-column');
-
-            for (var b = 0; b < inputs.length; b++) {
-                object.setWeekTotals(element, columns, inputs[b].dataset.program);
-
-                inputs[b].onkeyup = function () {
-                    object.setWeekTotals(element, columns, this.dataset.program);
-                }
-            }
-        });
-    }
-
-    setWeekTotals(container, columns, programId) {
-        for (var c = 0; c < columns.length; c++) {
-            var inputs = columns[c].querySelectorAll('input');
-            var sum = 0;
-
-            for (var i = 0; i < inputs.length; i++) {
-                sum = Number(inputs[i].value) + Number(sum);
-            }
-
-            if (columns[c].querySelector('.week-total .total')) {
-                columns[c].querySelector('.week-total .total').innerHTML = sum;
-            }
-        }
-
-        this.setBuyTotals(container, programId);
-    }
-
-    setBuyTotals(container, programId) {
-        var allInputs = container.querySelectorAll('input.date-count');
-        var sectionedInputs = [];
-        var count = 0;
-
-        for (var a = 0; a < allInputs.length; a++) {
-            if (allInputs[a].dataset.program == programId) {
-                sectionedInputs.push(allInputs[a]);
-            }
-        }
-
-        for (var b = 0; b < sectionedInputs.length; b++) {
-            count = Number(sectionedInputs[b].value) + Number(count);
-        }
-
-        document.querySelector('.spot-date-total .program-' + programId + '-total').innerHTML = count;
-    }
-
-    dashboardCreateCampaign() {
-        var object = this;
-        var overlay = $('.campaigns-overlay');
-        var button = $('.dash-create-campaign-button');
-        var close = $('.campaigns-overlay .close');
-        var form = $('.campaigns-overlay form');
-
-        button.click(function () {
-            overlay.fadeIn();
-        });
-
-        close.click(function () {
-            overlay.fadeOut();
-        });
-
-        form.submit(function (e) {
-            e.preventDefault();
-
-            var data = $(this).serialize();
+            var data = object.AjaxHelpers.serialize(form);
 
             object.CampaignsController.createNewCampaign(data).then(function (resp) {
+                var formClasses = form.classList;
+
                 if (resp.success == true) {
-                    form[0].reset();
-                    form.addClass('successful');
+                    form.reset();
+                    formClasses.add('successful');
 
                     setTimeout(function () {
-                        form.removeClass('successful');
+                        formClasses.remove('successful');
                     }, 1000);
                 } else {
-                    form.addClass('failure');
+                    formClasses.add('failure');
 
                     setTimeout(function () {
-                        form.removeClass('failure');
+                        formClasses.remove('failure');
                     }, 1000);
                 }
             });
-        });
+        };
     }
 
-    campaignEditGetRegions() {
-        var campaignsController = new CampaignsController();
+    /**
+     * Loads the regions for the selected organization as you're editing
+     * the campaign
+     *
+     * Makes an AJAX call to the /api/v1/regions/ endpoint to retrieve
+     * the data
+     */
+    loadRegionsForCampaignEdit() {
+        var object = this;
         var target = document.querySelector('.campaign-edit');
 
         if (target !== null) {
-            var selector = document.querySelector('#campaign-organization');
-            var container = $('#campaign-region');
-            var value = selector.value;
+            var selector  = document.querySelector('#campaign-organization');
+            var container = document.querySelector('#campaign-region');
+            var value     = selector.value;
 
-            container.empty();
+            container.innerHTML = '<option value="">Select Organization</option>';
 
-            if (value == '') {
-                container.append('<option value="">Select Organization</option>');
-            }
-            else {
-                container.append('<option value="">Select Region</option>');
-                campaignsController.loadCampaignRegions(value).then(function (resp) {
-                    for (var i = 0; i < resp.length; i++) {
-                        if (value == resp[i].id) {
-                            container.append('<option value="' + resp[i].id + '" selected="selected">' + resp[i].name + '</option>');
+            if (value !== '') {
+                container.innerHTML = container.innerHTML +
+                                      '<option value="">Select Region</option>';
+
+                object.CampaignsController.loadCampaignRegions(value).then(function (regions) {
+                    regions.forEach( function (region) {
+                        if (value == region.id) {
+                            container.innerHTML = container.innerHTML +
+                                                  '<option value="' + region.id + '" selected="selected">' + region.name + '</option>';
                         }
                         else {
-                            container.append('<option value="' + resp[i].id + '">' + resp[i].name + '</option>');
+                            container.innerHTML = container.innerHTML +
+                                                  '<option value="' + region.id + '">' + region.name + '</option>';
                         }
-                    }
+                    });
                 });
             }
         }
