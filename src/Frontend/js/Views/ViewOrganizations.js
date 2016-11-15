@@ -1,7 +1,7 @@
 class ViewOrganizations {
     constructor() {
         this.loadRegionsFromOrganization();
-        this.dashboardCreateOrganization();
+        this.createOrganizationFromDashboard();
 
         this.AjaxHelpers = new AjaxHelpers();
     }
@@ -97,45 +97,54 @@ class ViewOrganizations {
         });
     }
 
-    dashboardCreateOrganization() {
-        var object = this;
-        var overlay = $('.organizations-overlay');
-        var button = $('.dash-create-organizations-button');
-        var close = $('.organizations-overlay .close');
-        var form = $('.organizations-overlay form');
+    /**
+     * Brings the create organization form into view and persists the
+     * new organization on the forms submission
+     *
+     * Controls the modals display and sends the data off in an AJAX
+     * call to get persisted into the database
+     */
+    createOrganizationFromDashboard() {
+        var object   = this;
+        var overlay  = document.querySelector('.organizations-overlay');
+        var button   = document.querySelector('.dash-create-organizations-button');
+        var close    = overlay.querySelector('.close');
+        var form     = overlay.querySelector('form');
         var endpoint = '/api/v1/organizations/new';
 
-        button.click(function () {
-            overlay.fadeIn();
-        });
+        button.onclick = function () {
+            overlay.style.display = 'block';
+        };
 
-        close.click(function () {
-            overlay.fadeOut();
-        });
+        close.onclick = function () {
+            overlay.style.display = 'none';
+        };
 
-        form.submit(function (e) {
-            e.preventDefault();
+        form.onsubmit = function (submitted) {
+            submitted.preventDefault();
 
-            var data = $(this).serialize();
+            var data = object.AjaxHelpers.serialize(form);
 
             object.AjaxHelpers.postCall(endpoint, data).then(function (resp) {
+                var formClasses = form.classList;
+
                 if (resp.success == true) {
-                    form[0].reset();
-                    form.addClass('successful');
+                    form.reset();
+                    formClasses.add('successful');
                     object.refreshOrganizations();
 
                     setTimeout(function () {
-                        form.removeClass('successful');
+                        formClasses.remove('successful');
                     }, 1000);
                 } else {
-                    form.addClass('failure');
+                    formClasses.add('failure');
 
                     setTimeout(function () {
-                        form.removeClass('failure');
+                        formClasses.remove('failure');
                     }, 1000);
                 }
             });
-        });
+        };
     }
 
     refreshOrganizations() {
@@ -156,7 +165,7 @@ class ViewOrganizations {
                     '</li>');
             }
 
-            object.loadDashboardRegions();
+            object.loadRegionsFromOrganization();
         });
     }
 }

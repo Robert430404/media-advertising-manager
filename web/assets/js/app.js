@@ -125,6 +125,8 @@ var ActionHelpers = function () {
 }();
 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -180,6 +182,31 @@ var AjaxHelpers = function () {
 
                 request.send(data);
             });
+        }
+    }, {
+        key: 'serialize',
+        value: function serialize(form) {
+            var field,
+                s = [];
+
+            if ((typeof form === 'undefined' ? 'undefined' : _typeof(form)) == 'object' && form.nodeName == "FORM") {
+                var len = form.elements.length;
+
+                for (var i = 0; i < len; i++) {
+                    field = form.elements[i];
+
+                    if (field.name && !field.disabled && field.type != 'file' && field.type != 'reset' && field.type != 'submit' && field.type != 'button') {
+                        if (field.type == 'select-multiple') {
+                            for (var j = form.elements[i].options.length - 1; j >= 0; j--) {
+                                if (field.options[j].selected) s[s.length] = encodeURIComponent(field.name) + "=" + encodeURIComponent(field.options[j].value);
+                            }
+                        } else if (field.type != 'checkbox' && field.type != 'radio' || field.checked) {
+                            s[s.length] = encodeURIComponent(field.name) + "=" + encodeURIComponent(field.value);
+                        }
+                    }
+                }
+            }
+            return s.join('&').replace(/%20/g, '+');
         }
     }]);
 
@@ -559,7 +586,7 @@ var ViewOrganizations = function () {
         _classCallCheck(this, ViewOrganizations);
 
         this.loadRegionsFromOrganization();
-        this.dashboardCreateOrganization();
+        this.createOrganizationFromDashboard();
 
         this.AjaxHelpers = new AjaxHelpers();
     }
@@ -647,47 +674,58 @@ var ViewOrganizations = function () {
                 };
             });
         }
+
+        /**
+         * Brings the create organization form into view and persists the
+         * new organization on the forms submission
+         *
+         * Controls the modals display and sends the data off in an AJAX
+         * call to get persisted into the database
+         */
+
     }, {
-        key: 'dashboardCreateOrganization',
-        value: function dashboardCreateOrganization() {
+        key: 'createOrganizationFromDashboard',
+        value: function createOrganizationFromDashboard() {
             var object = this;
-            var overlay = $('.organizations-overlay');
-            var button = $('.dash-create-organizations-button');
-            var close = $('.organizations-overlay .close');
-            var form = $('.organizations-overlay form');
+            var overlay = document.querySelector('.organizations-overlay');
+            var button = document.querySelector('.dash-create-organizations-button');
+            var close = overlay.querySelector('.close');
+            var form = overlay.querySelector('form');
             var endpoint = '/api/v1/organizations/new';
 
-            button.click(function () {
-                overlay.fadeIn();
-            });
+            button.onclick = function () {
+                overlay.style.display = 'block';
+            };
 
-            close.click(function () {
-                overlay.fadeOut();
-            });
+            close.onclick = function () {
+                overlay.style.display = 'none';
+            };
 
-            form.submit(function (e) {
-                e.preventDefault();
+            form.onsubmit = function (submitted) {
+                submitted.preventDefault();
 
-                var data = $(this).serialize();
+                var data = object.AjaxHelpers.serialize(form);
 
                 object.AjaxHelpers.postCall(endpoint, data).then(function (resp) {
+                    var formClasses = form.classList;
+
                     if (resp.success == true) {
-                        form[0].reset();
-                        form.addClass('successful');
+                        form.reset();
+                        formClasses.add('successful');
                         object.refreshOrganizations();
 
                         setTimeout(function () {
-                            form.removeClass('successful');
+                            formClasses.remove('successful');
                         }, 1000);
                     } else {
-                        form.addClass('failure');
+                        formClasses.add('failure');
 
                         setTimeout(function () {
-                            form.removeClass('failure');
+                            formClasses.remove('failure');
                         }, 1000);
                     }
                 });
-            });
+            };
         }
     }, {
         key: 'refreshOrganizations',
@@ -704,7 +742,7 @@ var ViewOrganizations = function () {
                     sidebar.append('<li>' + '<label data-id="' + resp[i].id + '" data-name="' + resp[i].name + '">' + resp[i].name + '<i class="fa fa-chevron-right"></i>' + '</label>' + '</li>');
                 }
 
-                object.loadDashboardRegions();
+                object.loadRegionsFromOrganization();
             });
         }
     }]);
