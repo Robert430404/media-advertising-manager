@@ -3,10 +3,18 @@ class ViewNavigation {
         this.navigationToggle();
     }
 
+    /**
+     * This toggles the side menu into and out of visibility
+     * when you click on the hamburger
+     */
     navigationToggle() {
-        $('.hamburger').click(function () {
-            // $('body').toggleClass('add-padding');
-            $('.masthead').toggleClass('show');
-        });
+        var hamburger = document.querySelector('.hamburger');
+
+        hamburger.onclick = function () {
+            var masthead  = document.querySelector('.masthead');
+            var classList = masthead.classList;
+
+            classList.toggle('show');
+        }
     }
 }

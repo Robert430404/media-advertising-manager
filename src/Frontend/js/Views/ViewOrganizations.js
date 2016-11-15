@@ -133,13 +133,13 @@ class ViewOrganizations {
                     formClasses.add('successful');
                     object.refreshOrganizations();
 
-                    setTimeout(function () {
+                    setTimeout( function () {
                         formClasses.remove('successful');
                     }, 1000);
                 } else {
                     formClasses.add('failure');
 
-                    setTimeout(function () {
+                    setTimeout( function () {
                         formClasses.remove('failure');
                     }, 1000);
                 }
@@ -147,23 +147,30 @@ class ViewOrganizations {
         };
     }
 
+    /**
+     * Refreshes organizations after you have persisted a new organization
+     * into the database
+     *
+     * Makes an AJAX call to /api/v1/organizations endpoint to retrieve
+     * the data
+     */
     refreshOrganizations() {
-        var object = this;
-        var sidebar = $('.sidebar .organization-list');
-        var regionSelect = $('.regions-overlay #organization-id');
+        var object   = this;
+        var sidebar  = document.querySelector('.sidebar .organization-list');
         var endpoint = '/api/v1/organizations';
 
-        object.AjaxHelpers.getCall(endpoint).then(function (resp) {
-            sidebar.empty();
+        object.AjaxHelpers.getCall(endpoint).then(function (organizations) {
+            sidebar.innerHTML = '';
 
-            for (var i = 0; i < resp.length; i++) {
-                sidebar.append('<li>' +
-                    '<label data-id="' + resp[i].id + '" data-name="' + resp[i].name + '">' +
-                    resp[i].name +
-                    '<i class="fa fa-chevron-right"></i>' +
-                    '</label>' +
-                    '</li>');
-            }
+            organizations.forEach( function (organization) {
+                sidebar.innerHTML = sidebar.innerHTML +
+                                    '<li>' +
+                                        '<label data-id="' + organization.id + '" data-name="' + organization.name + '">' +
+                                            organization.name +
+                                            '<i class="fa fa-chevron-right"></i>' +
+                                        '</label>' +
+                                    '</li>';
+            });
 
             object.loadRegionsFromOrganization();
         });

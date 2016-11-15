@@ -99,125 +99,6 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var ActionHelpers = function () {
-    function ActionHelpers() {
-        _classCallCheck(this, ActionHelpers);
-
-        this.confirmDelete();
-    }
-
-    _createClass(ActionHelpers, [{
-        key: 'confirmDelete',
-        value: function confirmDelete() {
-            $('a.delete-button').click(function (e) {
-                e.preventDefault();
-                var link = $(this).attr('href');
-                var confirmation = confirm('Do you really want to delete this?');
-
-                if (confirmation) {
-                    window.location = link;
-                }
-            });
-        }
-    }]);
-
-    return ActionHelpers;
-}();
-'use strict';
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var AjaxHelpers = function () {
-    function AjaxHelpers() {
-        _classCallCheck(this, AjaxHelpers);
-    }
-
-    _createClass(AjaxHelpers, [{
-        key: 'getCall',
-        value: function getCall(url) {
-            return new Promise(function (resolve, reject) {
-                var request = new XMLHttpRequest();
-
-                request.open('GET', url);
-
-                request.onload = function () {
-                    if (request.status === 200) {
-                        resolve(JSON.parse(request.response));
-                    } else {
-                        reject(new Error(request.statusText));
-                    }
-                };
-
-                request.onerror = function () {
-                    reject(new Error('Network Error'));
-                };
-
-                request.send();
-            });
-        }
-    }, {
-        key: 'postCall',
-        value: function postCall(url, data) {
-            return new Promise(function (resolve, reject) {
-                var request = new XMLHttpRequest();
-
-                request.open('POST', url, true);
-                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-                request.onload = function () {
-                    if (request.status === 200) {
-                        resolve(JSON.parse(request.response));
-                    } else {
-                        reject(new Error(request.statusText));
-                    }
-                };
-
-                request.onerror = function () {
-                    reject(new Error('Network Error'));
-                };
-
-                request.send(data);
-            });
-        }
-    }, {
-        key: 'serialize',
-        value: function serialize(form) {
-            var field,
-                s = [];
-
-            if ((typeof form === 'undefined' ? 'undefined' : _typeof(form)) == 'object' && form.nodeName == "FORM") {
-                var len = form.elements.length;
-
-                for (var i = 0; i < len; i++) {
-                    field = form.elements[i];
-
-                    if (field.name && !field.disabled && field.type != 'file' && field.type != 'reset' && field.type != 'submit' && field.type != 'button') {
-                        if (field.type == 'select-multiple') {
-                            for (var j = form.elements[i].options.length - 1; j >= 0; j--) {
-                                if (field.options[j].selected) s[s.length] = encodeURIComponent(field.name) + "=" + encodeURIComponent(field.options[j].value);
-                            }
-                        } else if (field.type != 'checkbox' && field.type != 'radio' || field.checked) {
-                            s[s.length] = encodeURIComponent(field.name) + "=" + encodeURIComponent(field.value);
-                        }
-                    }
-                }
-            }
-            return s.join('&').replace(/%20/g, '+');
-        }
-    }]);
-
-    return AjaxHelpers;
-}();
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 var ViewCampaigns = function () {
     function ViewCampaigns() {
         _classCallCheck(this, ViewCampaigns);
@@ -563,13 +444,23 @@ var ViewNavigation = function () {
         this.navigationToggle();
     }
 
+    /**
+     * This toggles the side menu into and out of visibility
+     * when you click on the hamburger
+     */
+
+
     _createClass(ViewNavigation, [{
         key: 'navigationToggle',
         value: function navigationToggle() {
-            $('.hamburger').click(function () {
-                // $('body').toggleClass('add-padding');
-                $('.masthead').toggleClass('show');
-            });
+            var hamburger = document.querySelector('.hamburger');
+
+            hamburger.onclick = function () {
+                var masthead = document.querySelector('.masthead');
+                var classList = masthead.classList;
+
+                classList.toggle('show');
+            };
         }
     }]);
 
@@ -727,20 +618,28 @@ var ViewOrganizations = function () {
                 });
             };
         }
+
+        /**
+         * Refreshes organizations after you have persisted a new organization
+         * into the database
+         *
+         * Makes an AJAX call to /api/v1/organizations endpoint to retrieve
+         * the data
+         */
+
     }, {
         key: 'refreshOrganizations',
         value: function refreshOrganizations() {
             var object = this;
-            var sidebar = $('.sidebar .organization-list');
-            var regionSelect = $('.regions-overlay #organization-id');
+            var sidebar = document.querySelector('.sidebar .organization-list');
             var endpoint = '/api/v1/organizations';
 
-            object.AjaxHelpers.getCall(endpoint).then(function (resp) {
-                sidebar.empty();
+            object.AjaxHelpers.getCall(endpoint).then(function (organizations) {
+                sidebar.innerHTML = '';
 
-                for (var i = 0; i < resp.length; i++) {
-                    sidebar.append('<li>' + '<label data-id="' + resp[i].id + '" data-name="' + resp[i].name + '">' + resp[i].name + '<i class="fa fa-chevron-right"></i>' + '</label>' + '</li>');
-                }
+                organizations.forEach(function (organization) {
+                    sidebar.innerHTML = sidebar.innerHTML + '<li>' + '<label data-id="' + organization.id + '" data-name="' + organization.name + '">' + organization.name + '<i class="fa fa-chevron-right"></i>' + '</label>' + '</li>';
+                });
 
                 object.loadRegionsFromOrganization();
             });
@@ -933,4 +832,126 @@ var ViewWorksheets = function () {
     }]);
 
     return ViewWorksheets;
+}();
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ActionHelpers = function () {
+    function ActionHelpers() {
+        _classCallCheck(this, ActionHelpers);
+
+        this.confirmDelete();
+    }
+
+    _createClass(ActionHelpers, [{
+        key: 'confirmDelete',
+        value: function confirmDelete() {
+            $('a.delete-button').click(function (e) {
+                e.preventDefault();
+                var link = $(this).attr('href');
+                var confirmation = confirm('Do you really want to delete this?');
+
+                if (confirmation) {
+                    window.location = link;
+                }
+            });
+        }
+    }]);
+
+    return ActionHelpers;
+}();
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var AjaxHelpers = function () {
+    function AjaxHelpers() {
+        _classCallCheck(this, AjaxHelpers);
+    }
+
+    _createClass(AjaxHelpers, [{
+        key: 'getCall',
+        value: function getCall(url) {
+            return new Promise(function (resolve, reject) {
+                var request = new XMLHttpRequest();
+
+                request.open('GET', url);
+
+                request.onload = function () {
+                    if (request.status === 200) {
+                        resolve(JSON.parse(request.response));
+                    } else {
+                        reject(new Error(request.statusText));
+                    }
+                };
+
+                request.onerror = function () {
+                    reject(new Error('Network Error'));
+                };
+
+                request.send();
+            });
+        }
+    }, {
+        key: 'postCall',
+        value: function postCall(url, data) {
+            return new Promise(function (resolve, reject) {
+                var request = new XMLHttpRequest();
+
+                request.open('POST', url, true);
+                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+                request.onload = function () {
+                    if (request.status === 200) {
+                        resolve(JSON.parse(request.response));
+                    } else {
+                        reject(new Error(request.statusText));
+                    }
+                };
+
+                request.onerror = function () {
+                    reject(new Error('Network Error'));
+                };
+
+                request.send(data);
+            });
+        }
+    }, {
+        key: 'serialize',
+        value: function serialize(form) {
+            var field = [];
+            var value = [];
+
+            if ((typeof form === 'undefined' ? 'undefined' : _typeof(form)) == 'object' && form.nodeName == "FORM") {
+                var length = form.elements.length;
+
+                for (var i = 0; i < length; i++) {
+                    field = form.elements[i];
+
+                    if (field.name && !field.disabled && field.type != 'file' && field.type != 'reset' && field.type != 'submit' && field.type != 'button') {
+                        if (field.type == 'select-multiple') {
+                            for (var j = form.elements[i].options.length - 1; j >= 0; j--) {
+                                if (field.options[j].selected) {
+                                    value[value.length] = encodeURIComponent(field.name) + "=" + encodeURIComponent(field.options[j].value);
+                                }
+                            }
+                        } else if (field.type != 'checkbox' && field.type != 'radio' || field.checked) {
+                            value[value.length] = encodeURIComponent(field.name) + "=" + encodeURIComponent(field.value);
+                        }
+                    }
+                }
+            }
+
+            return value.join('&').replace(/%20/g, '+');
+        }
+    }]);
+
+    return AjaxHelpers;
 }();
