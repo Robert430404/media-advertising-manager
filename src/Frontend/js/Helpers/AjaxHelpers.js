@@ -1,8 +1,24 @@
+/**
+ * AjaxHelpers Class
+ *
+ * Contains functions that execute and help execute AJAX calls
+ */
 class AjaxHelpers {
+    /**
+     * Registers all dependencies to the object, and creates checks
+     * before executing the setup functions on this object
+     */
     constructor() {
-
+        this.ActionHelpers = new ActionHelpers();
     }
 
+    /**
+     * Executes a GET call and returns an ASYNC promise for use inside
+     * of the requesting function
+     *
+     * @param url
+     * @returns {Promise}
+     */
     getCall(url) {
         return new Promise(function (resolve, reject) {
             let request = new XMLHttpRequest();
@@ -26,6 +42,14 @@ class AjaxHelpers {
         });
     }
 
+    /**
+     * Executes a POST call and returns an ASYNC promise for use inside
+     * of the requesting function
+     *
+     * @param url
+     * @param data
+     * @returns {Promise}
+     */
     postCall(url, data) {
         return new Promise(function (resolve, reject) {
             let request = new XMLHttpRequest();
@@ -50,6 +74,13 @@ class AjaxHelpers {
         });
     }
 
+    /**
+     * Serializes form data for use inside of the post call, works
+     * similarly to the jQuery serialize function
+     *
+     * @param form
+     * @returns {string}
+     */
     serialize(form) {
         var field = [];
         var value = [];
@@ -59,15 +90,13 @@ class AjaxHelpers {
 
             for (var i = 0; i < length; i++) {
                 field = form.elements[i];
+                var fieldCheck = this.ActionHelpers.fieldTypeCheck(field);
 
-                if (field.name &&
-                    !field.disabled &&
-                    field.type != 'file' &&
-                    field.type != 'reset' &&
-                    field.type != 'submit' &&
-                    field.type != 'button') {
+                if (fieldCheck) {
                     if (field.type == 'select-multiple') {
-                        for (var j = form.elements[i].options.length - 1; j >= 0; j--) {
+                        var optionLength = form.elements[i].options.length - 1;
+
+                        for (var j = optionLength; j >= 0; j--) {
                             if (field.options[j].selected) {
                                 value[value.length] = encodeURIComponent(field.name) +
                                                       "=" +

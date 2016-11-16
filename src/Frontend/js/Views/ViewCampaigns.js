@@ -43,7 +43,7 @@ class ViewCampaigns {
                 if (value !== '') {
                     container.innerHTML = '';
 
-                    object.CampaignsController.loadCampaignRegions(value).then(function (regions) {
+                    object.CampaignsController.loadRegionsFromOrganization(value).then(function (regions) {
                         container.innerHTML = container.innerHTML +
                                               '<option value="">Select A Region</option>';
 
@@ -97,7 +97,7 @@ class ViewCampaigns {
                 var endVal   = end.value;
 
                 if (startVal.length > 9 && endVal.length > 9) {
-                    display.value = object.CampaignsController.calculateFlightLength(startVal, endVal) +
+                    display.value = object.CampaignsController.calculateFlightLengthInWeeks(startVal, endVal) +
                                     ' Weeks';
                 }
             };
@@ -109,7 +109,7 @@ class ViewCampaigns {
                 var endVal   = end.value;
 
                 if (startVal.length > 9 && endVal.length > 9) {
-                    display.value = object.CampaignsController.calculateFlightLength(startVal, endVal) +
+                    display.value = object.CampaignsController.calculateFlightLengthInWeeks(startVal, endVal) +
                                     ' Weeks';
                 }
             };
@@ -186,7 +186,7 @@ class ViewCampaigns {
                 container.innerHTML = container.innerHTML +
                                       '<option value="">Select Region</option>';
 
-                object.CampaignsController.loadCampaignRegions(value).then(function (regions) {
+                object.CampaignsController.loadRegionsFromOrganization(value).then(function (regions) {
                     regions.forEach( function (region) {
                         if (value == region.id) {
                             container.innerHTML = container.innerHTML +

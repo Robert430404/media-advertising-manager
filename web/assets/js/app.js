@@ -1,6 +1,12 @@
-"use strict";
+'use strict';
 
-$(document).ready(function () {
+/**
+ * Waits for DOM content to be fully loaded and ready, and then
+ * instantiates instances of all view objects so events can
+ * be initialized
+ */
+document.addEventListener('DOMContentLoaded', function () {
+    new View();
     new ViewOrganizations();
     new ViewCampaigns();
     new ViewNavigation();
@@ -8,35 +14,67 @@ $(document).ready(function () {
     new ViewSpotTypes();
     new ViewRegions();
     new ViewInvoices();
-    new ActionHelpers();
-});
+}, false);
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * CampaignsController Class
+ *
+ * Contains the data retrieval for the campaigns view
+ */
 var CampaignsController = function () {
+    /**
+     * Registers all dependencies to the object, and creates checks
+     * before executing the setup functions on this object
+     */
     function CampaignsController() {
         _classCallCheck(this, CampaignsController);
 
         this.AjaxHelpers = new AjaxHelpers();
     }
 
+    /**
+     * Loads all regions for a provided campaign through AJAX GET call
+     *
+     * @param organization
+     * @returns {Promise}
+     */
+
+
     _createClass(CampaignsController, [{
-        key: 'loadCampaignRegions',
-        value: function loadCampaignRegions(organization) {
+        key: 'loadRegionsFromOrganization',
+        value: function loadRegionsFromOrganization(organization) {
             var endpoint = '/api/v1/regions/' + organization;
 
             return this.AjaxHelpers.getCall(endpoint);
         }
+
+        /**
+         * Loads all campaigns for a provided region through AJAX GET call
+         *
+         * @param region
+         * @returns {Promise}
+         */
+
     }, {
-        key: 'loadRegionCampaigns',
-        value: function loadRegionCampaigns(region) {
+        key: 'loadCampaignsFromRegion',
+        value: function loadCampaignsFromRegion(region) {
             var endpoint = '/api/v1/campaigns/' + region;
 
             return this.AjaxHelpers.getCall(endpoint);
         }
+
+        /**
+         * Creates a new campaign through AJAX POST call
+         *
+         * @param data
+         * @returns {Promise}
+         */
+
     }, {
         key: 'createNewCampaign',
         value: function createNewCampaign(data) {
@@ -44,9 +82,20 @@ var CampaignsController = function () {
 
             return this.AjaxHelpers.postCall(endpoint, data);
         }
+
+        /**
+         * Returns the the difference in weeks between two dates, in this
+         * case it is used to calculate the total flight length of a
+         * campaign
+         *
+         * @param start
+         * @param end
+         * @returns {*}
+         */
+
     }, {
-        key: 'calculateFlightLength',
-        value: function calculateFlightLength(start, end) {
+        key: 'calculateFlightLengthInWeeks',
+        value: function calculateFlightLengthInWeeks(start, end) {
             var startDate = moment(start, "YYYY-MM-DD");
             var endDate = moment(end, "YYYY-MM-DD");
             var duration = moment.duration(endDate.diff(startDate));
@@ -116,121 +165,38 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var ActionHelpers = function () {
-    function ActionHelpers() {
-        _classCallCheck(this, ActionHelpers);
+/**
+ * View Class
+ *
+ * This is the "global" view class that contains initializations for
+ * "global" view actions, like confirmation's and other messages
+ */
+var View = function () {
+  /**
+   * Registers all dependencies to the object, and creates checks
+   * before executing the setup functions on this object
+   */
+  function View() {
+    _classCallCheck(this, View);
 
-        this.confirmDelete();
+    this.ActionHelpers = new ActionHelpers();
+
+    this.registerDeleteConfirmation();
+  }
+
+  /**
+   * Registers a delete confirmation
+   */
+
+
+  _createClass(View, [{
+    key: 'registerDeleteConfirmation',
+    value: function registerDeleteConfirmation() {
+      this.ActionHelpers.confirmAction('a.delete-button', 'Do you really want to delete this?');
     }
+  }]);
 
-    _createClass(ActionHelpers, [{
-        key: 'confirmDelete',
-        value: function confirmDelete() {
-            $('a.delete-button').click(function (e) {
-                e.preventDefault();
-                var link = $(this).attr('href');
-                var confirmation = confirm('Do you really want to delete this?');
-
-                if (confirmation) {
-                    window.location = link;
-                }
-            });
-        }
-    }]);
-
-    return ActionHelpers;
-}();
-'use strict';
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var AjaxHelpers = function () {
-    function AjaxHelpers() {
-        _classCallCheck(this, AjaxHelpers);
-    }
-
-    _createClass(AjaxHelpers, [{
-        key: 'getCall',
-        value: function getCall(url) {
-            return new Promise(function (resolve, reject) {
-                var request = new XMLHttpRequest();
-
-                request.open('GET', url);
-
-                request.onload = function () {
-                    if (request.status === 200) {
-                        resolve(JSON.parse(request.response));
-                    } else {
-                        reject(new Error(request.statusText));
-                    }
-                };
-
-                request.onerror = function () {
-                    reject(new Error('Network Error'));
-                };
-
-                request.send();
-            });
-        }
-    }, {
-        key: 'postCall',
-        value: function postCall(url, data) {
-            return new Promise(function (resolve, reject) {
-                var request = new XMLHttpRequest();
-
-                request.open('POST', url, true);
-                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-                request.onload = function () {
-                    if (request.status === 200) {
-                        resolve(JSON.parse(request.response));
-                    } else {
-                        reject(new Error(request.statusText));
-                    }
-                };
-
-                request.onerror = function () {
-                    reject(new Error('Network Error'));
-                };
-
-                request.send(data);
-            });
-        }
-    }, {
-        key: 'serialize',
-        value: function serialize(form) {
-            var field = [];
-            var value = [];
-
-            if ((typeof form === 'undefined' ? 'undefined' : _typeof(form)) == 'object' && form.nodeName == "FORM") {
-                var length = form.elements.length;
-
-                for (var i = 0; i < length; i++) {
-                    field = form.elements[i];
-
-                    if (field.name && !field.disabled && field.type != 'file' && field.type != 'reset' && field.type != 'submit' && field.type != 'button') {
-                        if (field.type == 'select-multiple') {
-                            for (var j = form.elements[i].options.length - 1; j >= 0; j--) {
-                                if (field.options[j].selected) {
-                                    value[value.length] = encodeURIComponent(field.name) + "=" + encodeURIComponent(field.options[j].value);
-                                }
-                            }
-                        } else if (field.type != 'checkbox' && field.type != 'radio' || field.checked) {
-                            value[value.length] = encodeURIComponent(field.name) + "=" + encodeURIComponent(field.value);
-                        }
-                    }
-                }
-            }
-
-            return value.join('&').replace(/%20/g, '+');
-        }
-    }]);
-
-    return AjaxHelpers;
+  return View;
 }();
 'use strict';
 
@@ -289,7 +255,7 @@ var ViewCampaigns = function () {
                     if (value !== '') {
                         container.innerHTML = '';
 
-                        object.CampaignsController.loadCampaignRegions(value).then(function (regions) {
+                        object.CampaignsController.loadRegionsFromOrganization(value).then(function (regions) {
                             container.innerHTML = container.innerHTML + '<option value="">Select A Region</option>';
 
                             regions.forEach(function (region) {
@@ -347,7 +313,7 @@ var ViewCampaigns = function () {
                     var endVal = end.value;
 
                     if (startVal.length > 9 && endVal.length > 9) {
-                        display.value = object.CampaignsController.calculateFlightLength(startVal, endVal) + ' Weeks';
+                        display.value = object.CampaignsController.calculateFlightLengthInWeeks(startVal, endVal) + ' Weeks';
                     }
                 };
             }
@@ -358,7 +324,7 @@ var ViewCampaigns = function () {
                     var endVal = end.value;
 
                     if (startVal.length > 9 && endVal.length > 9) {
-                        display.value = object.CampaignsController.calculateFlightLength(startVal, endVal) + ' Weeks';
+                        display.value = object.CampaignsController.calculateFlightLengthInWeeks(startVal, endVal) + ' Weeks';
                     }
                 };
             }
@@ -439,7 +405,7 @@ var ViewCampaigns = function () {
                 if (value !== '') {
                     container.innerHTML = container.innerHTML + '<option value="">Select Region</option>';
 
-                    object.CampaignsController.loadCampaignRegions(value).then(function (regions) {
+                    object.CampaignsController.loadRegionsFromOrganization(value).then(function (regions) {
                         regions.forEach(function (region) {
                             if (value == region.id) {
                                 container.innerHTML = container.innerHTML + '<option value="' + region.id + '" selected="selected">' + region.name + '</option>';
@@ -476,7 +442,7 @@ var ViewInvoices = function () {
 
         this.setRegionForInvoiceImporter();
         this.setInvoiceCampaigns();
-        this.addMoreInvoices();
+        // this.addMoreInvoices();
 
         this.CampaignsController = new CampaignsController();
     }
@@ -501,7 +467,7 @@ var ViewInvoices = function () {
                     container.innerHTML = '<option value="">Select Organization</option>';
 
                     if (value !== '') {
-                        object.CampaignsController.loadCampaignRegions(value).then(function (regions) {
+                        object.CampaignsController.loadRegionsFromOrganization(value).then(function (regions) {
                             container.innerHTML = '<option value="">Select Region</option>';
 
                             regions.forEach(function (region) {
@@ -536,7 +502,7 @@ var ViewInvoices = function () {
                     container.innerHTML = '<option value="">Select Region</option>';
 
                     if (value !== '') {
-                        object.CampaignsController.loadRegionCampaigns(value).then(function (campaigns) {
+                        object.CampaignsController.loadCampaignsFromRegion(value).then(function (campaigns) {
                             container.innerHTML = '<option value="">Select Campaign</option>';
 
                             campaigns.forEach(function (campaign) {
@@ -555,21 +521,23 @@ var ViewInvoices = function () {
         /**
          * Function that allows you to add more files to the invoice processor
          * so you can process multiple invoices as once.
+         *
+         * Currently not in use
          */
+        // addMoreInvoices() {
+        //     var inputs = document.querySelectorAll('.file-inputs');
+        //
+        //     $('.add-more-invoices').click(function () {
+        //         var lastInput = inputs.find('.columns:last-child').find('input');
+        //         var currentId = lastInput.attr('data-id');
+        //         var newId     = Number(currentId) + 1;
+        //
+        //         inputs.append('<div class="columns large-4 medium-4 small-12">' +
+        //                            '<input type="file" class="form-control" name="invoices-' + newId + '" data-id="' + newId + '" />' +
+        //                       '</div>');
+        //     });
+        // }
 
-    }, {
-        key: 'addMoreInvoices',
-        value: function addMoreInvoices() {
-            var inputs = document.querySelectorAll('.file-inputs');
-
-            $('.add-more-invoices').click(function () {
-                var lastInput = inputs.find('.columns:last-child').find('input');
-                var currentId = lastInput.attr('data-id');
-                var newId = Number(currentId) + 1;
-
-                inputs.append('<div class="columns large-4 medium-4 small-12">' + '<input type="file" class="form-control" name="invoices-' + newId + '" data-id="' + newId + '" />' + '</div>');
-            });
-        }
     }]);
 
     return ViewInvoices;
@@ -1183,4 +1151,212 @@ var ViewWorksheets = function () {
     }]);
 
     return ViewWorksheets;
+}();
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * ActionHelpers Class
+ *
+ * Contains all logic for functions that add additional functionality to actions
+ * taken on the entities for data. (DELETE, UPDATE, EDIT, etc...)
+ */
+var ActionHelpers = function () {
+    /**
+     * Registers all dependencies to the object, and creates checks
+     * before executing the setup functions on this object
+     */
+    function ActionHelpers() {
+        _classCallCheck(this, ActionHelpers);
+
+        this.confirmAction();
+    }
+
+    /**
+     * When a delete action is taken, this puts up a confirmation box
+     * before the action is persisted
+     *
+     * @param selector
+     * @param message
+     */
+
+
+    _createClass(ActionHelpers, [{
+        key: 'confirmAction',
+        value: function confirmAction(selector, message) {
+            var buttons = document.querySelectorAll(selector);
+
+            buttons.forEach(function (button) {
+                button.onclick = function (clicked) {
+                    clicked.preventDefault();
+
+                    var link = button.href;
+                    var confirmation = confirm(message);
+
+                    if (confirmation) {
+                        window.location = link;
+                    }
+                };
+            });
+        }
+
+        /**
+         * This checks the type of fields being sent and if it meets a certain
+         * criteria. A boolean value is returned, use in the serialize function
+         *
+         * @param field
+         * @returns {boolean}
+         */
+
+    }, {
+        key: 'fieldTypeCheck',
+        value: function fieldTypeCheck(field) {
+            var type = false;
+
+            if (field.name && !field.disabled && field.type != 'file' && field.type != 'reset' && field.type != 'submit' && field.type != 'button') {
+                type = true;
+            }
+
+            return type;
+        }
+    }]);
+
+    return ActionHelpers;
+}();
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * AjaxHelpers Class
+ *
+ * Contains functions that execute and help execute AJAX calls
+ */
+var AjaxHelpers = function () {
+    /**
+     * Registers all dependencies to the object, and creates checks
+     * before executing the setup functions on this object
+     */
+    function AjaxHelpers() {
+        _classCallCheck(this, AjaxHelpers);
+
+        this.ActionHelpers = new ActionHelpers();
+    }
+
+    /**
+     * Executes a GET call and returns an ASYNC promise for use inside
+     * of the requesting function
+     *
+     * @param url
+     * @returns {Promise}
+     */
+
+
+    _createClass(AjaxHelpers, [{
+        key: 'getCall',
+        value: function getCall(url) {
+            return new Promise(function (resolve, reject) {
+                var request = new XMLHttpRequest();
+
+                request.open('GET', url);
+
+                request.onload = function () {
+                    if (request.status === 200) {
+                        resolve(JSON.parse(request.response));
+                    } else {
+                        reject(new Error(request.statusText));
+                    }
+                };
+
+                request.onerror = function () {
+                    reject(new Error('Network Error'));
+                };
+
+                request.send();
+            });
+        }
+
+        /**
+         * Executes a POST call and returns an ASYNC promise for use inside
+         * of the requesting function
+         *
+         * @param url
+         * @param data
+         * @returns {Promise}
+         */
+
+    }, {
+        key: 'postCall',
+        value: function postCall(url, data) {
+            return new Promise(function (resolve, reject) {
+                var request = new XMLHttpRequest();
+
+                request.open('POST', url, true);
+                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+                request.onload = function () {
+                    if (request.status === 200) {
+                        resolve(JSON.parse(request.response));
+                    } else {
+                        reject(new Error(request.statusText));
+                    }
+                };
+
+                request.onerror = function () {
+                    reject(new Error('Network Error'));
+                };
+
+                request.send(data);
+            });
+        }
+
+        /**
+         * Serializes form data for use inside of the post call, works
+         * similarly to the jQuery serialize function
+         *
+         * @param form
+         * @returns {string}
+         */
+
+    }, {
+        key: 'serialize',
+        value: function serialize(form) {
+            var field = [];
+            var value = [];
+
+            if ((typeof form === 'undefined' ? 'undefined' : _typeof(form)) == 'object' && form.nodeName == "FORM") {
+                var length = form.elements.length;
+
+                for (var i = 0; i < length; i++) {
+                    field = form.elements[i];
+                    var fieldCheck = this.ActionHelpers.fieldTypeCheck(field);
+
+                    if (fieldCheck) {
+                        if (field.type == 'select-multiple') {
+                            var optionLength = form.elements[i].options.length - 1;
+
+                            for (var j = optionLength; j >= 0; j--) {
+                                if (field.options[j].selected) {
+                                    value[value.length] = encodeURIComponent(field.name) + "=" + encodeURIComponent(field.options[j].value);
+                                }
+                            }
+                        } else if (field.type != 'checkbox' && field.type != 'radio' || field.checked) {
+                            value[value.length] = encodeURIComponent(field.name) + "=" + encodeURIComponent(field.value);
+                        }
+                    }
+                }
+            }
+
+            return value.join('&').replace(/%20/g, '+');
+        }
+    }]);
+
+    return AjaxHelpers;
 }();

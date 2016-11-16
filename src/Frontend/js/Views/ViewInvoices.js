@@ -11,7 +11,7 @@ class ViewInvoices {
     constructor() {
         this.setRegionForInvoiceImporter();
         this.setInvoiceCampaigns();
-        this.addMoreInvoices();
+        // this.addMoreInvoices();
 
         this.CampaignsController = new CampaignsController();
     }
@@ -32,7 +32,7 @@ class ViewInvoices {
                 container.innerHTML = '<option value="">Select Organization</option>';
 
                 if (value !== '') {
-                    object.CampaignsController.loadCampaignRegions(value).then(function (regions) {
+                    object.CampaignsController.loadRegionsFromOrganization(value).then(function (regions) {
                         container.innerHTML = '<option value="">Select Region</option>';
 
                         regions.forEach( function (region) {
@@ -66,7 +66,7 @@ class ViewInvoices {
                 container.innerHTML = '<option value="">Select Region</option>';
 
                 if (value !== '') {
-                    object.CampaignsController.loadRegionCampaigns(value).then(function (campaigns) {
+                    object.CampaignsController.loadCampaignsFromRegion(value).then(function (campaigns) {
                         container.innerHTML = '<option value="">Select Campaign</option>';
 
                         campaigns.forEach(function (campaign) {
@@ -87,18 +87,20 @@ class ViewInvoices {
     /**
      * Function that allows you to add more files to the invoice processor
      * so you can process multiple invoices as once.
+     *
+     * Currently not in use
      */
-    addMoreInvoices() {
-        var inputs = document.querySelectorAll('.file-inputs');
-
-        $('.add-more-invoices').click(function () {
-            var lastInput = inputs.find('.columns:last-child').find('input');
-            var currentId = lastInput.attr('data-id');
-            var newId     = Number(currentId) + 1;
-
-            inputs.append('<div class="columns large-4 medium-4 small-12">' +
-                               '<input type="file" class="form-control" name="invoices-' + newId + '" data-id="' + newId + '" />' +
-                          '</div>');
-        });
-    }
+    // addMoreInvoices() {
+    //     var inputs = document.querySelectorAll('.file-inputs');
+    //
+    //     $('.add-more-invoices').click(function () {
+    //         var lastInput = inputs.find('.columns:last-child').find('input');
+    //         var currentId = lastInput.attr('data-id');
+    //         var newId     = Number(currentId) + 1;
+    //
+    //         inputs.append('<div class="columns large-4 medium-4 small-12">' +
+    //                            '<input type="file" class="form-control" name="invoices-' + newId + '" data-id="' + newId + '" />' +
+    //                       '</div>');
+    //     });
+    // }
 }
