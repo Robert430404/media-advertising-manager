@@ -74,7 +74,7 @@ class ViewOrganizations {
      * the data
      */
     loadCampaignsFromRegion() {
-        var object = this;
+        var object  = this;
         var regions = document.querySelectorAll('.region-selector');
 
         regions.forEach( function (region) {
@@ -85,6 +85,8 @@ class ViewOrganizations {
                 var regionName = region.innerHTML;
 
                 object.AjaxHelpers.getCall(endpoint).then( function (campaigns) {
+                    container.innerHTML = '<p class="align-center">There Are No Campaigns For This Region</p>';
+
                     if (campaigns.length > 0) {
                         container.innerHTML = '<h1 class="campaigns-title">' + regionName + ' Campaigns</h1>';
                         container.innerHTML = container.innerHTML +

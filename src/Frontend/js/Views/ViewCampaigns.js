@@ -18,7 +18,7 @@ class ViewCampaigns {
         this.setFlightWeeks();
 
         if (this.CampOverlay) {
-            this.createCampignFromDashboard();
+            this.createCampaignFromDashboard();
         }
     }
 
@@ -123,7 +123,7 @@ class ViewCampaigns {
      * Controls the modals display and sends the data off in an AJAX
      * call to get persisted into the database
      */
-    createCampignFromDashboard() {
+    createCampaignFromDashboard() {
         var object  = this;
         var overlay = document.querySelector('.campaigns-overlay');
         var button  = document.querySelector('.dash-create-campaign-button');

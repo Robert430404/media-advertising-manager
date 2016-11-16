@@ -260,7 +260,7 @@ var ViewCampaigns = function () {
         this.setFlightWeeks();
 
         if (this.CampOverlay) {
-            this.createCampignFromDashboard();
+            this.createCampaignFromDashboard();
         }
     }
 
@@ -373,8 +373,8 @@ var ViewCampaigns = function () {
          */
 
     }, {
-        key: 'createCampignFromDashboard',
-        value: function createCampignFromDashboard() {
+        key: 'createCampaignFromDashboard',
+        value: function createCampaignFromDashboard() {
             var object = this;
             var overlay = document.querySelector('.campaigns-overlay');
             var button = document.querySelector('.dash-create-campaign-button');
@@ -714,6 +714,8 @@ var ViewOrganizations = function () {
                     var regionName = region.innerHTML;
 
                     object.AjaxHelpers.getCall(endpoint).then(function (campaigns) {
+                        container.innerHTML = '<p class="align-center">There Are No Campaigns For This Region</p>';
+
                         if (campaigns.length > 0) {
                             container.innerHTML = '<h1 class="campaigns-title">' + regionName + ' Campaigns</h1>';
                             container.innerHTML = container.innerHTML + '<ul class="campaign-list"></ul>';
