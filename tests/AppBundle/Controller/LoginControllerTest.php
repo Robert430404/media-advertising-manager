@@ -6,6 +6,9 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class LoginControllerTest extends WebTestCase
 {
+    /**
+     * Test for 200 okay on login view
+     */
     public function testIndexAction()
     {
         $client = static::createClient();

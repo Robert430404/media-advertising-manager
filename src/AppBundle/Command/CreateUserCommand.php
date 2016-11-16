@@ -49,17 +49,16 @@ class CreateUserCommand extends ContainerAwareCommand
             ''
         ]);
 
-        $helper = $this->getHelper('question');
+        $helper   = $this->getHelper('question');
         $question = new ConfirmationQuestion('Is the user information correct (y/n): ', false);
 
         if (!$helper->ask($input, $output, $question)) {
             return;
         }
 
-        $user = new Users();
-
-        $encoder = $this->getContainer()->get('security.password_encoder');
-        $password = $input->getArgument('password');
+        $user            = new Users();
+        $encoder         = $this->getContainer()->get('security.password_encoder');
+        $password        = $input->getArgument('password');
         $encodedPassword = $encoder->encodePassword($user, $password);
 
         $user->setUsername($input->getArgument('username'));

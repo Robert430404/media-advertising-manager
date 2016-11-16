@@ -26,6 +26,7 @@ class LoginController extends Controller
 
     /**
      * Authenticates the User From Entity
+     *
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      *
