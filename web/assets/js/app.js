@@ -1,5 +1,11 @@
 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 /**
  * Waits for DOM content to be fully loaded and ready, and then
  * instantiates instances of all view objects so events can
@@ -15,17 +21,12 @@ document.addEventListener('DOMContentLoaded', function () {
     new ViewRegions();
     new ViewInvoices();
 }, false);
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 /**
  * CampaignsController Class
  *
  * Contains the data retrieval for the campaigns view
  */
+
 var CampaignsController = function () {
     /**
      * Registers all dependencies to the object, and creates checks
@@ -111,18 +112,14 @@ var CampaignsController = function () {
 
     return CampaignsController;
 }();
-"use strict";
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
  * WorksheetsController Class
  *
  * Contains logic that deals with worksheet data persistence
  */
+
+
 var WorksheetsController = function () {
     /**
      * Registers all dependencies to the object, and creates checks
@@ -159,18 +156,14 @@ var WorksheetsController = function () {
 
     return WorksheetsController;
 }();
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 /**
  * ActionHelpers Class
  *
  * Contains all logic for functions that add additional functionality to actions
  * taken on the entities for data. (DELETE, UPDATE, EDIT, etc...)
  */
+
+
 var ActionHelpers = function () {
     /**
      * Registers all dependencies to the object, and creates checks
@@ -235,19 +228,13 @@ var ActionHelpers = function () {
 
     return ActionHelpers;
 }();
-'use strict';
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 /**
  * AjaxHelpers Class
  *
  * Contains functions that execute and help execute AJAX calls
  */
+
+
 var AjaxHelpers = function () {
     /**
      * Registers all dependencies to the object, and creates checks
@@ -369,56 +356,48 @@ var AjaxHelpers = function () {
 
     return AjaxHelpers;
 }();
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 /**
  * View Class
  *
  * This is the "global" view class that contains initializations for
  * "global" view actions, like confirmation's and other messages
  */
+
+
 var View = function () {
-  /**
-   * Registers all dependencies to the object, and creates checks
-   * before executing the setup functions on this object
-   */
-  function View() {
-    _classCallCheck(this, View);
+    /**
+     * Registers all dependencies to the object, and creates checks
+     * before executing the setup functions on this object
+     */
+    function View() {
+        _classCallCheck(this, View);
 
-    this.ActionHelpers = new ActionHelpers();
+        this.ActionHelpers = new ActionHelpers();
 
-    this.registerDeleteConfirmation();
-  }
-
-  /**
-   * Registers a delete confirmation
-   */
-
-
-  _createClass(View, [{
-    key: 'registerDeleteConfirmation',
-    value: function registerDeleteConfirmation() {
-      this.ActionHelpers.confirmAction('a.delete-button', 'Do you really want to delete this?');
+        this.registerDeleteConfirmation();
     }
-  }]);
 
-  return View;
+    /**
+     * Registers a delete confirmation
+     */
+
+
+    _createClass(View, [{
+        key: 'registerDeleteConfirmation',
+        value: function registerDeleteConfirmation() {
+            this.ActionHelpers.confirmAction('a.delete-button', 'Do you really want to delete this?');
+        }
+    }]);
+
+    return View;
 }();
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 /**
  * ViewCampaigns Class
  *
  * Contains all logic that interacts with campaigns in the view
  */
+
+
 var ViewCampaigns = function () {
     /**
      * Registers all dependencies to the object, and creates checks
@@ -631,17 +610,13 @@ var ViewCampaigns = function () {
 
     return ViewCampaigns;
 }();
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 /**
  * ViewInvoices Class
  *
  * Contains all logic that interacts with invoices in the view
  */
+
+
 var ViewInvoices = function () {
     /**
      * Registers all dependencies to the object, and creates checks
@@ -752,17 +727,13 @@ var ViewInvoices = function () {
 
     return ViewInvoices;
 }();
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 /**
  * ViewNavigation Class
  *
  * Contains all logic that interacts with the navigation in the view
  */
+
+
 var ViewNavigation = function () {
     /**
      * Registers all dependencies to the object, and creates checks
@@ -796,17 +767,13 @@ var ViewNavigation = function () {
 
     return ViewNavigation;
 }();
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 /**
  * ViewOrganizations Class
  *
  * Contains all logic that interacts with organizations in the view
  */
+
+
 var ViewOrganizations = function () {
     /**
      * Registers all dependencies to the object, and creates checks
@@ -995,17 +962,13 @@ var ViewOrganizations = function () {
 
     return ViewOrganizations;
 }();
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 /**
  * ViewRegions Class
  *
  * Contains all logic that interacts with regions in the view
  */
+
+
 var ViewRegions = function () {
     /**
      * Registers all dependencies to the object, and creates checks
@@ -1078,17 +1041,13 @@ var ViewRegions = function () {
 
     return ViewRegions;
 }();
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 /**
  * ViewSpotTypes Class
  *
  * Contains all logic that interacts with spot types in the view
  */
+
+
 var ViewSpotTypes = function () {
     /**
      * Registers all dependencies to the object, and creates checks
@@ -1161,17 +1120,13 @@ var ViewSpotTypes = function () {
 
     return ViewSpotTypes;
 }();
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 /**
  * ViewWorksheets Class
  *
  * Contains all logic that interacts with worksheets in the view
  */
+
+
 var ViewWorksheets = function () {
     /**
      * Registers all dependencies to the object, and creates checks

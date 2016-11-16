@@ -13,10 +13,10 @@ gulp.task('styles', function() {
 gulp.task('scripts', function () {
     return gulp
             .src('src/Frontend/**/*.js')
+            .pipe(concat('app.js'))
             .pipe(babel({
                 presets: ['es2015']
             }))
-            .pipe(concat('app.js'))
             .pipe(gulp.dest('web/assets/js'))
 });
 
