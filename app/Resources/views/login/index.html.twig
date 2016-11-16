@@ -31,6 +31,7 @@
                     </div>
                 </div>
             <hr />
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
             <div class="form-group row">
                 <div class="column large-12 medium-12 small-12">
                     <input type="submit" class="submit form-button" id="submit" value="submit" name="submit" />
