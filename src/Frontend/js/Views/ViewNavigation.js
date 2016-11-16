@@ -1,4 +1,13 @@
+/**
+ * ViewNavigation Class
+ *
+ * Contains all logic that interacts with the navigation in the view
+ */
 class ViewNavigation {
+    /**
+     * Registers all dependencies to the object, and creates checks
+     * before executing the setup functions on this object
+     */
     constructor() {
         this.navigationToggle();
     }

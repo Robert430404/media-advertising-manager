@@ -1,3 +1,8 @@
+/**
+ * ViewCampaigns Class
+ *
+ * Contains all logic that interacts with campaigns in the view
+ */
 class ViewCampaigns {
     /**
      * Registers all dependencies to the object, and creates checks

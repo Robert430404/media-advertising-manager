@@ -1,43 +1,63 @@
+/**
+ * ViewWorksheets Class
+ *
+ * Contains all logic that interacts with worksheets in the view
+ */
 class ViewWorksheets {
+    /**
+     * Registers all dependencies to the object, and creates checks
+     * before executing the setup functions on this object
+     */
     constructor() {
-        this.persistAction();
-        this.expandSpotDetails();
+        this.Worksheets = new WorksheetsController();
+
+        this.persistWeekInformationForWorksheet();
+        this.toggleProgramDetails();
         this.setInnerOverflow();
 
         if (document.querySelector('.info-inner')) {
-            this.setSpotTotals();
+            this.createTotalCalculations();
         }
-
-        this.Worksheets = new WorksheetsController();
     }
 
-    persistAction() {
-        var object = this;
+    /**
+     * This action persists the week information to the database and
+     * provides visual feedback to the user
+     *
+     * Makes an AJAX call to the /api/v1/worksheet/' + id + '/update
+     * endpoint to persist the data
+     */
+    persistWeekInformationForWorksheet() {
+        var object  = this;
+        var buttons = document.querySelectorAll('.update-week-information');
 
-        $('.update-week-information').click(function () {
-            var button = $(this);
-            var id = $(this).attr('data-worksheet');
-            var response = object.Worksheets.persistWorksheetWeekInformation(id);
+        buttons.forEach( function (button) {
+            button.onclick = function (clicked) {
+                clicked.preventDefault();
 
-            button.parent().parent().toggleClass('loading');
+                var id          = button.dataset.worksheet;
+                var worksheet   = button.parentNode.parentNode;
+                var wsClasses   = worksheet.classList;
+                var infoRequest = object.Worksheets.persistWorksheetWeekInformation(id);
 
-            if(response) {
-                response.then(function (resp) {
+                wsClasses.toggle('loading');
+
+                infoRequest.then( function (resp) {
                     setTimeout(function () {
-                        button.parent().parent().toggleClass('loading');
+                        wsClasses.toggle('loading');
 
-                        if(resp.success == true) {
-                            button.parent().parent().toggleClass('success');
+                        if (resp.success == true) {
+                            wsClasses.toggle('success');
 
                             setTimeout(function () {
-                                button.parent().parent().toggleClass('success');
+                                wsClasses.toggle('success');
                             }, 700);
                         }
                         else {
-                            button.parent().parent().toggleClass('failure');
+                            wsClasses.toggle('failure');
 
                             setTimeout(function () {
-                                button.parent().parent().toggleClass('failure');
+                                wsClasses.toggle('failure');
                             }, 700);
                         }
                     }, 100);
@@ -46,58 +66,75 @@ class ViewWorksheets {
         });
     }
 
+    /**
+     * Sets the inner overflow of the horizontal scrolling section of the
+     * week information interface so you can scroll through all of the
+     * dates inside of the flight run to enter spot counts
+     */
     setInnerOverflow() {
-        var container = $('.info-inner');
+        var containers = document.querySelectorAll('.info-inner');
 
-        container.each(function () {
-            var dates = $(this).find('.spot-column');
-            var colWidth = dates.outerWidth();
+        containers.forEach( function (container) {
+            var dates     = container.querySelectorAll('.spot-column');
+            var colWidth  = dates[0].offsetWidth;
             var dateCount = dates.length;
 
-            $(this).find('.scrollable').css({
-                'width': colWidth * dateCount + 'px',
+            container.querySelector('.scrollable').style.width = (colWidth * dateCount) + 'px';
+        });
+    }
+
+    /**
+     * Sets the spot total for each program (row) of the buy
+     */
+    createTotalCalculations() {
+        var object     = this;
+        var containers = document.querySelectorAll('.info-inner');
+
+        containers.forEach( function (container) {
+            var inputs  = container.querySelectorAll('input.date-count');
+            var columns = container.querySelectorAll('.spot-column');
+
+            inputs.forEach( function (input) {
+                object.setWeeklyTotals(container, columns, input.dataset.program);
+
+                input.onkeyup = function () {
+                    object.setWeeklyTotals(container, columns, this.dataset.program);
+                }
             });
         });
     }
 
-    setSpotTotals() {
-        var object     = this;
-        var containers = document.querySelectorAll('.info-inner');
+    /**
+     * Sets the weekly totals for the buy
+     *
+     * @param container
+     * @param columns
+     * @param programId
+     */
+    setWeeklyTotals(container, columns, programId) {
+        columns.forEach( function (column) {
+            var inputs = column.querySelectorAll('input');
+            var sum    = 0;
 
-        containers.forEach( function (element) {
-            console.log(element);
+            inputs.forEach( function (input) {
+                sum = Number(input.value) + Number(sum);
+            });
 
-            var inputs  = element.querySelectorAll('input.date-count');
-            var columns = element.querySelectorAll('.spot-column');
-
-            for (var b = 0; b < inputs.length; b++) {
-                object.setWeekTotals(element, columns, inputs[b].dataset.program);
-
-                inputs[b].onkeyup = function () {
-                    object.setWeekTotals(element, columns, this.dataset.program);
-                }
+            if (column.querySelector('.week-total .total')) {
+                column.querySelector('.week-total .total').innerHTML = sum;
             }
         });
+
+        this.setWholeBuyTotals(container, programId);
     }
 
-    setWeekTotals(container, columns, programId) {
-        for (var c = 0; c < columns.length; c++) {
-            var inputs = columns[c].querySelectorAll('input');
-            var sum = 0;
-
-            for (var i = 0; i < inputs.length; i++) {
-                sum = Number(inputs[i].value) + Number(sum);
-            }
-
-            if (columns[c].querySelector('.week-total .total')) {
-                columns[c].querySelector('.week-total .total').innerHTML = sum;
-            }
-        }
-
-        this.setBuyTotals(container, programId);
-    }
-
-    setBuyTotals(container, programId) {
+    /**
+     * Sets the totals for the entire program (row)
+     *
+     * @param container
+     * @param programId
+     */
+    setWholeBuyTotals(container, programId) {
         var allInputs = container.querySelectorAll('input.date-count');
         var sectionedInputs = [];
         var count = 0;
@@ -115,12 +152,21 @@ class ViewWorksheets {
         document.querySelector('.spot-date-total .program-' + programId + '-total').innerHTML = count;
     }
 
-    expandSpotDetails() {
-        var object = this;
+    /**
+     * Toggles the display of the program details
+     */
+    toggleProgramDetails() {
+        var expanders = document.querySelectorAll('.extra-detail-expander');
 
-        $('.extra-detail-expander').click(function () {
-            $(this).toggleClass('rotated');
-            $(this).parent().find('.detail-wrapper').slideToggle();
+        expanders.forEach( function (expander) {
+            expander.onclick = function () {
+                var classList = expander.classList;
+                var wrapper   = expander.parentNode.querySelector('.detail-wrapper');
+                var wrapStyle = wrapper.style.display;
+
+                classList.toggle('rotated');
+                wrapper.style.display = wrapStyle === 'block' ? '' : 'block';
+            }
         });
     }
 }

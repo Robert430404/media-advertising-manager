@@ -1,36 +1,48 @@
+/**
+ * ViewInvoices Class
+ *
+ * Contains all logic that interacts with invoices in the view
+ */
 class ViewInvoices {
+    /**
+     * Registers all dependencies to the object, and creates checks
+     * before executing the setup functions on this object
+     */
     constructor() {
-        this.setInvoiceRegions();
+        this.setRegionForInvoiceImporter();
         this.setInvoiceCampaigns();
         this.addMoreInvoices();
 
         this.CampaignsController = new CampaignsController();
     }
 
-    setInvoiceRegions() {
-        var object = this;
-        var target = document.querySelector('#organizations');
-        var container = $('#regions');
+    /**
+     * Sets the region for the invoice importer after you've selected your
+     * organization, loads the regions using the campaigns controller
+     */
+    setRegionForInvoiceImporter() {
+        var object    = this;
+        var target    = document.querySelector('#organizations');
+        var container = document.querySelector('#regions');
 
         if (target) {
             target.onchange = function () {
                 var value = this.value;
 
-                container.empty();
+                container.innerHTML = '<option value="">Select Organization</option>';
 
-                if (value == '') {
-                    container.append('<option value="">Select Organization</option>');
-                }
-                else {
-                    object.CampaignsController.loadCampaignRegions(value).then(function (resp) {
-                        container.append('<option value="">Select Region</option>');
+                if (value !== '') {
+                    object.CampaignsController.loadCampaignRegions(value).then(function (regions) {
+                        container.innerHTML = '<option value="">Select Region</option>';
 
-                        for (var i = 0; i < resp.length; i++) {
-                            container.append('<option value="' + resp[i].id + '">' + resp[i].name + '</option>');
-                        }
+                        regions.forEach( function (region) {
+                            container.innerHTML = container.innerHTML +
+                                                  '<option value="' + region.id + '">' + region.name + '</option>';
+                        });
 
-                        if (resp.length == 0) {
-                            container.append('<option value="">No Available Regions</option>');
+                        if (regions.length == 0) {
+                            container.innerHTML = container.innerHTML +
+                                                  '<option value="">No Available Regions</option>';
                         }
                     });
                 }
@@ -38,30 +50,33 @@ class ViewInvoices {
         }
     }
 
+    /**
+     * Sets the campaigns for the invoice importer after you've selected your
+     * region, loads the campaigns using the campaigns controller
+     */
     setInvoiceCampaigns() {
-        var object = this;
-        var target = document.querySelector('#regions');
-        var container = $('#campaigns');
+        var object    = this;
+        var target    = document.querySelector('#regions');
+        var container = document.querySelector('#campaigns');
 
         if (target) {
             target.onchange = function () {
                 var value = this.value;
 
-                container.empty();
+                container.innerHTML = '<option value="">Select Region</option>';
 
-                if (value == '') {
-                    container.append('<option value="">Select Organization</option>');
-                }
-                else {
-                    object.CampaignsController.loadRegionCampaigns(value).then(function (resp) {
-                        container.append('<option value="">Select Campaign</option>');
+                if (value !== '') {
+                    object.CampaignsController.loadRegionCampaigns(value).then(function (campaigns) {
+                        container.innerHTML = '<option value="">Select Campaign</option>';
 
-                        for (var i = 0; i < resp.length; i++) {
-                            container.append('<option value="' + resp[i].id + '">' + resp[i].name + '</option>');
-                        }
+                        campaigns.forEach(function (campaign) {
+                            container.innerHTML = container.innerHTML +
+                                                  '<option value="' + campaign.id + '">' + campaign.name + '</option>';
+                        });
 
-                        if (resp.length == 0) {
-                            container.append('<option value="">No Available Campaigns</option>');
+                        if (campaigns.length == 0) {
+                            container.innerHTML = container.innerHTML +
+                                                  '<option value="">No Available Campaigns</option>';
                         }
                     });
                 }
@@ -69,8 +84,12 @@ class ViewInvoices {
         }
     }
 
+    /**
+     * Function that allows you to add more files to the invoice processor
+     * so you can process multiple invoices as once.
+     */
     addMoreInvoices() {
-        var inputs = $('.file-inputs');
+        var inputs = document.querySelectorAll('.file-inputs');
 
         $('.add-more-invoices').click(function () {
             var lastInput = inputs.find('.columns:last-child').find('input');

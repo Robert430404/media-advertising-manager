@@ -69,18 +69,35 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * WorksheetsController Class
+ *
+ * Contains logic that deals with worksheet data persistence
+ */
 var WorksheetsController = function () {
+    /**
+     * Registers all dependencies to the object, and creates checks
+     * before executing the setup functions on this object
+     */
     function WorksheetsController() {
         _classCallCheck(this, WorksheetsController);
 
         this.AjaxHelpers = new AjaxHelpers();
     }
 
+    /**
+     * Persists this data into the database
+     *
+     * @param id
+     * @returns {*}
+     */
+
+
     _createClass(WorksheetsController, [{
         key: 'persistWorksheetWeekInformation',
         value: function persistWorksheetWeekInformation(id) {
-            var form = $('.worksheet-counts-' + id);
-            var data = form.serialize();
+            var form = document.querySelector('.worksheet-counts-' + id);
+            var data = this.AjaxHelpers.serialize(form);
             var endpoint = '/api/v1/worksheet/' + id + '/update';
 
             if (data == '') {
@@ -221,6 +238,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * ViewCampaigns Class
+ *
+ * Contains all logic that interacts with campaigns in the view
+ */
 var ViewCampaigns = function () {
     /**
      * Registers all dependencies to the object, and creates checks
@@ -439,83 +461,106 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * ViewInvoices Class
+ *
+ * Contains all logic that interacts with invoices in the view
+ */
 var ViewInvoices = function () {
+    /**
+     * Registers all dependencies to the object, and creates checks
+     * before executing the setup functions on this object
+     */
     function ViewInvoices() {
         _classCallCheck(this, ViewInvoices);
 
-        this.setInvoiceRegions();
+        this.setRegionForInvoiceImporter();
         this.setInvoiceCampaigns();
         this.addMoreInvoices();
 
         this.CampaignsController = new CampaignsController();
     }
 
+    /**
+     * Sets the region for the invoice importer after you've selected your
+     * organization, loads the regions using the campaigns controller
+     */
+
+
     _createClass(ViewInvoices, [{
-        key: 'setInvoiceRegions',
-        value: function setInvoiceRegions() {
+        key: 'setRegionForInvoiceImporter',
+        value: function setRegionForInvoiceImporter() {
             var object = this;
             var target = document.querySelector('#organizations');
-            var container = $('#regions');
+            var container = document.querySelector('#regions');
 
             if (target) {
                 target.onchange = function () {
                     var value = this.value;
 
-                    container.empty();
+                    container.innerHTML = '<option value="">Select Organization</option>';
 
-                    if (value == '') {
-                        container.append('<option value="">Select Organization</option>');
-                    } else {
-                        object.CampaignsController.loadCampaignRegions(value).then(function (resp) {
-                            container.append('<option value="">Select Region</option>');
+                    if (value !== '') {
+                        object.CampaignsController.loadCampaignRegions(value).then(function (regions) {
+                            container.innerHTML = '<option value="">Select Region</option>';
 
-                            for (var i = 0; i < resp.length; i++) {
-                                container.append('<option value="' + resp[i].id + '">' + resp[i].name + '</option>');
-                            }
+                            regions.forEach(function (region) {
+                                container.innerHTML = container.innerHTML + '<option value="' + region.id + '">' + region.name + '</option>';
+                            });
 
-                            if (resp.length == 0) {
-                                container.append('<option value="">No Available Regions</option>');
+                            if (regions.length == 0) {
+                                container.innerHTML = container.innerHTML + '<option value="">No Available Regions</option>';
                             }
                         });
                     }
                 };
             }
         }
+
+        /**
+         * Sets the campaigns for the invoice importer after you've selected your
+         * region, loads the campaigns using the campaigns controller
+         */
+
     }, {
         key: 'setInvoiceCampaigns',
         value: function setInvoiceCampaigns() {
             var object = this;
             var target = document.querySelector('#regions');
-            var container = $('#campaigns');
+            var container = document.querySelector('#campaigns');
 
             if (target) {
                 target.onchange = function () {
                     var value = this.value;
 
-                    container.empty();
+                    container.innerHTML = '<option value="">Select Region</option>';
 
-                    if (value == '') {
-                        container.append('<option value="">Select Organization</option>');
-                    } else {
-                        object.CampaignsController.loadRegionCampaigns(value).then(function (resp) {
-                            container.append('<option value="">Select Campaign</option>');
+                    if (value !== '') {
+                        object.CampaignsController.loadRegionCampaigns(value).then(function (campaigns) {
+                            container.innerHTML = '<option value="">Select Campaign</option>';
 
-                            for (var i = 0; i < resp.length; i++) {
-                                container.append('<option value="' + resp[i].id + '">' + resp[i].name + '</option>');
-                            }
+                            campaigns.forEach(function (campaign) {
+                                container.innerHTML = container.innerHTML + '<option value="' + campaign.id + '">' + campaign.name + '</option>';
+                            });
 
-                            if (resp.length == 0) {
-                                container.append('<option value="">No Available Campaigns</option>');
+                            if (campaigns.length == 0) {
+                                container.innerHTML = container.innerHTML + '<option value="">No Available Campaigns</option>';
                             }
                         });
                     }
                 };
             }
         }
+
+        /**
+         * Function that allows you to add more files to the invoice processor
+         * so you can process multiple invoices as once.
+         */
+
     }, {
         key: 'addMoreInvoices',
         value: function addMoreInvoices() {
-            var inputs = $('.file-inputs');
+            var inputs = document.querySelectorAll('.file-inputs');
 
             $('.add-more-invoices').click(function () {
                 var lastInput = inputs.find('.columns:last-child').find('input');
@@ -535,7 +580,16 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * ViewNavigation Class
+ *
+ * Contains all logic that interacts with the navigation in the view
+ */
 var ViewNavigation = function () {
+    /**
+     * Registers all dependencies to the object, and creates checks
+     * before executing the setup functions on this object
+     */
     function ViewNavigation() {
         _classCallCheck(this, ViewNavigation);
 
@@ -570,6 +624,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * ViewOrganizations Class
+ *
+ * Contains all logic that interacts with organizations in the view
+ */
 var ViewOrganizations = function () {
     /**
      * Registers all dependencies to the object, and creates checks
@@ -749,7 +808,7 @@ var ViewOrganizations = function () {
                     sidebar.innerHTML = sidebar.innerHTML + '<li>' + '<label data-id="' + organization.id + '" data-name="' + organization.name + '">' + organization.name + '<i class="fa fa-chevron-right"></i>' + '</label>' + '</li>';
                 });
 
-                object.loadRegionsFromOrganization();
+                object.loadRegionsFromOrganizationForDashboard();
             });
         }
     }]);
@@ -762,55 +821,78 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * ViewRegions Class
+ *
+ * Contains all logic that interacts with regions in the view
+ */
 var ViewRegions = function () {
+    /**
+     * Registers all dependencies to the object, and creates checks
+     * before executing the setup functions on this object
+     */
     function ViewRegions() {
         _classCallCheck(this, ViewRegions);
 
-        this.dashboardCreateRegion();
-
         this.AjaxHelpers = new AjaxHelpers();
+        this.RegionOverlay = document.querySelector('.regions-overlay');
+
+        if (this.RegionOverlay) {
+            this.dashboardCreateRegion();
+        }
     }
+
+    /**
+     * Brings the create region form into view and persists the new
+     * region on the forms submission
+     *
+     * Controls the modals display and sends the data off in an AJAX
+     * call to get persisted into the database
+     */
+
 
     _createClass(ViewRegions, [{
         key: 'dashboardCreateRegion',
         value: function dashboardCreateRegion() {
             var object = this;
-            var overlay = $('.regions-overlay');
-            var button = $('.dash-create-regions-button');
-            var close = $('.regions-overlay .close');
-            var form = $('.regions-overlay form');
+            var overlay = document.querySelector('.regions-overlay');
+            var button = document.querySelector('.dash-create-regions-button');
+            var close = overlay.querySelector('.close');
+            var form = overlay.querySelector('form');
             var endpoint = '/api/v1/regions/new';
 
-            button.click(function () {
-                overlay.fadeIn();
-            });
+            button.onclick = function () {
+                overlay.style.display = 'block';
+            };
 
-            close.click(function () {
-                overlay.fadeOut();
-            });
+            close.onclick = function () {
+                overlay.style.display = 'none';
+            };
 
-            form.submit(function (e) {
-                e.preventDefault();
+            form.onsubmit = function (submitted) {
+                submitted.preventDefault();
 
-                var data = $(this).serialize();
+                var data = object.AjaxHelpers.serialize(form);
 
                 object.AjaxHelpers.postCall(endpoint, data).then(function (resp) {
+                    var formClasses = form.classList;
+
                     if (resp.success == true) {
-                        form[0].reset();
-                        form.addClass('successful');
+                        form.reset();
+                        formClasses.add('successful');
 
                         setTimeout(function () {
-                            form.removeClass('successful');
+                            formClasses.remove('successful');
                         }, 1000);
                     } else {
-                        form.addClass('failure');
+                        formClasses.add('failure');
 
                         setTimeout(function () {
-                            form.removeClass('failure');
+                            formClasses.remove('failure');
                         }, 1000);
                     }
                 });
-            });
+            };
         }
     }]);
 
@@ -822,55 +904,78 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * ViewSpotTypes Class
+ *
+ * Contains all logic that interacts with spot types in the view
+ */
 var ViewSpotTypes = function () {
+    /**
+     * Registers all dependencies to the object, and creates checks
+     * before executing the setup functions on this object
+     */
     function ViewSpotTypes() {
         _classCallCheck(this, ViewSpotTypes);
 
-        this.dashboardCreateSpotType();
-
         this.AjaxHelpers = new AjaxHelpers();
+        this.SpotTypeOverlay = document.querySelector('.spot-types-overlay');
+
+        if (this.SpotTypeOverlay) {
+            this.createSpotTypeFromDashboard();
+        }
     }
 
+    /**
+     * Brings the create spot type form into view and persists the new
+     * spot type on the forms submission
+     *
+     * Controls the modals display and sends the data off in an AJAX
+     * call to get persisted into the database
+     */
+
+
     _createClass(ViewSpotTypes, [{
-        key: 'dashboardCreateSpotType',
-        value: function dashboardCreateSpotType() {
+        key: 'createSpotTypeFromDashboard',
+        value: function createSpotTypeFromDashboard() {
             var object = this;
-            var overlay = $('.spot-types-overlay');
-            var button = $('.dash-create-spot-types-button');
-            var close = $('.spot-types-overlay .close');
-            var form = $('.spot-types-overlay form');
+            var overlay = document.querySelector('.spot-types-overlay');
+            var button = document.querySelector('.dash-create-spot-types-button');
+            var close = overlay.querySelector('.close');
+            var form = overlay.querySelector('form');
             var endpoint = '/api/v1/spot-types/new';
 
-            button.click(function () {
-                overlay.fadeIn();
-            });
+            button.onclick = function () {
+                overlay.style.display = 'block';
+            };
 
-            close.click(function () {
-                overlay.fadeOut();
-            });
+            close.onclick = function () {
+                overlay.style.display = 'none';
+            };
 
-            form.submit(function (e) {
-                e.preventDefault();
+            form.onsubmit = function (submitted) {
+                submitted.preventDefault();
 
-                var data = $(this).serialize();
+                var data = object.AjaxHelpers.serialize(form);
 
                 object.AjaxHelpers.postCall(endpoint, data).then(function (resp) {
+                    var formClasses = form.classList;
+
                     if (resp.success == true) {
-                        form[0].reset();
-                        form.addClass('successful');
+                        form.reset();
+                        formClasses.add('successful');
 
                         setTimeout(function () {
-                            form.removeClass('successful');
+                            formClasses.remove('successful');
                         }, 1000);
                     } else {
-                        form.addClass('failure');
+                        formClasses.add('failure');
 
                         setTimeout(function () {
-                            form.removeClass('failure');
+                            formClasses.remove('failure');
                         }, 1000);
                     }
                 });
-            });
+            };
         }
     }]);
 
@@ -882,113 +987,160 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * ViewWorksheets Class
+ *
+ * Contains all logic that interacts with worksheets in the view
+ */
 var ViewWorksheets = function () {
+    /**
+     * Registers all dependencies to the object, and creates checks
+     * before executing the setup functions on this object
+     */
     function ViewWorksheets() {
         _classCallCheck(this, ViewWorksheets);
 
-        this.persistAction();
-        this.expandSpotDetails();
+        this.Worksheets = new WorksheetsController();
+
+        this.persistWeekInformationForWorksheet();
+        this.toggleProgramDetails();
         this.setInnerOverflow();
 
         if (document.querySelector('.info-inner')) {
-            this.setSpotTotals();
+            this.createTotalCalculations();
         }
-
-        this.Worksheets = new WorksheetsController();
     }
 
+    /**
+     * This action persists the week information to the database and
+     * provides visual feedback to the user
+     *
+     * Makes an AJAX call to the /api/v1/worksheet/' + id + '/update
+     * endpoint to persist the data
+     */
+
+
     _createClass(ViewWorksheets, [{
-        key: 'persistAction',
-        value: function persistAction() {
+        key: 'persistWeekInformationForWorksheet',
+        value: function persistWeekInformationForWorksheet() {
             var object = this;
+            var buttons = document.querySelectorAll('.update-week-information');
 
-            $('.update-week-information').click(function () {
-                var button = $(this);
-                var id = $(this).attr('data-worksheet');
-                var response = object.Worksheets.persistWorksheetWeekInformation(id);
+            buttons.forEach(function (button) {
+                button.onclick = function (clicked) {
+                    clicked.preventDefault();
 
-                button.parent().parent().toggleClass('loading');
+                    var id = button.dataset.worksheet;
+                    var worksheet = button.parentNode.parentNode;
+                    var wsClasses = worksheet.classList;
+                    var infoRequest = object.Worksheets.persistWorksheetWeekInformation(id);
 
-                if (response) {
-                    response.then(function (resp) {
+                    wsClasses.toggle('loading');
+
+                    infoRequest.then(function (resp) {
                         setTimeout(function () {
-                            button.parent().parent().toggleClass('loading');
+                            wsClasses.toggle('loading');
 
                             if (resp.success == true) {
-                                button.parent().parent().toggleClass('success');
+                                wsClasses.toggle('success');
 
                                 setTimeout(function () {
-                                    button.parent().parent().toggleClass('success');
+                                    wsClasses.toggle('success');
                                 }, 700);
                             } else {
-                                button.parent().parent().toggleClass('failure');
+                                wsClasses.toggle('failure');
 
                                 setTimeout(function () {
-                                    button.parent().parent().toggleClass('failure');
+                                    wsClasses.toggle('failure');
                                 }, 700);
                             }
                         }, 100);
                     });
-                }
+                };
             });
         }
+
+        /**
+         * Sets the inner overflow of the horizontal scrolling section of the
+         * week information interface so you can scroll through all of the
+         * dates inside of the flight run to enter spot counts
+         */
+
     }, {
         key: 'setInnerOverflow',
         value: function setInnerOverflow() {
-            var container = $('.info-inner');
+            var containers = document.querySelectorAll('.info-inner');
 
-            container.each(function () {
-                var dates = $(this).find('.spot-column');
-                var colWidth = dates.outerWidth();
+            containers.forEach(function (container) {
+                var dates = container.querySelectorAll('.spot-column');
+                var colWidth = dates[0].offsetWidth;
                 var dateCount = dates.length;
 
-                $(this).find('.scrollable').css({
-                    'width': colWidth * dateCount + 'px'
-                });
+                container.querySelector('.scrollable').style.width = colWidth * dateCount + 'px';
             });
         }
+
+        /**
+         * Sets the spot total for each program (row) of the buy
+         */
+
     }, {
-        key: 'setSpotTotals',
-        value: function setSpotTotals() {
+        key: 'createTotalCalculations',
+        value: function createTotalCalculations() {
             var object = this;
             var containers = document.querySelectorAll('.info-inner');
 
-            containers.forEach(function (element) {
-                console.log(element);
+            containers.forEach(function (container) {
+                var inputs = container.querySelectorAll('input.date-count');
+                var columns = container.querySelectorAll('.spot-column');
 
-                var inputs = element.querySelectorAll('input.date-count');
-                var columns = element.querySelectorAll('.spot-column');
+                inputs.forEach(function (input) {
+                    object.setWeeklyTotals(container, columns, input.dataset.program);
 
-                for (var b = 0; b < inputs.length; b++) {
-                    object.setWeekTotals(element, columns, inputs[b].dataset.program);
-
-                    inputs[b].onkeyup = function () {
-                        object.setWeekTotals(element, columns, this.dataset.program);
+                    input.onkeyup = function () {
+                        object.setWeeklyTotals(container, columns, this.dataset.program);
                     };
-                }
+                });
             });
         }
+
+        /**
+         * Sets the weekly totals for the buy
+         *
+         * @param container
+         * @param columns
+         * @param programId
+         */
+
     }, {
-        key: 'setWeekTotals',
-        value: function setWeekTotals(container, columns, programId) {
-            for (var c = 0; c < columns.length; c++) {
-                var inputs = columns[c].querySelectorAll('input');
+        key: 'setWeeklyTotals',
+        value: function setWeeklyTotals(container, columns, programId) {
+            columns.forEach(function (column) {
+                var inputs = column.querySelectorAll('input');
                 var sum = 0;
 
-                for (var i = 0; i < inputs.length; i++) {
-                    sum = Number(inputs[i].value) + Number(sum);
-                }
+                inputs.forEach(function (input) {
+                    sum = Number(input.value) + Number(sum);
+                });
 
-                if (columns[c].querySelector('.week-total .total')) {
-                    columns[c].querySelector('.week-total .total').innerHTML = sum;
+                if (column.querySelector('.week-total .total')) {
+                    column.querySelector('.week-total .total').innerHTML = sum;
                 }
-            }
+            });
 
-            this.setBuyTotals(container, programId);
+            this.setWholeBuyTotals(container, programId);
         }
+
+        /**
+         * Sets the totals for the entire program (row)
+         *
+         * @param container
+         * @param programId
+         */
+
     }, {
-        key: 'setBuyTotals',
-        value: function setBuyTotals(container, programId) {
+        key: 'setWholeBuyTotals',
+        value: function setWholeBuyTotals(container, programId) {
             var allInputs = container.querySelectorAll('input.date-count');
             var sectionedInputs = [];
             var count = 0;
@@ -1005,14 +1157,25 @@ var ViewWorksheets = function () {
 
             document.querySelector('.spot-date-total .program-' + programId + '-total').innerHTML = count;
         }
-    }, {
-        key: 'expandSpotDetails',
-        value: function expandSpotDetails() {
-            var object = this;
 
-            $('.extra-detail-expander').click(function () {
-                $(this).toggleClass('rotated');
-                $(this).parent().find('.detail-wrapper').slideToggle();
+        /**
+         * Toggles the display of the program details
+         */
+
+    }, {
+        key: 'toggleProgramDetails',
+        value: function toggleProgramDetails() {
+            var expanders = document.querySelectorAll('.extra-detail-expander');
+
+            expanders.forEach(function (expander) {
+                expander.onclick = function () {
+                    var classList = expander.classList;
+                    var wrapper = expander.parentNode.querySelector('.detail-wrapper');
+                    var wrapStyle = wrapper.style.display;
+
+                    classList.toggle('rotated');
+                    wrapper.style.display = wrapStyle === 'block' ? '' : 'block';
+                };
             });
         }
     }]);

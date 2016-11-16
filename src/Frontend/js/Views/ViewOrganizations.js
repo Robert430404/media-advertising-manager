@@ -1,3 +1,8 @@
+/**
+ * ViewOrganizations Class
+ *
+ * Contains all logic that interacts with organizations in the view
+ */
 class ViewOrganizations {
     /**
      * Registers all dependencies to the object, and creates checks
@@ -182,7 +187,7 @@ class ViewOrganizations {
                                     '</li>';
             });
 
-            object.loadRegionsFromOrganization();
+            object.loadRegionsFromOrganizationForDashboard();
         });
     }
 }
