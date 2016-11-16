@@ -23,18 +23,20 @@ class ActionHelpers {
     confirmAction(selector, message) {
         var buttons = document.querySelectorAll(selector);
 
-        buttons.forEach( function (button) {
-            button.onclick = function (clicked) {
-                clicked.preventDefault();
+        if (buttons) {
+            buttons.forEach( function (button) {
+                button.onclick = function (clicked) {
+                    clicked.preventDefault();
 
-                var link         = button.href;
-                var confirmation = confirm(message);
+                    var link         = button.href;
+                    var confirmation = confirm(message);
 
-                if (confirmation) {
-                    window.location = link;
-                }
-            };
-        });
+                    if (confirmation) {
+                        window.location = link;
+                    }
+                };
+            });
+        }
     }
 
     /**
