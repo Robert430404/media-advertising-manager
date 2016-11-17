@@ -15,54 +15,62 @@
                 </h2>
                 <div class="breakdown-wrapper row">
                     <div class="columns large-12 medium-12 small-12">
-                        {% for spot in spots  %}
-                            {% for row in spot %}
-                                {% if row.typeId == 41 %}
-                                    <div>{{ row.totalSpots }}</div>
-                                    <div class="row">
-                                        <div class="columns large-2 medium-2 small-12">
-                                            Date Ran
+                        <div class="invoice-table">
+                            {% for spot in spots  %}
+                                {% for row in spot %}
+                                    {% if row.typeId == 41 %}
+                                        <div class="row invoice-section-information">
+                                            <div class="columns large-12 medium-12 small-12">
+                                                Total Spots: <strong>{{ row.totalSpots }}</strong> //
+                                                Start Date: <strong>{{ row.startDate.format("M d, Y") }}</strong> //
+                                                End Date: <strong>{{ row.endDate.format("M d, Y") }}</strong>
+                                            </div>
                                         </div>
-                                        <div class="columns large-2 medium-2 small-12">
-                                            Day Ran
+                                        <div class="row invoice-row invoice-row-headers">
+                                            <div class="columns large-2 medium-2 small-12">
+                                                Date Ran
+                                            </div>
+                                            <div class="columns large-2 medium-2 small-12">
+                                                Day Ran
+                                            </div>
+                                            <div class="columns large-2 medium-3 small-12">
+                                                Time Ran
+                                            </div>
+                                            <div class="columns large-2 medium-3 small-12">
+                                                Spot Length
+                                            </div>
+                                            <div class="columns large-3 medium-3 small-12">
+                                                Spot Name
+                                            </div>
+                                            <div class="columns large-1 medium-1 small-12 align-center">
+                                                Valid
+                                            </div>
                                         </div>
-                                        <div class="columns large-2 medium-3 small-12">
-                                            Time Ran
+                                    {% else %}
+                                        <div class="row invoice-row invoice-row-info">
+                                            <div class="columns large-2 medium-2 small-12">
+                                                {{ row.dateRan.format("M d, Y") }}
+                                            </div>
+                                            <div class="columns large-2 medium-2 small-12">
+                                                {{ row.dateRan.format("D") }}
+                                            </div>
+                                            <div class="columns large-2 medium-3 small-12">
+                                                {{ row.timeRan.format("h:i a") }}
+                                            </div>
+                                            <div class="columns large-2 medium-3 small-12">
+                                                {{ row.spotLength }} Seconds
+                                            </div>
+                                            <div class="columns large-3 medium-3 small-12">
+                                                {{ row.spotName }}
+                                            </div>
+                                            <div class="columns large-1 medium-1 small-12 align-center">
+                                                <i class="fa fa-check"></i>
+                                            </div>
                                         </div>
-                                        <div class="columns large-2 medium-3 small-12">
-                                            Spot Length
-                                        </div>
-                                        <div class="columns large-3 medium-3 small-12">
-                                            Spot Name
-                                        </div>
-                                        <div class="columns large-1 medium-1 small-12">
-                                            Valid
-                                        </div>
-                                    </div>
-                                {% else %}
-                                    <div class="row">
-                                        <div class="columns large-2 medium-2 small-12">
-                                            {{ row.dateRan.format("M d, Y") }}
-                                        </div>
-                                        <div class="columns large-2 medium-2 small-12">
-                                            {{ row.dateRan.format("D") }}
-                                        </div>
-                                        <div class="columns large-2 medium-3 small-12">
-                                            {{ row.timeRan.format("H:i") }}
-                                        </div>
-                                        <div class="columns large-2 medium-3 small-12">
-                                            {{ row.spotLength }}
-                                        </div>
-                                        <div class="columns large-3 medium-3 small-12">
-                                            {{ row.spotName }}
-                                        </div>
-                                        <div class="columns large-1 medium-1 small-12">
-                                            <i class="fa fa-check"></i>
-                                        </div>
-                                    </div>
-                                {% endif %}
+                                    {% endif %}
+                                {% endfor %}
                             {% endfor %}
-                        {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>

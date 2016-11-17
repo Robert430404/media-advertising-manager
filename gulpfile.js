@@ -40,6 +40,6 @@ gulp.task('uglify-scripts', function () {
 });
 
 gulp.task('default', function () {
-    gulp.watch('src/Frontend/sass/**/*.scss', ['styles', 'uglify-styles']);
-    gulp.watch('src/Frontend/js/**/*.js', ['scripts', 'uglify-scripts']);
+    gulp.watch('src/Frontend/sass/**/*.scss', ['styles']);
+    gulp.watch('src/Frontend/js/**/*.js', ['scripts']);
 });

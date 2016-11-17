@@ -157,206 +157,6 @@ var WorksheetsController = function () {
     return WorksheetsController;
 }();
 /**
- * ActionHelpers Class
- *
- * Contains all logic for functions that add additional functionality to actions
- * taken on the entities for data. (DELETE, UPDATE, EDIT, etc...)
- */
-
-
-var ActionHelpers = function () {
-    /**
-     * Registers all dependencies to the object, and creates checks
-     * before executing the setup functions on this object
-     */
-    function ActionHelpers() {
-        _classCallCheck(this, ActionHelpers);
-
-        this.confirmAction();
-    }
-
-    /**
-     * When a delete action is taken, this puts up a confirmation box
-     * before the action is persisted
-     *
-     * @param selector
-     * @param message
-     */
-
-
-    _createClass(ActionHelpers, [{
-        key: 'confirmAction',
-        value: function confirmAction(selector, message) {
-            var buttons = document.querySelectorAll(selector);
-
-            if (buttons) {
-                buttons.forEach(function (button) {
-                    button.onclick = function (clicked) {
-                        clicked.preventDefault();
-
-                        var link = button.href;
-                        var confirmation = confirm(message);
-
-                        if (confirmation) {
-                            window.location = link;
-                        }
-                    };
-                });
-            }
-        }
-
-        /**
-         * This checks the type of fields being sent and if it meets a certain
-         * criteria. A boolean value is returned, use in the serialize function
-         *
-         * @param field
-         * @returns {boolean}
-         */
-
-    }, {
-        key: 'fieldTypeCheck',
-        value: function fieldTypeCheck(field) {
-            var type = false;
-
-            if (field.name && !field.disabled && field.type != 'file' && field.type != 'reset' && field.type != 'submit' && field.type != 'button') {
-                type = true;
-            }
-
-            return type;
-        }
-    }]);
-
-    return ActionHelpers;
-}();
-/**
- * AjaxHelpers Class
- *
- * Contains functions that execute and help execute AJAX calls
- */
-
-
-var AjaxHelpers = function () {
-    /**
-     * Registers all dependencies to the object, and creates checks
-     * before executing the setup functions on this object
-     */
-    function AjaxHelpers() {
-        _classCallCheck(this, AjaxHelpers);
-
-        this.ActionHelpers = new ActionHelpers();
-    }
-
-    /**
-     * Executes a GET call and returns an ASYNC promise for use inside
-     * of the requesting function
-     *
-     * @param url
-     * @returns {Promise}
-     */
-
-
-    _createClass(AjaxHelpers, [{
-        key: 'getCall',
-        value: function getCall(url) {
-            return new Promise(function (resolve, reject) {
-                var request = new XMLHttpRequest();
-
-                request.open('GET', url);
-
-                request.onload = function () {
-                    if (request.status === 200) {
-                        resolve(JSON.parse(request.response));
-                    } else {
-                        reject(new Error(request.statusText));
-                    }
-                };
-
-                request.onerror = function () {
-                    reject(new Error('Network Error'));
-                };
-
-                request.send();
-            });
-        }
-
-        /**
-         * Executes a POST call and returns an ASYNC promise for use inside
-         * of the requesting function
-         *
-         * @param url
-         * @param data
-         * @returns {Promise}
-         */
-
-    }, {
-        key: 'postCall',
-        value: function postCall(url, data) {
-            return new Promise(function (resolve, reject) {
-                var request = new XMLHttpRequest();
-
-                request.open('POST', url, true);
-                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-                request.onload = function () {
-                    if (request.status === 200) {
-                        resolve(JSON.parse(request.response));
-                    } else {
-                        reject(new Error(request.statusText));
-                    }
-                };
-
-                request.onerror = function () {
-                    reject(new Error('Network Error'));
-                };
-
-                request.send(data);
-            });
-        }
-
-        /**
-         * Serializes form data for use inside of the post call, works
-         * similarly to the jQuery serialize function
-         *
-         * @param form
-         * @returns {string}
-         */
-
-    }, {
-        key: 'serialize',
-        value: function serialize(form) {
-            var field = [];
-            var value = [];
-
-            if ((typeof form === 'undefined' ? 'undefined' : _typeof(form)) == 'object' && form.nodeName == "FORM") {
-                var length = form.elements.length;
-
-                for (var i = 0; i < length; i++) {
-                    field = form.elements[i];
-                    var fieldCheck = this.ActionHelpers.fieldTypeCheck(field);
-
-                    if (fieldCheck) {
-                        if (field.type == 'select-multiple') {
-                            var optionLength = form.elements[i].options.length - 1;
-
-                            for (var j = optionLength; j >= 0; j--) {
-                                if (field.options[j].selected) {
-                                    value[value.length] = encodeURIComponent(field.name) + "=" + encodeURIComponent(field.options[j].value);
-                                }
-                            }
-                        } else if (field.type != 'checkbox' && field.type != 'radio' || field.checked) {
-                            value[value.length] = encodeURIComponent(field.name) + "=" + encodeURIComponent(field.value);
-                        }
-                    }
-                }
-            }
-
-            return value.join('&').replace(/%20/g, '+');
-        }
-    }]);
-
-    return AjaxHelpers;
-}();
-/**
  * View Class
  *
  * This is the "global" view class that contains initializations for
@@ -1316,4 +1116,204 @@ var ViewWorksheets = function () {
     }]);
 
     return ViewWorksheets;
+}();
+/**
+ * ActionHelpers Class
+ *
+ * Contains all logic for functions that add additional functionality to actions
+ * taken on the entities for data. (DELETE, UPDATE, EDIT, etc...)
+ */
+
+
+var ActionHelpers = function () {
+    /**
+     * Registers all dependencies to the object, and creates checks
+     * before executing the setup functions on this object
+     */
+    function ActionHelpers() {
+        _classCallCheck(this, ActionHelpers);
+
+        this.confirmAction();
+    }
+
+    /**
+     * When a delete action is taken, this puts up a confirmation box
+     * before the action is persisted
+     *
+     * @param selector
+     * @param message
+     */
+
+
+    _createClass(ActionHelpers, [{
+        key: 'confirmAction',
+        value: function confirmAction(selector, message) {
+            var buttons = document.querySelectorAll(selector);
+
+            if (buttons) {
+                buttons.forEach(function (button) {
+                    button.onclick = function (clicked) {
+                        clicked.preventDefault();
+
+                        var link = button.href;
+                        var confirmation = confirm(message);
+
+                        if (confirmation) {
+                            window.location = link;
+                        }
+                    };
+                });
+            }
+        }
+
+        /**
+         * This checks the type of fields being sent and if it meets a certain
+         * criteria. A boolean value is returned, use in the serialize function
+         *
+         * @param field
+         * @returns {boolean}
+         */
+
+    }, {
+        key: 'fieldTypeCheck',
+        value: function fieldTypeCheck(field) {
+            var type = false;
+
+            if (field.name && !field.disabled && field.type != 'file' && field.type != 'reset' && field.type != 'submit' && field.type != 'button') {
+                type = true;
+            }
+
+            return type;
+        }
+    }]);
+
+    return ActionHelpers;
+}();
+/**
+ * AjaxHelpers Class
+ *
+ * Contains functions that execute and help execute AJAX calls
+ */
+
+
+var AjaxHelpers = function () {
+    /**
+     * Registers all dependencies to the object, and creates checks
+     * before executing the setup functions on this object
+     */
+    function AjaxHelpers() {
+        _classCallCheck(this, AjaxHelpers);
+
+        this.ActionHelpers = new ActionHelpers();
+    }
+
+    /**
+     * Executes a GET call and returns an ASYNC promise for use inside
+     * of the requesting function
+     *
+     * @param url
+     * @returns {Promise}
+     */
+
+
+    _createClass(AjaxHelpers, [{
+        key: 'getCall',
+        value: function getCall(url) {
+            return new Promise(function (resolve, reject) {
+                var request = new XMLHttpRequest();
+
+                request.open('GET', url);
+
+                request.onload = function () {
+                    if (request.status === 200) {
+                        resolve(JSON.parse(request.response));
+                    } else {
+                        reject(new Error(request.statusText));
+                    }
+                };
+
+                request.onerror = function () {
+                    reject(new Error('Network Error'));
+                };
+
+                request.send();
+            });
+        }
+
+        /**
+         * Executes a POST call and returns an ASYNC promise for use inside
+         * of the requesting function
+         *
+         * @param url
+         * @param data
+         * @returns {Promise}
+         */
+
+    }, {
+        key: 'postCall',
+        value: function postCall(url, data) {
+            return new Promise(function (resolve, reject) {
+                var request = new XMLHttpRequest();
+
+                request.open('POST', url, true);
+                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+                request.onload = function () {
+                    if (request.status === 200) {
+                        resolve(JSON.parse(request.response));
+                    } else {
+                        reject(new Error(request.statusText));
+                    }
+                };
+
+                request.onerror = function () {
+                    reject(new Error('Network Error'));
+                };
+
+                request.send(data);
+            });
+        }
+
+        /**
+         * Serializes form data for use inside of the post call, works
+         * similarly to the jQuery serialize function
+         *
+         * @param form
+         * @returns {string}
+         */
+
+    }, {
+        key: 'serialize',
+        value: function serialize(form) {
+            var field = [];
+            var value = [];
+
+            if ((typeof form === 'undefined' ? 'undefined' : _typeof(form)) == 'object' && form.nodeName == "FORM") {
+                var length = form.elements.length;
+
+                for (var i = 0; i < length; i++) {
+                    field = form.elements[i];
+                    var fieldCheck = this.ActionHelpers.fieldTypeCheck(field);
+
+                    if (fieldCheck) {
+                        if (field.type == 'select-multiple') {
+                            var optionLength = form.elements[i].options.length - 1;
+
+                            for (var j = optionLength; j >= 0; j--) {
+                                if (field.options[j].selected) {
+                                    value[value.length] = encodeURIComponent(field.name) + "=" + encodeURIComponent(field.options[j].value);
+                                }
+                            }
+                        } else if (field.type != 'checkbox' && field.type != 'radio' || field.checked) {
+                            value[value.length] = encodeURIComponent(field.name) + "=" + encodeURIComponent(field.value);
+                        }
+                    }
+                }
+            }
+
+            return value.join('&').replace(/%20/g, '+');
+        }
+    }]);
+
+    return AjaxHelpers;
 }();

@@ -68,5 +68,55 @@
         text-align: center;
       }
     }
+    .invoice-table {
+      border-radius: $border-radius;
+      overflow: hidden;
+      padding: 15px;
+      .invoice-section-information {
+        background: $highlight-dark;
+        color: $white;
+        text-align: center;
+        padding: 5px;
+        font-size: 16px;
+        font-weight: 300;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        &:first-child {
+          margin-top: -15px;
+          border-top: 0;
+        }
+      }
+      .invoice-row-headers {
+        background: $off-white;
+        padding: 5px 0;
+        border: 1px solid $lighter-grey;
+        border-bottom: 0;
+        border-top: 0;
+        .columns {
+          font-weight: 600;
+          font-size: 14px;
+          letter-spacing: 2px;
+          text-transform: uppercase;
+        }
+      }
+      .invoice-row-info {
+        padding: 5px 0;
+        border: 1px solid $lighter-grey;
+        border-bottom: 0;
+        &:nth-child(even) {
+          background: $off-white;
+        }
+        .columns {
+          font-weight: 400;
+          font-size: 14px;
+          letter-spacing: 2px;
+          text-transform: uppercase;
+        }
+        &:last-child {
+          margin-bottom: -15px;
+          border-bottom: 1px solid $lighter-grey;
+        }
+      }
+    }
   }
 }
