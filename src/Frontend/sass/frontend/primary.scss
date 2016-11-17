@@ -158,3 +158,34 @@
     }
   }
 }
+
+@media(max-width: 639px) {
+  .primary-content {
+    .region-list {
+      width: 100%;
+      border: 0;
+      border-bottom: 1px solid $lighter-grey;
+      padding-bottom: 15px;
+      margin-bottom: 15px;
+    }
+    .region-campaigns {
+      width: 100%;
+      .campaign-list {
+        li {
+          text-align: center;
+          .actions {
+            margin-top: 5px;
+            float: none;
+            display: block;
+            width: 100%;
+            a {
+              display: inline-block;
+              padding: 0 7px;
+              margin: 0px 2px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

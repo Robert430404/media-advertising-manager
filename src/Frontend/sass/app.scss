@@ -31,10 +31,9 @@ $shadowSize: 25px;
 body {
   background: $lighter-grey url('/assets/img/background.png') fixed;
   font-family: 'Helvetica Neue', 'Segoe UI', 'Arial', 'Helvetica', sans-serif;
-  padding:  0 0 0 63px;
   transition: all .3s;
   &.add-padding {
-    padding: 0 0 0 250px;
+    padding: 0 0 0 63px;
   }
 }
 

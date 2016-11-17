@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="{{ asset('assets/css/app.min.css') }}">
         <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}" />
     </head>
-    <body>
+    <body {% if is_granted('ROLE_USER') %}class="add-padding"{% endif %}>
 
         <div class="site-content">
             {% if is_granted('ROLE_USER') %}

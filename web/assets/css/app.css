@@ -10,10 +10,9 @@
 body {
   background: #cbcbcb url("/assets/img/background.png") fixed;
   font-family: 'Helvetica Neue', 'Segoe UI', 'Arial', 'Helvetica', sans-serif;
-  padding: 0 0 0 63px;
   transition: all .3s; }
   body.add-padding {
-    padding: 0 0 0 250px; }
+    padding: 0 0 0 63px; }
 
 div {
   font-family: 'Helvetica Neue', 'Segoe UI', 'Arial', 'Helvetica', sans-serif; }
@@ -891,6 +890,27 @@ div {
               background: #ECEDEE; }
         .primary-content .region-campaigns .campaign-list li:last-child {
           border: 0; }
+
+@media (max-width: 639px) {
+  .primary-content .region-list {
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid #cbcbcb;
+    padding-bottom: 15px;
+    margin-bottom: 15px; }
+  .primary-content .region-campaigns {
+    width: 100%; }
+    .primary-content .region-campaigns .campaign-list li {
+      text-align: center; }
+      .primary-content .region-campaigns .campaign-list li .actions {
+        margin-top: 5px;
+        float: none;
+        display: block;
+        width: 100%; }
+        .primary-content .region-campaigns .campaign-list li .actions a {
+          display: inline-block;
+          padding: 0 7px;
+          margin: 0px 2px; } }
 
 .button {
   border-radius: 4px;
