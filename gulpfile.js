@@ -1,10 +1,10 @@
-var gulp   = require('gulp'),
-    sass   = require('gulp-sass'),
-    babel  = require('gulp-babel'),
-    concat = require('gulp-concat'),
-    uglify = require('gulp-uglify'),
+var gulp      = require('gulp'),
+    sass      = require('gulp-sass'),
+    babel     = require('gulp-babel'),
+    concat    = require('gulp-concat'),
+    uglify    = require('gulp-uglify'),
     uglifycss = require('gulp-uglifycss'),
-    rename = require('gulp-rename');
+    rename    = require('gulp-rename');
 
 gulp.task('styles', function () {
     return gulp
