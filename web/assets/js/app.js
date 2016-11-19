@@ -536,7 +536,6 @@ var ViewCampaigns = function () {
             var button = document.querySelector('.dash-create-campaign-button');
             var close = overlay.querySelector('.close');
             var form = overlay.querySelector('form');
-            console.log(object);
 
             button.onclick = function () {
                 overlay.style.display = 'block';
