@@ -247,7 +247,7 @@ class InvoiceHelpers
         $dateRange  = [];
 
         // Validates The Spot Totals To Make Sure Were Not Being Invoices For More/Less Spots
-        if ($spotTotals === $invTotals) {
+        if (count($spotTotals) === count($invTotals)) {
             $totals    = true;
             $sameCount = [];
 
@@ -257,6 +257,9 @@ class InvoiceHelpers
 
                 if ($spotTotal === $invTotal) {
                     $sameCount[$key] = true;
+                }
+                else {
+                    $sameCount[$key] = false;
                 }
             }
         }
@@ -271,6 +274,9 @@ class InvoiceHelpers
                     if ($campStart->format('U') <= $startDate->format('U') &&
                         $campEnd->format('U') >= $endDate->format('U')) {
                         $dateRange[$key] = true;
+                    }
+                    else {
+                        $dateRange[$key] = false;
                     }
                 }
             }
