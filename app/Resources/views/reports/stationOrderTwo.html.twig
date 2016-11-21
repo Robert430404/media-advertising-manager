@@ -261,7 +261,7 @@
                                         {% if program.Friday != 0 %} F {% endif %}
                                         {% if program.Saturday != 0 %} S {% endif %}
                                         {% if program.Sunday != 0 %} Su {% endif %}
-                                    </span> <strong>/</strong>
+                                    </span> <br/>
                                         {{ program.timeSlotStart.format('h:ia') }} to
                                         {{ program.timeSlotEnd.format('h:ia') }}
                                     </p>
@@ -273,7 +273,7 @@
                             {% for program in worksheet.programs %}
                                 <div class="spot-date-day-part-length">
                                     <p>
-                                        {{ program.dayPart }} <strong>/</strong>
+                                        {{ program.dayPart }}<br/>
                                         {{ program.spotLength }}
                                     </p>
                                 </div>
@@ -285,8 +285,7 @@
                             {% for program in worksheet.programs %}
                                 <div class="spot-date-rate-cost">
                                     <p>
-                                        $<span class="spot-rate-cost spot-rate-{{ i }}">{{ program.spotRate }}</span>
-                                        <strong>/</strong>
+                                        $<span class="spot-rate-cost spot-rate-{{ i }}">{{ program.spotRate }}</span><br/>
                                         $<span class="spot-cost-total spot-total-{{ i }}">&nbsp;</span>
                                     </p>
                                 </div>
@@ -340,7 +339,9 @@
                                             <div class="spot-date-total">
                                                 {% if attribute(worksheet.weekInfo, 'date-' ~ d ~ '-' ~ program.id) is defined %}
                                                     <p class="raw-spot-count row-{{ i }}">{{ attribute(worksheet.weekInfo, 'date-' ~ d ~ '-' ~ program.id) }}</p>
+                                                    <p>&nbsp;</p>
                                                 {% else %}
+                                                    <p>&nbsp;</p>
                                                     <p>&nbsp;</p>
                                                 {% endif %}
                                             </div>
