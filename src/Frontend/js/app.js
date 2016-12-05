@@ -2,6 +2,8 @@
  * Waits for DOM content to be fully loaded and ready, and then
  * instantiates instances of all view objects so events can
  * be initialized
+ *
+ * @return void
  */
 document.addEventListener('DOMContentLoaded', function () {
     new View();

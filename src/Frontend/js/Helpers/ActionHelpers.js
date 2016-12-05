@@ -8,6 +8,8 @@ class ActionHelpers {
     /**
      * Registers all dependencies to the object, and creates checks
      * before executing the setup functions on this object
+     *
+     * @return void
      */
     constructor() {
         this.confirmAction();
@@ -19,17 +21,18 @@ class ActionHelpers {
      *
      * @param selector
      * @param message
+     * @return void
      */
     confirmAction(selector, message) {
-        var buttons = document.querySelectorAll(selector);
+        const buttons = document.querySelectorAll(selector);
 
         if (buttons) {
             buttons.forEach( function (button) {
                 button.onclick = function (clicked) {
                     clicked.preventDefault();
 
-                    var link         = button.href;
-                    var confirmation = confirm(message);
+                    const link         = button.href,
+                          confirmation = confirm(message);
 
                     if (confirmation) {
                         window.location = link;
@@ -40,14 +43,62 @@ class ActionHelpers {
     }
 
     /**
+     * Toggles The Modal For The Dashboard
+     *
+     * @param overlay
+     * @param button
+     * @param close
+     * @param form
+     * @param endpoint
+     * @return void
+     */
+    loadDashboardModal(overlay, button, close, form, endpoint) {
+        const object  = this;
+
+        button.onclick = function () {
+            overlay.style.display = 'block';
+        };
+
+        close.onclick = function () {
+            overlay.style.display = 'none';
+        };
+
+        form.onsubmit = function (submitted) {
+            submitted.preventDefault();
+
+            const data = AjaxHelpers.serialize(form);
+
+            object.AjaxHelpers.postCall(endpoint, data).then(function (resp) {
+                const formClasses = form.classList;
+
+                if (resp.success == true) {
+                    form.reset();
+                    formClasses.add('successful');
+                    object.refreshOrganizations();
+
+                    setTimeout( function () {
+                        formClasses.remove('successful');
+                    }, 1000);
+                } else {
+                    formClasses.add('failure');
+
+                    setTimeout( function () {
+                        formClasses.remove('failure');
+                    }, 1000);
+                }
+            });
+        };
+    }
+
+    /**
      * This checks the type of fields being sent and if it meets a certain
      * criteria. A boolean value is returned, use in the serialize function
      *
      * @param field
      * @returns {boolean}
      */
-    fieldTypeCheck(field) {
-        var type = false;
+    static fieldTypeCheck(field) {
+        let type = false;
 
         if (field.name &&
             !field.disabled &&

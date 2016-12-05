@@ -2,10 +2,10 @@
 
 namespace AppBundle\Helpers;
 
-use AppBundle\Entity\Campaigns;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManager;
+use AppBundle\Entity\Campaigns;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class InvoiceHelpers
 {

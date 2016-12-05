@@ -20,7 +20,7 @@ class WorksheetsController {
      */
     persistWorksheetWeekInformation(id) {
         var form     = document.querySelector('.worksheet-counts-' + id);
-        var data     = this.AjaxHelpers.serialize(form);
+        var data     = AjaxHelpers.serialize(form);
         var endpoint = '/api/v1/worksheet/' + id + '/update';
 
         if(data == '')

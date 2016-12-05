@@ -7,6 +7,8 @@ class CampaignsController {
     /**
      * Registers all dependencies to the object, and creates checks
      * before executing the setup functions on this object
+     *
+     * @return void
      */
     constructor() {
         this.AjaxHelpers = new AjaxHelpers();
@@ -19,7 +21,7 @@ class CampaignsController {
      * @returns {Promise}
      */
     loadRegionsFromOrganization(organization) {
-        var endpoint = '/api/v1/regions/' + organization;
+        const endpoint = '/api/v1/regions/' + organization;
 
         return this.AjaxHelpers.getCall(endpoint);
     }
@@ -31,7 +33,7 @@ class CampaignsController {
      * @returns {Promise}
      */
     loadCampaignsFromRegion(region) {
-        var endpoint = '/api/v1/campaigns/' + region;
+        const endpoint = '/api/v1/campaigns/' + region;
 
         return this.AjaxHelpers.getCall(endpoint);
     }
@@ -43,7 +45,7 @@ class CampaignsController {
      * @returns {Promise}
      */
     createNewCampaign(data) {
-        var endpoint = '/api/v1/campaigns/new';
+        const endpoint = '/api/v1/campaigns/new';
 
         return this.AjaxHelpers.postCall(endpoint, data);
     }
@@ -57,11 +59,11 @@ class CampaignsController {
      * @param end
      * @returns {*}
      */
-    calculateFlightLengthInWeeks(start, end) {
-        var startDate = moment(start, "YYYY-MM-DD");
-        var endDate   = moment(end, "YYYY-MM-DD");
-        var duration  = moment.duration(endDate.diff(startDate));
-        var weeks     = duration.asWeeks().toFixed(0);
+    static calculateFlightLengthInWeeks(start, end) {
+        const startDate = moment(start, "YYYY-MM-DD"),
+              endDate   = moment(end, "YYYY-MM-DD"),
+              duration  = moment.duration(endDate.diff(startDate)),
+              weeks     = duration.asWeeks().toFixed(0);
 
         if (weeks < 0 || weeks == 0) {
             return 'Invalid Dates';

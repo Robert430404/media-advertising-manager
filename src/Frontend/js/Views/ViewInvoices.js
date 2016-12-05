@@ -7,6 +7,8 @@ class ViewInvoices {
     /**
      * Registers all dependencies to the object, and creates checks
      * before executing the setup functions on this object
+     *
+     * @return void
      */
     constructor() {
         this.setRegionForInvoiceImporter();
@@ -19,15 +21,17 @@ class ViewInvoices {
     /**
      * Sets the region for the invoice importer after you've selected your
      * organization, loads the regions using the campaigns controller
+     *
+     * @return void
      */
     setRegionForInvoiceImporter() {
-        var object    = this;
-        var target    = document.querySelector('#organizations');
-        var container = document.querySelector('#regions');
+        const object    = this,
+              target    = document.querySelector('#organizations'),
+              container = document.querySelector('#regions');
 
         if (target) {
             target.onchange = function () {
-                var value = this.value;
+                const value = this.value;
 
                 container.innerHTML = '<option value="">Select Organization</option>';
 
@@ -53,15 +57,17 @@ class ViewInvoices {
     /**
      * Sets the campaigns for the invoice importer after you've selected your
      * region, loads the campaigns using the campaigns controller
+     *
+     * @return void
      */
     setInvoiceCampaigns() {
-        var object    = this;
-        var target    = document.querySelector('#regions');
-        var container = document.querySelector('#campaigns');
+        const object    = this,
+              target    = document.querySelector('#regions'),
+              container = document.querySelector('#campaigns');
 
         if (target) {
             target.onchange = function () {
-                var value = this.value;
+                const value = this.value;
 
                 container.innerHTML = '<option value="">Select Region</option>';
 
@@ -89,6 +95,8 @@ class ViewInvoices {
      * so you can process multiple invoices as once.
      *
      * Currently not in use
+     *
+     * @return void
      */
     // addMoreInvoices() {
     //     var inputs = document.querySelectorAll('.file-inputs');

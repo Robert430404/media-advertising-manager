@@ -7,13 +7,16 @@ class ViewWorksheets {
     /**
      * Registers all dependencies to the object, and creates checks
      * before executing the setup functions on this object
+     *
+     * @return void
      */
     constructor() {
         this.Worksheets = new WorksheetsController();
 
         this.persistWeekInformationForWorksheet();
         this.toggleProgramDetails();
-        this.setInnerOverflow();
+
+        ViewWorksheets.setInnerOverflow();
 
         if (document.querySelector('.info-inner')) {
             this.createTotalCalculations();
@@ -26,19 +29,21 @@ class ViewWorksheets {
      *
      * Makes an AJAX call to the /api/v1/worksheet/' + id + '/update
      * endpoint to persist the data
+     *
+     * @return void
      */
     persistWeekInformationForWorksheet() {
-        var object  = this;
-        var buttons = document.querySelectorAll('.update-week-information');
+        const object  = this,
+              buttons = document.querySelectorAll('.update-week-information');
 
         buttons.forEach( function (button) {
             button.onclick = function (clicked) {
                 clicked.preventDefault();
 
-                var id          = button.dataset.worksheet;
-                var worksheet   = button.parentNode.parentNode;
-                var wsClasses   = worksheet.classList;
-                var infoRequest = object.Worksheets.persistWorksheetWeekInformation(id);
+                const id          = button.dataset.worksheet,
+                      worksheet   = button.parentNode.parentNode,
+                      wsClasses   = worksheet.classList,
+                      infoRequest = object.Worksheets.persistWorksheetWeekInformation(id);
 
                 wsClasses.toggle('loading');
 
@@ -70,14 +75,16 @@ class ViewWorksheets {
      * Sets the inner overflow of the horizontal scrolling section of the
      * week information interface so you can scroll through all of the
      * dates inside of the flight run to enter spot counts
+     *
+     * @return void
      */
-    setInnerOverflow() {
-        var containers = document.querySelectorAll('.info-inner');
+    static setInnerOverflow() {
+        const containers = document.querySelectorAll('.info-inner');
 
         containers.forEach( function (container) {
-            var dates     = container.querySelectorAll('.spot-column');
-            var colWidth  = dates[0].offsetWidth;
-            var dateCount = dates.length;
+            const dates     = container.querySelectorAll('.spot-column'),
+                  colWidth  = dates[0].offsetWidth,
+                  dateCount = dates.length;
 
             container.querySelector('.scrollable').style.width = (colWidth * dateCount) + 'px';
         });
@@ -85,14 +92,16 @@ class ViewWorksheets {
 
     /**
      * Sets the spot total for each program (row) of the buy
+     *
+     * @return void
      */
     createTotalCalculations() {
-        var object     = this;
-        var containers = document.querySelectorAll('.info-inner');
+        const object     = this,
+              containers = document.querySelectorAll('.info-inner');
 
         containers.forEach( function (container) {
-            var inputs  = container.querySelectorAll('input.date-count');
-            var columns = container.querySelectorAll('.spot-column');
+            const inputs  = container.querySelectorAll('input.date-count'),
+                  columns = container.querySelectorAll('.spot-column');
 
             inputs.forEach( function (input) {
                 object.setWeeklyTotals(container, columns, input.dataset.program);
@@ -110,11 +119,12 @@ class ViewWorksheets {
      * @param container
      * @param columns
      * @param programId
+     * @return void
      */
     setWeeklyTotals(container, columns, programId) {
         columns.forEach( function (column) {
-            var inputs = column.querySelectorAll('input');
-            var sum    = 0;
+            const inputs = column.querySelectorAll('input');
+            let sum      = 0;
 
             inputs.forEach( function (input) {
                 sum = Number(input.value) + Number(sum);
@@ -125,7 +135,7 @@ class ViewWorksheets {
             }
         });
 
-        this.setWholeBuyTotals(container, programId);
+        ViewWorksheets.setWholeBuyTotals(container, programId);
     }
 
     /**
@@ -133,36 +143,39 @@ class ViewWorksheets {
      *
      * @param container
      * @param programId
+     * @return void
      */
-    setWholeBuyTotals(container, programId) {
-        var allInputs = container.querySelectorAll('input.date-count');
-        var sectionedInputs = [];
-        var count = 0;
+    static setWholeBuyTotals(container, programId) {
+        const allInputs     = container.querySelectorAll('input.date-count');
+        let sectionedInputs = [];
+        let count           = 0;
 
-        for (var a = 0; a < allInputs.length; a++) {
-            if (allInputs[a].dataset.program == programId) {
-                sectionedInputs.push(allInputs[a]);
+        allInputs.forEach( function (input) {
+            if (input.dataset.program == programId) {
+                sectionedInputs.push(input);
             }
-        }
+        });
 
-        for (var b = 0; b < sectionedInputs.length; b++) {
-            count = Number(sectionedInputs[b].value) + Number(count);
-        }
+        sectionedInputs.forEach( function (input) {
+            count = Number(input.value) + Number(count);
+        });
 
-        document.querySelector('.spot-date-total .program-' + programId + '-total').innerHTML = count;
+        document.querySelector('.spot-date-total .program-' + programId + '-total').innerHTML = count.toString();
     }
 
     /**
      * Toggles the display of the program details
+     *
+     * @return void
      */
     toggleProgramDetails() {
-        var expanders = document.querySelectorAll('.extra-detail-expander');
+        const expanders = document.querySelectorAll('.extra-detail-expander');
 
         expanders.forEach( function (expander) {
             expander.onclick = function () {
-                var classList = expander.classList;
-                var wrapper   = expander.parentNode.querySelector('.detail-wrapper');
-                var wrapStyle = wrapper.style.display;
+                const classList = expander.classList,
+                      wrapper   = expander.parentNode.querySelector('.detail-wrapper'),
+                      wrapStyle = wrapper.style.display;
 
                 classList.toggle('rotated');
                 wrapper.style.display = wrapStyle === 'block' ? '' : 'block';

@@ -7,6 +7,8 @@ class ViewNavigation {
     /**
      * Registers all dependencies to the object, and creates checks
      * before executing the setup functions on this object
+     *
+     * @return void
      */
     constructor() {
         this.navigationToggle();
@@ -15,13 +17,15 @@ class ViewNavigation {
     /**
      * This toggles the side menu into and out of visibility
      * when you click on the hamburger
+     *
+     * @return void
      */
     navigationToggle() {
-        var hamburger = document.querySelector('.hamburger');
+        const hamburger = document.querySelector('.hamburger');
 
         hamburger.onclick = function () {
-            var masthead  = document.querySelector('.masthead');
-            var classList = masthead.classList;
+            const masthead  = document.querySelector('.masthead'),
+                  classList = masthead.classList;
 
             classList.toggle('show');
         }

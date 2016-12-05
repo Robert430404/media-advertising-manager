@@ -8,6 +8,8 @@ class View {
     /**
      * Registers all dependencies to the object, and creates checks
      * before executing the setup functions on this object
+     *
+     * @return void
      */
     constructor() {
         this.ActionHelpers = new ActionHelpers();
@@ -17,6 +19,8 @@ class View {
 
     /**
      * Registers a delete confirmation
+     *
+     * @return void
      */
     registerDeleteConfirmation() {
         this.ActionHelpers.confirmAction('a.delete-button', 'Do you really want to delete this?');

@@ -7,6 +7,8 @@ class AjaxHelpers {
     /**
      * Registers all dependencies to the object, and creates checks
      * before executing the setup functions on this object
+     *
+     * @return void
      */
     constructor() {
         this.ActionHelpers = new ActionHelpers();
@@ -81,22 +83,22 @@ class AjaxHelpers {
      * @param form
      * @returns {string}
      */
-    serialize(form) {
-        var field = [];
-        var value = [];
+    static serialize(form) {
+        let field = [];
+        let value = [];
 
         if (typeof form == 'object' && form.nodeName == "FORM") {
-            var length = form.elements.length;
+            const length = form.elements.length;
 
-            for (var i = 0; i < length; i++) {
+            for (let i = 0; i < length; i++) {
                 field = form.elements[i];
-                var fieldCheck = this.ActionHelpers.fieldTypeCheck(field);
+                const fieldCheck = ActionHelpers.fieldTypeCheck(field);
 
                 if (fieldCheck) {
                     if (field.type == 'select-multiple') {
-                        var optionLength = form.elements[i].options.length - 1;
+                        const optionLength = form.elements[i].options.length - 1;
 
-                        for (var j = optionLength; j >= 0; j--) {
+                        for (let j = optionLength; j >= 0; j--) {
                             if (field.options[j].selected) {
                                 value[value.length] = encodeURIComponent(field.name) +
                                                       "=" +

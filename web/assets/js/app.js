@@ -10,6 +10,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * Waits for DOM content to be fully loaded and ready, and then
  * instantiates instances of all view objects so events can
  * be initialized
+ *
+ * @return void
  */
 document.addEventListener('DOMContentLoaded', function () {
     new View();
@@ -31,6 +33,8 @@ var CampaignsController = function () {
     /**
      * Registers all dependencies to the object, and creates checks
      * before executing the setup functions on this object
+     *
+     * @return void
      */
     function CampaignsController() {
         _classCallCheck(this, CampaignsController);
@@ -94,13 +98,13 @@ var CampaignsController = function () {
          * @returns {*}
          */
 
-    }, {
+    }], [{
         key: 'calculateFlightLengthInWeeks',
         value: function calculateFlightLengthInWeeks(start, end) {
-            var startDate = moment(start, "YYYY-MM-DD");
-            var endDate = moment(end, "YYYY-MM-DD");
-            var duration = moment.duration(endDate.diff(startDate));
-            var weeks = duration.asWeeks().toFixed(0);
+            var startDate = moment(start, "YYYY-MM-DD"),
+                endDate = moment(end, "YYYY-MM-DD"),
+                duration = moment.duration(endDate.diff(startDate)),
+                weeks = duration.asWeeks().toFixed(0);
 
             if (weeks < 0 || weeks == 0) {
                 return 'Invalid Dates';
@@ -112,7 +116,6 @@ var CampaignsController = function () {
 
     return CampaignsController;
 }();
-
 /**
  * WorksheetsController Class
  *
@@ -143,7 +146,7 @@ var WorksheetsController = function () {
         key: 'persistWorksheetWeekInformation',
         value: function persistWorksheetWeekInformation(id) {
             var form = document.querySelector('.worksheet-counts-' + id);
-            var data = this.AjaxHelpers.serialize(form);
+            var data = AjaxHelpers.serialize(form);
             var endpoint = '/api/v1/worksheet/' + id + '/update';
 
             if (data == '') {
@@ -168,6 +171,8 @@ var ActionHelpers = function () {
     /**
      * Registers all dependencies to the object, and creates checks
      * before executing the setup functions on this object
+     *
+     * @return void
      */
     function ActionHelpers() {
         _classCallCheck(this, ActionHelpers);
@@ -181,6 +186,7 @@ var ActionHelpers = function () {
      *
      * @param selector
      * @param message
+     * @return void
      */
 
 
@@ -194,8 +200,8 @@ var ActionHelpers = function () {
                     button.onclick = function (clicked) {
                         clicked.preventDefault();
 
-                        var link = button.href;
-                        var confirmation = confirm(message);
+                        var link = button.href,
+                            confirmation = confirm(message);
 
                         if (confirmation) {
                             window.location = link;
@@ -206,6 +212,57 @@ var ActionHelpers = function () {
         }
 
         /**
+         * Toggles The Modal For The Dashboard
+         *
+         * @param overlay
+         * @param button
+         * @param close
+         * @param form
+         * @param endpoint
+         * @return void
+         */
+
+    }, {
+        key: 'loadDashboardModal',
+        value: function loadDashboardModal(overlay, button, close, form, endpoint) {
+            var object = this;
+
+            button.onclick = function () {
+                overlay.style.display = 'block';
+            };
+
+            close.onclick = function () {
+                overlay.style.display = 'none';
+            };
+
+            form.onsubmit = function (submitted) {
+                submitted.preventDefault();
+
+                var data = AjaxHelpers.serialize(form);
+
+                object.AjaxHelpers.postCall(endpoint, data).then(function (resp) {
+                    var formClasses = form.classList;
+
+                    if (resp.success == true) {
+                        form.reset();
+                        formClasses.add('successful');
+                        object.refreshOrganizations();
+
+                        setTimeout(function () {
+                            formClasses.remove('successful');
+                        }, 1000);
+                    } else {
+                        formClasses.add('failure');
+
+                        setTimeout(function () {
+                            formClasses.remove('failure');
+                        }, 1000);
+                    }
+                });
+            };
+        }
+
+        /**
          * This checks the type of fields being sent and if it meets a certain
          * criteria. A boolean value is returned, use in the serialize function
          *
@@ -213,7 +270,7 @@ var ActionHelpers = function () {
          * @returns {boolean}
          */
 
-    }, {
+    }], [{
         key: 'fieldTypeCheck',
         value: function fieldTypeCheck(field) {
             var type = false;
@@ -239,6 +296,8 @@ var AjaxHelpers = function () {
     /**
      * Registers all dependencies to the object, and creates checks
      * before executing the setup functions on this object
+     *
+     * @return void
      */
     function AjaxHelpers() {
         _classCallCheck(this, AjaxHelpers);
@@ -321,7 +380,7 @@ var AjaxHelpers = function () {
          * @returns {string}
          */
 
-    }, {
+    }], [{
         key: 'serialize',
         value: function serialize(form) {
             var field = [];
@@ -332,7 +391,7 @@ var AjaxHelpers = function () {
 
                 for (var i = 0; i < length; i++) {
                     field = form.elements[i];
-                    var fieldCheck = this.ActionHelpers.fieldTypeCheck(field);
+                    var fieldCheck = ActionHelpers.fieldTypeCheck(field);
 
                     if (fieldCheck) {
                         if (field.type == 'select-multiple') {
@@ -368,6 +427,8 @@ var View = function () {
     /**
      * Registers all dependencies to the object, and creates checks
      * before executing the setup functions on this object
+     *
+     * @return void
      */
     function View() {
         _classCallCheck(this, View);
@@ -379,6 +440,8 @@ var View = function () {
 
     /**
      * Registers a delete confirmation
+     *
+     * @return void
      */
 
 
@@ -402,18 +465,22 @@ var ViewCampaigns = function () {
     /**
      * Registers all dependencies to the object, and creates checks
      * before executing the setup functions on this object
+     *
+     * @return void
      */
     function ViewCampaigns() {
         _classCallCheck(this, ViewCampaigns);
 
-        this.CampaignsController = new CampaignsController();
         this.AjaxHelpers = new AjaxHelpers();
+        this.ActionHelpers = new ActionHelpers();
+        this.CampaignsController = new CampaignsController();
         this.CampOverlay = document.querySelector('.campaigns-overlay');
 
         this.loadRegionsFromOrganizationForCampaign();
         this.loadRegionsForCampaignEdit();
-        this.setFlightFieldFormats();
         this.setFlightWeeks();
+
+        ViewCampaigns.setFlightFieldFormats();
 
         if (this.CampOverlay) {
             this.createCampaignFromDashboard();
@@ -426,15 +493,17 @@ var ViewCampaigns = function () {
      *
      * Makes an AJAX call to the /api/v1/regions/ endpoint to retrieve
      * the data
+     *
+     * @return void
      */
 
 
     _createClass(ViewCampaigns, [{
         key: 'loadRegionsFromOrganizationForCampaign',
         value: function loadRegionsFromOrganizationForCampaign() {
-            var object = this;
-            var target = document.querySelector('#campaign-organization');
-            var container = document.querySelector('#campaign-region');
+            var object = this,
+                target = document.querySelector('#campaign-organization'),
+                container = document.querySelector('#campaign-region');
 
             if (target) {
                 target.onchange = function () {
@@ -461,13 +530,116 @@ var ViewCampaigns = function () {
          * Enforces the date format on the flight date fields
          *
          * Depends on formatter.js
+         *
+         * @return void
          */
 
     }, {
+        key: 'setFlightWeeks',
+
+
+        /**
+         * Sets the total flight length in weeks once you have your dates
+         * entered into the fields
+         *
+         * @return void
+         */
+        value: function setFlightWeeks() {
+            var object = this,
+                start = document.querySelector('#flight-start'),
+                end = document.querySelector('#flight-end'),
+                display = document.querySelector('#flight-length');
+
+            if (start) {
+                start.onkeyup = function () {
+                    var startVal = start.value,
+                        endVal = end.value;
+
+                    if (startVal.length > 9 && endVal.length > 9) {
+                        display.value = CampaignsController.calculateFlightLengthInWeeks(startVal, endVal) + ' Weeks';
+                    }
+                };
+            }
+
+            if (end) {
+                end.onkeyup = function () {
+                    var startVal = start.value,
+                        endVal = end.value;
+
+                    if (startVal.length > 9 && endVal.length > 9) {
+                        display.value = CampaignsController.calculateFlightLengthInWeeks(startVal, endVal) + ' Weeks';
+                    }
+                };
+            }
+        }
+
+        /**
+         * Brings the create campaign form into view and persists the
+         * new campaign on the forms submission
+         *
+         * Controls the modals display and sends the data off in an AJAX
+         * call to get persisted into the database
+         *
+         * @return void
+         */
+
+    }, {
+        key: 'createCampaignFromDashboard',
+        value: function createCampaignFromDashboard() {
+            var overlay = document.querySelector('.campaigns-overlay'),
+                button = document.querySelector('.dash-create-campaign-button'),
+                close = overlay.querySelector('.close'),
+                form = overlay.querySelector('form'),
+                endpoint = '/api/v1/campaigns/new';
+
+            this.ActionHelpers.loadDashboardModal(overlay, button, close, form, endpoint);
+        }
+
+        /**
+         * Loads the regions for the selected organization as you're editing
+         * the campaign
+         *
+         * Makes an AJAX call to the /api/v1/regions/ endpoint to retrieve
+         * the data
+         *
+         * @return void
+         */
+
+    }, {
+        key: 'loadRegionsForCampaignEdit',
+        value: function loadRegionsForCampaignEdit() {
+            var object = this,
+                target = document.querySelector('.campaign-edit');
+
+            if (target !== null) {
+                (function () {
+                    var selector = document.querySelector('#campaign-organization'),
+                        container = document.querySelector('#campaign-region'),
+                        value = selector.value;
+
+                    container.innerHTML = '<option value="">Select Organization</option>';
+
+                    if (value !== '') {
+                        container.innerHTML = container.innerHTML + '<option value="">Select Region</option>';
+
+                        object.CampaignsController.loadRegionsFromOrganization(value).then(function (regions) {
+                            regions.forEach(function (region) {
+                                if (value == region.id) {
+                                    container.innerHTML = container.innerHTML + '<option value="' + region.id + '" selected="selected">' + region.name + '</option>';
+                                } else {
+                                    container.innerHTML = container.innerHTML + '<option value="' + region.id + '">' + region.name + '</option>';
+                                }
+                            });
+                        });
+                    }
+                })();
+            }
+        }
+    }], [{
         key: 'setFlightFieldFormats',
         value: function setFlightFieldFormats() {
-            var flightStart = document.querySelector('.flight-start');
-            var flightEnd = document.querySelector('.flight-end');
+            var flightStart = document.querySelector('.flight-start'),
+                flightEnd = document.querySelector('.flight-end');
 
             if (flightStart) {
                 new Formatter(flightStart, {
@@ -481,130 +653,6 @@ var ViewCampaigns = function () {
                     'pattern': '{{9999}}-{{99}}-{{99}}',
                     'persist': true
                 });
-            }
-        }
-
-        /**
-         * Sets the total flight length in weeks once you have your dates
-         * entered into the fields
-         */
-
-    }, {
-        key: 'setFlightWeeks',
-        value: function setFlightWeeks() {
-            var object = this;
-            var start = document.querySelector('#flight-start');
-            var end = document.querySelector('#flight-end');
-            var display = document.querySelector('#flight-length');
-
-            if (start) {
-                start.onkeyup = function () {
-                    var startVal = start.value;
-                    var endVal = end.value;
-
-                    if (startVal.length > 9 && endVal.length > 9) {
-                        display.value = object.CampaignsController.calculateFlightLengthInWeeks(startVal, endVal) + ' Weeks';
-                    }
-                };
-            }
-
-            if (end) {
-                end.onkeyup = function () {
-                    var startVal = start.value;
-                    var endVal = end.value;
-
-                    if (startVal.length > 9 && endVal.length > 9) {
-                        display.value = object.CampaignsController.calculateFlightLengthInWeeks(startVal, endVal) + ' Weeks';
-                    }
-                };
-            }
-        }
-
-        /**
-         * Brings the create campaign form into view and persists the
-         * new campaign on the forms submission
-         *
-         * Controls the modals display and sends the data off in an AJAX
-         * call to get persisted into the database
-         */
-
-    }, {
-        key: 'createCampaignFromDashboard',
-        value: function createCampaignFromDashboard() {
-            var object = this;
-            var overlay = document.querySelector('.campaigns-overlay');
-            var button = document.querySelector('.dash-create-campaign-button');
-            var close = overlay.querySelector('.close');
-            var form = overlay.querySelector('form');
-
-            button.onclick = function () {
-                overlay.style.display = 'block';
-            };
-
-            close.onclick = function () {
-                overlay.style.display = 'none';
-            };
-
-            form.onsubmit = function (submitted) {
-                submitted.preventDefault();
-
-                var data = object.AjaxHelpers.serialize(form);
-
-                object.CampaignsController.createNewCampaign(data).then(function (resp) {
-                    var formClasses = form.classList;
-
-                    if (resp.success == true) {
-                        form.reset();
-                        formClasses.add('successful');
-
-                        setTimeout(function () {
-                            formClasses.remove('successful');
-                        }, 1000);
-                    } else {
-                        formClasses.add('failure');
-
-                        setTimeout(function () {
-                            formClasses.remove('failure');
-                        }, 1000);
-                    }
-                });
-            };
-        }
-
-        /**
-         * Loads the regions for the selected organization as you're editing
-         * the campaign
-         *
-         * Makes an AJAX call to the /api/v1/regions/ endpoint to retrieve
-         * the data
-         */
-
-    }, {
-        key: 'loadRegionsForCampaignEdit',
-        value: function loadRegionsForCampaignEdit() {
-            var object = this;
-            var target = document.querySelector('.campaign-edit');
-
-            if (target !== null) {
-                var selector = document.querySelector('#campaign-organization');
-                var container = document.querySelector('#campaign-region');
-                var value = selector.value;
-
-                container.innerHTML = '<option value="">Select Organization</option>';
-
-                if (value !== '') {
-                    container.innerHTML = container.innerHTML + '<option value="">Select Region</option>';
-
-                    object.CampaignsController.loadRegionsFromOrganization(value).then(function (regions) {
-                        regions.forEach(function (region) {
-                            if (value == region.id) {
-                                container.innerHTML = container.innerHTML + '<option value="' + region.id + '" selected="selected">' + region.name + '</option>';
-                            } else {
-                                container.innerHTML = container.innerHTML + '<option value="' + region.id + '">' + region.name + '</option>';
-                            }
-                        });
-                    });
-                }
             }
         }
     }]);
@@ -622,6 +670,8 @@ var ViewInvoices = function () {
     /**
      * Registers all dependencies to the object, and creates checks
      * before executing the setup functions on this object
+     *
+     * @return void
      */
     function ViewInvoices() {
         _classCallCheck(this, ViewInvoices);
@@ -636,15 +686,17 @@ var ViewInvoices = function () {
     /**
      * Sets the region for the invoice importer after you've selected your
      * organization, loads the regions using the campaigns controller
+     *
+     * @return void
      */
 
 
     _createClass(ViewInvoices, [{
         key: 'setRegionForInvoiceImporter',
         value: function setRegionForInvoiceImporter() {
-            var object = this;
-            var target = document.querySelector('#organizations');
-            var container = document.querySelector('#regions');
+            var object = this,
+                target = document.querySelector('#organizations'),
+                container = document.querySelector('#regions');
 
             if (target) {
                 target.onchange = function () {
@@ -672,14 +724,16 @@ var ViewInvoices = function () {
         /**
          * Sets the campaigns for the invoice importer after you've selected your
          * region, loads the campaigns using the campaigns controller
+         *
+         * @return void
          */
 
     }, {
         key: 'setInvoiceCampaigns',
         value: function setInvoiceCampaigns() {
-            var object = this;
-            var target = document.querySelector('#regions');
-            var container = document.querySelector('#campaigns');
+            var object = this,
+                target = document.querySelector('#regions'),
+                container = document.querySelector('#campaigns');
 
             if (target) {
                 target.onchange = function () {
@@ -709,6 +763,8 @@ var ViewInvoices = function () {
          * so you can process multiple invoices as once.
          *
          * Currently not in use
+         *
+         * @return void
          */
         // addMoreInvoices() {
         //     var inputs = document.querySelectorAll('.file-inputs');
@@ -739,6 +795,8 @@ var ViewNavigation = function () {
     /**
      * Registers all dependencies to the object, and creates checks
      * before executing the setup functions on this object
+     *
+     * @return void
      */
     function ViewNavigation() {
         _classCallCheck(this, ViewNavigation);
@@ -749,6 +807,8 @@ var ViewNavigation = function () {
     /**
      * This toggles the side menu into and out of visibility
      * when you click on the hamburger
+     *
+     * @return void
      */
 
 
@@ -758,8 +818,8 @@ var ViewNavigation = function () {
             var hamburger = document.querySelector('.hamburger');
 
             hamburger.onclick = function () {
-                var masthead = document.querySelector('.masthead');
-                var classList = masthead.classList;
+                var masthead = document.querySelector('.masthead'),
+                    classList = masthead.classList;
 
                 classList.toggle('show');
             };
@@ -779,11 +839,14 @@ var ViewOrganizations = function () {
     /**
      * Registers all dependencies to the object, and creates checks
      * before executing the setup functions on this object
+     *
+     * @return void
      */
     function ViewOrganizations() {
         _classCallCheck(this, ViewOrganizations);
 
         this.AjaxHelpers = new AjaxHelpers();
+        this.ActionHelpers = new ActionHelpers();
         this.OrgList = document.querySelectorAll('.organization-list li label');
         this.OrgOverlay = document.querySelector('.organizations-overlay');
 
@@ -801,21 +864,23 @@ var ViewOrganizations = function () {
      *
      * Makes an AJAX call to the /api/v1/regions/ endpoint to retrieve
      * the data
+     *
+     * @return void
      */
 
 
     _createClass(ViewOrganizations, [{
         key: 'loadRegionsFromOrganizationForDashboard',
         value: function loadRegionsFromOrganizationForDashboard() {
-            var object = this;
-            var targets = document.querySelectorAll('.organization-list li label');
-            var container = document.querySelector('.region-information');
+            var object = this,
+                targets = document.querySelectorAll('.organization-list li label'),
+                container = document.querySelector('.region-information');
 
             targets.forEach(function (target) {
                 target.onclick = function () {
-                    var orgId = target.dataset.id;
-                    var orgName = this.dataset.name;
-                    var endpoint = '/api/v1/regions/' + orgId;
+                    var orgId = target.dataset.id,
+                        orgName = this.dataset.name,
+                        endpoint = '/api/v1/regions/' + orgId;
 
                     object.AjaxHelpers.getCall(endpoint).then(function (regions) {
                         container.innerHTML = '<h1 class="content-title">' + orgName + ' Regions</h1>';
@@ -844,20 +909,22 @@ var ViewOrganizations = function () {
          *
          * Makes an AJAX call to the /api/v1/campaigns/ endpoint to retrieve
          * the data
+         *
+         * @return void
          */
 
     }, {
         key: 'loadCampaignsFromRegion',
         value: function loadCampaignsFromRegion() {
-            var object = this;
-            var regions = document.querySelectorAll('.region-selector');
+            var object = this,
+                regions = document.querySelectorAll('.region-selector');
 
             regions.forEach(function (region) {
                 region.onclick = function () {
-                    var id = region.dataset.id;
-                    var endpoint = '/api/v1/campaigns/' + id;
-                    var container = document.querySelector('.region-campaigns');
-                    var regionName = region.innerHTML;
+                    var id = region.dataset.id,
+                        endpoint = '/api/v1/campaigns/' + id,
+                        container = document.querySelector('.region-campaigns'),
+                        regionName = region.innerHTML;
 
                     object.AjaxHelpers.getCall(endpoint).then(function (campaigns) {
                         container.innerHTML = '<p class="align-center">There Are No Campaigns For This Region</p>';
@@ -887,51 +954,20 @@ var ViewOrganizations = function () {
          *
          * Controls the modals display and sends the data off in an AJAX
          * call to get persisted into the database
+         *
+         * @return void
          */
 
     }, {
         key: 'createOrganizationFromDashboard',
         value: function createOrganizationFromDashboard() {
-            var object = this;
-            var overlay = document.querySelector('.organizations-overlay');
-            var button = document.querySelector('.dash-create-organizations-button');
-            var close = overlay.querySelector('.close');
-            var form = overlay.querySelector('form');
-            var endpoint = '/api/v1/organizations/new';
+            var overlay = document.querySelector('.organizations-overlay'),
+                button = document.querySelector('.dash-create-organizations-button'),
+                close = overlay.querySelector('.close'),
+                form = overlay.querySelector('form'),
+                endpoint = '/api/v1/organizations/new';
 
-            button.onclick = function () {
-                overlay.style.display = 'block';
-            };
-
-            close.onclick = function () {
-                overlay.style.display = 'none';
-            };
-
-            form.onsubmit = function (submitted) {
-                submitted.preventDefault();
-
-                var data = object.AjaxHelpers.serialize(form);
-
-                object.AjaxHelpers.postCall(endpoint, data).then(function (resp) {
-                    var formClasses = form.classList;
-
-                    if (resp.success == true) {
-                        form.reset();
-                        formClasses.add('successful');
-                        object.refreshOrganizations();
-
-                        setTimeout(function () {
-                            formClasses.remove('successful');
-                        }, 1000);
-                    } else {
-                        formClasses.add('failure');
-
-                        setTimeout(function () {
-                            formClasses.remove('failure');
-                        }, 1000);
-                    }
-                });
-            };
+            this.ActionHelpers.loadDashboardModal(overlay, button, close, form, endpoint);
         }
 
         /**
@@ -940,14 +976,16 @@ var ViewOrganizations = function () {
          *
          * Makes an AJAX call to /api/v1/organizations endpoint to retrieve
          * the data
+         *
+         * @return void
          */
 
     }, {
         key: 'refreshOrganizations',
         value: function refreshOrganizations() {
-            var object = this;
-            var sidebar = document.querySelector('.sidebar .organization-list');
-            var endpoint = '/api/v1/organizations';
+            var object = this,
+                sidebar = document.querySelector('.sidebar .organization-list'),
+                endpoint = '/api/v1/organizations';
 
             object.AjaxHelpers.getCall(endpoint).then(function (organizations) {
                 sidebar.innerHTML = '';
@@ -974,11 +1012,14 @@ var ViewRegions = function () {
     /**
      * Registers all dependencies to the object, and creates checks
      * before executing the setup functions on this object
+     *
+     * @return void
      */
     function ViewRegions() {
         _classCallCheck(this, ViewRegions);
 
         this.AjaxHelpers = new AjaxHelpers();
+        this.ActionHelpers = new ActionHelpers();
         this.RegionOverlay = document.querySelector('.regions-overlay');
 
         if (this.RegionOverlay) {
@@ -992,51 +1033,21 @@ var ViewRegions = function () {
      *
      * Controls the modals display and sends the data off in an AJAX
      * call to get persisted into the database
+     *
+     * @return void
      */
 
 
     _createClass(ViewRegions, [{
         key: 'dashboardCreateRegion',
         value: function dashboardCreateRegion() {
-            var object = this;
-            var overlay = document.querySelector('.regions-overlay');
-            var button = document.querySelector('.dash-create-regions-button');
-            var close = overlay.querySelector('.close');
-            var form = overlay.querySelector('form');
-            var endpoint = '/api/v1/regions/new';
+            var overlay = document.querySelector('.regions-overlay'),
+                button = document.querySelector('.dash-create-regions-button'),
+                close = overlay.querySelector('.close'),
+                form = overlay.querySelector('form'),
+                endpoint = '/api/v1/regions/new';
 
-            button.onclick = function () {
-                overlay.style.display = 'block';
-            };
-
-            close.onclick = function () {
-                overlay.style.display = 'none';
-            };
-
-            form.onsubmit = function (submitted) {
-                submitted.preventDefault();
-
-                var data = object.AjaxHelpers.serialize(form);
-
-                object.AjaxHelpers.postCall(endpoint, data).then(function (resp) {
-                    var formClasses = form.classList;
-
-                    if (resp.success == true) {
-                        form.reset();
-                        formClasses.add('successful');
-
-                        setTimeout(function () {
-                            formClasses.remove('successful');
-                        }, 1000);
-                    } else {
-                        formClasses.add('failure');
-
-                        setTimeout(function () {
-                            formClasses.remove('failure');
-                        }, 1000);
-                    }
-                });
-            };
+            this.ActionHelpers.loadDashboardModal(overlay, button, close, form, endpoint);
         }
     }]);
 
@@ -1053,11 +1064,14 @@ var ViewSpotTypes = function () {
     /**
      * Registers all dependencies to the object, and creates checks
      * before executing the setup functions on this object
+     *
+     * @return void
      */
     function ViewSpotTypes() {
         _classCallCheck(this, ViewSpotTypes);
 
         this.AjaxHelpers = new AjaxHelpers();
+        this.ActionHelpers = new ActionHelpers();
         this.SpotTypeOverlay = document.querySelector('.spot-types-overlay');
 
         if (this.SpotTypeOverlay) {
@@ -1071,51 +1085,21 @@ var ViewSpotTypes = function () {
      *
      * Controls the modals display and sends the data off in an AJAX
      * call to get persisted into the database
+     *
+     * @return void
      */
 
 
     _createClass(ViewSpotTypes, [{
         key: 'createSpotTypeFromDashboard',
         value: function createSpotTypeFromDashboard() {
-            var object = this;
-            var overlay = document.querySelector('.spot-types-overlay');
-            var button = document.querySelector('.dash-create-spot-types-button');
-            var close = overlay.querySelector('.close');
-            var form = overlay.querySelector('form');
-            var endpoint = '/api/v1/spot-types/new';
+            var overlay = document.querySelector('.spot-types-overlay'),
+                button = document.querySelector('.dash-create-spot-types-button'),
+                close = overlay.querySelector('.close'),
+                form = overlay.querySelector('form'),
+                endpoint = '/api/v1/spot-types/new';
 
-            button.onclick = function () {
-                overlay.style.display = 'block';
-            };
-
-            close.onclick = function () {
-                overlay.style.display = 'none';
-            };
-
-            form.onsubmit = function (submitted) {
-                submitted.preventDefault();
-
-                var data = object.AjaxHelpers.serialize(form);
-
-                object.AjaxHelpers.postCall(endpoint, data).then(function (resp) {
-                    var formClasses = form.classList;
-
-                    if (resp.success == true) {
-                        form.reset();
-                        formClasses.add('successful');
-
-                        setTimeout(function () {
-                            formClasses.remove('successful');
-                        }, 1000);
-                    } else {
-                        formClasses.add('failure');
-
-                        setTimeout(function () {
-                            formClasses.remove('failure');
-                        }, 1000);
-                    }
-                });
-            };
+            this.ActionHelpers.loadDashboardModal(overlay, button, close, form, endpoint);
         }
     }]);
 
@@ -1132,6 +1116,8 @@ var ViewWorksheets = function () {
     /**
      * Registers all dependencies to the object, and creates checks
      * before executing the setup functions on this object
+     *
+     * @return void
      */
     function ViewWorksheets() {
         _classCallCheck(this, ViewWorksheets);
@@ -1140,7 +1126,8 @@ var ViewWorksheets = function () {
 
         this.persistWeekInformationForWorksheet();
         this.toggleProgramDetails();
-        this.setInnerOverflow();
+
+        ViewWorksheets.setInnerOverflow();
 
         if (document.querySelector('.info-inner')) {
             this.createTotalCalculations();
@@ -1153,23 +1140,25 @@ var ViewWorksheets = function () {
      *
      * Makes an AJAX call to the /api/v1/worksheet/' + id + '/update
      * endpoint to persist the data
+     *
+     * @return void
      */
 
 
     _createClass(ViewWorksheets, [{
         key: 'persistWeekInformationForWorksheet',
         value: function persistWeekInformationForWorksheet() {
-            var object = this;
-            var buttons = document.querySelectorAll('.update-week-information');
+            var object = this,
+                buttons = document.querySelectorAll('.update-week-information');
 
             buttons.forEach(function (button) {
                 button.onclick = function (clicked) {
                     clicked.preventDefault();
 
-                    var id = button.dataset.worksheet;
-                    var worksheet = button.parentNode.parentNode;
-                    var wsClasses = worksheet.classList;
-                    var infoRequest = object.Worksheets.persistWorksheetWeekInformation(id);
+                    var id = button.dataset.worksheet,
+                        worksheet = button.parentNode.parentNode,
+                        wsClasses = worksheet.classList,
+                        infoRequest = object.Worksheets.persistWorksheetWeekInformation(id);
 
                     wsClasses.toggle('loading');
 
@@ -1200,35 +1189,26 @@ var ViewWorksheets = function () {
          * Sets the inner overflow of the horizontal scrolling section of the
          * week information interface so you can scroll through all of the
          * dates inside of the flight run to enter spot counts
-         */
-
-    }, {
-        key: 'setInnerOverflow',
-        value: function setInnerOverflow() {
-            var containers = document.querySelectorAll('.info-inner');
-
-            containers.forEach(function (container) {
-                var dates = container.querySelectorAll('.spot-column');
-                var colWidth = dates[0].offsetWidth;
-                var dateCount = dates.length;
-
-                container.querySelector('.scrollable').style.width = colWidth * dateCount + 'px';
-            });
-        }
-
-        /**
-         * Sets the spot total for each program (row) of the buy
+         *
+         * @return void
          */
 
     }, {
         key: 'createTotalCalculations',
+
+
+        /**
+         * Sets the spot total for each program (row) of the buy
+         *
+         * @return void
+         */
         value: function createTotalCalculations() {
-            var object = this;
-            var containers = document.querySelectorAll('.info-inner');
+            var object = this,
+                containers = document.querySelectorAll('.info-inner');
 
             containers.forEach(function (container) {
-                var inputs = container.querySelectorAll('input.date-count');
-                var columns = container.querySelectorAll('.spot-column');
+                var inputs = container.querySelectorAll('input.date-count'),
+                    columns = container.querySelectorAll('.spot-column');
 
                 inputs.forEach(function (input) {
                     object.setWeeklyTotals(container, columns, input.dataset.program);
@@ -1246,6 +1226,7 @@ var ViewWorksheets = function () {
          * @param container
          * @param columns
          * @param programId
+         * @return void
          */
 
     }, {
@@ -1264,7 +1245,7 @@ var ViewWorksheets = function () {
                 }
             });
 
-            this.setWholeBuyTotals(container, programId);
+            ViewWorksheets.setWholeBuyTotals(container, programId);
         }
 
         /**
@@ -1272,8 +1253,45 @@ var ViewWorksheets = function () {
          *
          * @param container
          * @param programId
+         * @return void
          */
 
+    }, {
+        key: 'toggleProgramDetails',
+
+
+        /**
+         * Toggles the display of the program details
+         *
+         * @return void
+         */
+        value: function toggleProgramDetails() {
+            var expanders = document.querySelectorAll('.extra-detail-expander');
+
+            expanders.forEach(function (expander) {
+                expander.onclick = function () {
+                    var classList = expander.classList,
+                        wrapper = expander.parentNode.querySelector('.detail-wrapper'),
+                        wrapStyle = wrapper.style.display;
+
+                    classList.toggle('rotated');
+                    wrapper.style.display = wrapStyle === 'block' ? '' : 'block';
+                };
+            });
+        }
+    }], [{
+        key: 'setInnerOverflow',
+        value: function setInnerOverflow() {
+            var containers = document.querySelectorAll('.info-inner');
+
+            containers.forEach(function (container) {
+                var dates = container.querySelectorAll('.spot-column'),
+                    colWidth = dates[0].offsetWidth,
+                    dateCount = dates.length;
+
+                container.querySelector('.scrollable').style.width = colWidth * dateCount + 'px';
+            });
+        }
     }, {
         key: 'setWholeBuyTotals',
         value: function setWholeBuyTotals(container, programId) {
@@ -1281,38 +1299,17 @@ var ViewWorksheets = function () {
             var sectionedInputs = [];
             var count = 0;
 
-            for (var a = 0; a < allInputs.length; a++) {
-                if (allInputs[a].dataset.program == programId) {
-                    sectionedInputs.push(allInputs[a]);
+            allInputs.forEach(function (input) {
+                if (input.dataset.program == programId) {
+                    sectionedInputs.push(input);
                 }
-            }
-
-            for (var b = 0; b < sectionedInputs.length; b++) {
-                count = Number(sectionedInputs[b].value) + Number(count);
-            }
-
-            document.querySelector('.spot-date-total .program-' + programId + '-total').innerHTML = count;
-        }
-
-        /**
-         * Toggles the display of the program details
-         */
-
-    }, {
-        key: 'toggleProgramDetails',
-        value: function toggleProgramDetails() {
-            var expanders = document.querySelectorAll('.extra-detail-expander');
-
-            expanders.forEach(function (expander) {
-                expander.onclick = function () {
-                    var classList = expander.classList;
-                    var wrapper = expander.parentNode.querySelector('.detail-wrapper');
-                    var wrapStyle = wrapper.style.display;
-
-                    classList.toggle('rotated');
-                    wrapper.style.display = wrapStyle === 'block' ? '' : 'block';
-                };
             });
+
+            sectionedInputs.forEach(function (input) {
+                count = Number(input.value) + Number(count);
+            });
+
+            document.querySelector('.spot-date-total .program-' + programId + '-total').innerHTML = count.toString();
         }
     }]);
 
