@@ -14,6 +14,7 @@ class ViewCampaigns {
         this.AjaxHelpers         = new AjaxHelpers();
         this.ActionHelpers       = new ActionHelpers();
         this.CampaignsController = new CampaignsController();
+        this.DomHelpers          = new DomHelpers();
         this.CampOverlay         = document.querySelector('.campaigns-overlay');
 
         this.loadRegionsFromOrganizationForCampaign();
@@ -43,20 +44,19 @@ class ViewCampaigns {
 
         if (target) {
             target.onchange = function () {
-                let value = this.value;
+                const dropDown = object.DomHelpers.setContainer(container),
+                      value    = this.value;
 
-                container.innerHTML = '<option value="">Select Organization</option>';
+                dropDown.replace(`<option value="">Select Organization</option>`);
 
                 if (value !== '') {
-                    container.innerHTML = '';
+                    dropDown.clear();
 
                     object.CampaignsController.loadRegionsFromOrganization(value).then(function (regions) {
-                        container.innerHTML = container.innerHTML +
-                                              '<option value="">Select A Region</option>';
+                        dropDown.append(`<option value="">Select A Region</option>`);
 
                         regions.forEach( function (region) {
-                            container.innerHTML = container.innerHTML +
-                                                  '<option value="' + region.id + '">' + region.name + '</option>';
+                            dropDown.append(`<option value="${region.id}">${region.name}</option>`);
                         });
                     });
                 }
@@ -97,8 +97,7 @@ class ViewCampaigns {
      * @return void
      */
     setFlightWeeks() {
-        const object  = this,
-              start   = document.querySelector('#flight-start'),
+        const start   = document.querySelector('#flight-start'),
               end     = document.querySelector('#flight-end'),
               display = document.querySelector('#flight-length');
 
@@ -159,26 +158,24 @@ class ViewCampaigns {
         const object = this,
               target = document.querySelector('.campaign-edit');
 
-        if (target !== null) {
+        if (target) {
             const selector  = document.querySelector('#campaign-organization'),
                   container = document.querySelector('#campaign-region'),
-                  value     = selector.value;
+                  value     = selector.value,
+                  dropDown  = this.DomHelpers.setContainer(container);
 
-            container.innerHTML = '<option value="">Select Organization</option>';
+            dropDown.replace(`<option value="">Select Organization</option>`);
 
             if (value !== '') {
-                container.innerHTML = container.innerHTML +
-                                      '<option value="">Select Region</option>';
+                dropDown.append(`<option value="">Select Region</option>`);
 
                 object.CampaignsController.loadRegionsFromOrganization(value).then(function (regions) {
                     regions.forEach( function (region) {
                         if (value == region.id) {
-                            container.innerHTML = container.innerHTML +
-                                                  '<option value="' + region.id + '" selected="selected">' + region.name + '</option>';
+                            dropDown.append(`<option value="${region.id}" selected="selected">${region.name}</option>`);
                         }
                         else {
-                            container.innerHTML = container.innerHTML +
-                                                  '<option value="' + region.id + '">' + region.name + '</option>';
+                            dropDown.append(`<option value="${region.id}">${region.name}</option>`);
                         }
                     });
                 });

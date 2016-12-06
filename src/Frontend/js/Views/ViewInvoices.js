@@ -11,11 +11,12 @@ class ViewInvoices {
      * @return void
      */
     constructor() {
+        this.CampaignsController = new CampaignsController();
+        this.ActionHelpers       = new ActionHelpers();
+        this.DomHelpers          = new DomHelpers();
+
         this.setRegionForInvoiceImporter();
         this.setInvoiceCampaigns();
-        // this.addMoreInvoices();
-
-        this.CampaignsController = new CampaignsController();
     }
 
     /**
@@ -25,28 +26,27 @@ class ViewInvoices {
      * @return void
      */
     setRegionForInvoiceImporter() {
-        const object    = this,
-              target    = document.querySelector('#organizations'),
-              container = document.querySelector('#regions');
+        const object         = this,
+              target         = document.querySelector('#organizations'),
+              container      = document.querySelector('#regions');
 
         if (target) {
-            target.onchange = function () {
-                const value = this.value;
+            target.onchange = () => {
+                const value          = target.value,
+                      regionDropDown = object.DomHelpers.setContainer(container);
 
-                container.innerHTML = '<option value="">Select Organization</option>';
+                regionDropDown.replace(`<option value="">Select Organization</option>`);
 
                 if (value !== '') {
-                    object.CampaignsController.loadRegionsFromOrganization(value).then(function (regions) {
-                        container.innerHTML = '<option value="">Select Region</option>';
+                    object.CampaignsController.loadRegionsFromOrganization(value).then((regions) => {
+                        regionDropDown.replace(`<option value="">Select Region</option>`);
 
-                        regions.forEach( function (region) {
-                            container.innerHTML = container.innerHTML +
-                                                  '<option value="' + region.id + '">' + region.name + '</option>';
+                        regions.forEach((region) => {
+                            regionDropDown.append(`<option value="${region.id}">${region.name}</option>`);
                         });
 
                         if (regions.length == 0) {
-                            container.innerHTML = container.innerHTML +
-                                                  '<option value="">No Available Regions</option>';
+                            regionDropDown.append(`<option value="">No Available Regions</option>`);
                         }
                     });
                 }
@@ -66,49 +66,26 @@ class ViewInvoices {
               container = document.querySelector('#campaigns');
 
         if (target) {
-            target.onchange = function () {
-                const value = this.value;
+            target.onchange = () => {
+                const value   = target.value,
+                      campCon = object.DomHelpers.setContainer(container);
 
-                container.innerHTML = '<option value="">Select Region</option>';
+                campCon.replace(`<option value="">Select Region</option>`);
 
                 if (value !== '') {
-                    object.CampaignsController.loadCampaignsFromRegion(value).then(function (campaigns) {
-                        container.innerHTML = '<option value="">Select Campaign</option>';
+                    object.CampaignsController.loadCampaignsFromRegion(value).then((campaigns) => {
+                        campCon.replace(`<option value="">Select Campaign</option>`);
 
-                        campaigns.forEach(function (campaign) {
-                            container.innerHTML = container.innerHTML +
-                                                  '<option value="' + campaign.id + '">' + campaign.name + '</option>';
+                        campaigns.forEach((campaign) => {
+                            campCon.append(`<option value="${campaign.id}">${campaign.name}</option>`);
                         });
 
                         if (campaigns.length == 0) {
-                            container.innerHTML = container.innerHTML +
-                                                  '<option value="">No Available Campaigns</option>';
+                            campCon.append(`<option value="">No Available Campaigns</option>`);
                         }
                     });
                 }
             }
         }
     }
-
-    /**
-     * Function that allows you to add more files to the invoice processor
-     * so you can process multiple invoices as once.
-     *
-     * Currently not in use
-     *
-     * @return void
-     */
-    // addMoreInvoices() {
-    //     var inputs = document.querySelectorAll('.file-inputs');
-    //
-    //     $('.add-more-invoices').click(function () {
-    //         var lastInput = inputs.find('.columns:last-child').find('input');
-    //         var currentId = lastInput.attr('data-id');
-    //         var newId     = Number(currentId) + 1;
-    //
-    //         inputs.append('<div class="columns large-4 medium-4 small-12">' +
-    //                            '<input type="file" class="form-control" name="invoices-' + newId + '" data-id="' + newId + '" />' +
-    //                       '</div>');
-    //     });
-    // }
 }

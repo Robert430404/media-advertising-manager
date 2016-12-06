@@ -13,14 +13,22 @@ class ViewOrganizations {
     constructor() {
         this.AjaxHelpers   = new AjaxHelpers();
         this.ActionHelpers = new ActionHelpers();
+        this.DomHelpers    = new DomHelpers();
+
         this.OrgList       = document.querySelectorAll('.organization-list li label');
         this.OrgOverlay    = document.querySelector('.organizations-overlay');
+        this.OrgRefresh    = document.querySelector('.refresh-button');
 
         if (this.OrgList) {
             this.loadRegionsFromOrganizationForDashboard();
         }
         if (this.OrgOverlay) {
             this.createOrganizationFromDashboard();
+        }
+        if (this.OrgRefresh) {
+            this.OrgRefresh.onclick = () => {
+                this.refreshOrganizations();
+            }
         }
     }
 
@@ -34,37 +42,35 @@ class ViewOrganizations {
      * @return void
      */
     loadRegionsFromOrganizationForDashboard() {
-        const object    = this,
-              targets   = document.querySelectorAll('.organization-list li label'),
-              container = document.querySelector('.region-information');
+        const object     = this,
+              targets    = document.querySelectorAll('.organization-list li label'),
+              container  = document.querySelector('.region-information');
 
-        targets.forEach( function (target) {
-            target.onclick = function () {
-                const orgId    = target.dataset.id,
-                      orgName  = this.dataset.name,
-                      endpoint = '/api/v1/regions/' + orgId;
+        targets.forEach((target) => {
+            target.onclick = () => {
+                const orgId      = target.dataset.id,
+                      orgName    = target.dataset.name,
+                      endpoint   = '/api/v1/regions/' + orgId,
+                      regionInfo = object.DomHelpers.setContainer(container);
 
-                object.AjaxHelpers.getCall(endpoint).then( function (regions) {
-                    container.innerHTML = '<h1 class="content-title">' + orgName + ' Regions</h1>';
-                    container.innerHTML = container.innerHTML +
-                                          '<ul class="region-list"></ul>';
+                object.AjaxHelpers.getCall(endpoint).then((regions) => {
+                    regionInfo.replace(`<h1 class="content-title">${orgName} Regions</h1>`);
+                    regionInfo.append(`<ul class="region-list"></ul>`);
+                    regionInfo.append(`<div class="region-campaigns"></div>`);
 
                     if (regions.length > 0) {
-                        regions.forEach( function (region) {
-                            const list = container.querySelector('.region-list');
+                        regions.forEach((region) => {
+                            const regionList = container.querySelector('.region-list'),
+                                  list       = object.DomHelpers.setContainer(regionList);
 
-                            list.innerHTML = list.innerHTML +
-                                             '<li class="region-selector region-selector-' + region.id + '" data-id="' + region.id + '">' +
-                                                 region.name +
-                                             '</li>';
+                            list.append(`<li class="region-selector region-selector-${region.id}" data-id="${region.id}">
+                                            ${region.name}
+                                        </li>`);
                         });
                     } else {
-                        container.innerHTML = container.innerHTML +
-                                              '<p class="align-center">There Are No Regions</p>';
+                        regionInfo.append(`<p class="align-center">There Are No Regions</p>`);
                     }
 
-                    container.innerHTML = container.innerHTML +
-                                          '<div class="region-campaigns"></div>';
                     object.loadCampaignsFromRegion();
                 });
             }
@@ -84,36 +90,32 @@ class ViewOrganizations {
         const object  = this,
               regions = document.querySelectorAll('.region-selector');
 
-        regions.forEach( function (region) {
-            region.onclick = function () {
+        regions.forEach((region) => {
+            region.onclick = () => {
                 const id         = region.dataset.id,
                       endpoint   = '/api/v1/campaigns/' + id,
                       container  = document.querySelector('.region-campaigns'),
-                      regionName = region.innerHTML;
+                      regionName = region.innerHTML,
+                      regionCamp = object.DomHelpers.setContainer(container);
 
-                object.AjaxHelpers.getCall(endpoint).then( function (campaigns) {
-                    container.innerHTML = '<p class="align-center">There Are No Campaigns For This Region</p>';
+                object.AjaxHelpers.getCall(endpoint).then((campaigns) => {
+                    regionCamp.replace(`<p class="align-center">There Are No Campaigns For This Region</p>`);
 
                     if (campaigns.length > 0) {
-                        container.innerHTML = '<h1 class="campaigns-title">' + regionName + ' Campaigns</h1>';
-                        container.innerHTML = container.innerHTML +
-                                              '<ul class="campaign-list"></ul>';
+                        regionCamp.replace(`<h1 class="campaigns-title">${regionName} Campaigns</h1>`);
+                        regionCamp.append(`<ul class="campaign-list"></ul>`);
 
-                        campaigns.forEach( function (campaign) {
-                            const list = container.querySelector('.campaign-list');
+                        const campList = container.querySelector('.campaign-list'),
+                              list     = object.DomHelpers.setContainer(campList);
 
-                            list.innerHTML = list.innerHTML +
-                                             '<li class="campaign-selector campaign-selector-' + campaign.id + '" data-id="' + campaign.id + '">' +
-                                                 campaign.name +
-                                             '</li>';
-
-                            const button = list.querySelector('.campaign-selector-' + campaign.id);
-
-                            button.innerHTML = button.innerHTML +
-                                               '<div class="actions">' +
-                                                   '<a href="/campaigns/worksheets/' + campaign.id + '">Worksheets</a>' +
-                                                   '<a href="/reports/station-order/' + campaign.id + '" target="_blank">Station Order</a>' +
-                                               '</div>';
+                        campaigns.forEach((campaign) => {
+                            list.append(`<li class="campaign-selector campaign-selector-${campaign.id}" data-id="${campaign.id}">
+                                            ${campaign.name}
+                                            <div class="actions">
+                                                <a href="/campaigns/worksheets/${campaign.id}">Worksheets</a>
+                                                <a href="/reports/station-order/${campaign.id}" target="_blank">Station Order</a>
+                                            </div>
+                                        </li>`);
                         });
                     }
                 });
@@ -150,23 +152,27 @@ class ViewOrganizations {
      * @return void
      */
     refreshOrganizations() {
-        const object   = this,
-              sidebar  = document.querySelector('.sidebar .organization-list'),
-              endpoint = '/api/v1/organizations';
+        const object           = this,
+              container        = document.querySelector('.sidebar .organization-list'),
+              organizationList = this.DomHelpers.setContainer(container),
+              sidebarClasses   = container.classList,
+              endpoint         = '/api/v1/organizations';
 
-        object.AjaxHelpers.getCall(endpoint).then(function (organizations) {
-            sidebar.innerHTML = '';
+        sidebarClasses.add('loading');
 
-            organizations.forEach( function (organization) {
-                sidebar.innerHTML = sidebar.innerHTML +
-                                    '<li>' +
-                                        '<label data-id="' + organization.id + '" data-name="' + organization.name + '">' +
-                                            organization.name +
-                                            '<i class="fa fa-chevron-right"></i>' +
-                                        '</label>' +
-                                    '</li>';
+        object.AjaxHelpers.getCall(endpoint).then((organizations) => {
+            organizationList.clear();
+
+            organizations.forEach((organization) => {
+                organizationList.append(`<li>
+                                            <label data-id="${organization.id}" data-name="${organization.name}">
+                                                ${organization.name}
+                                                <i class="fa fa-chevron-right"></i>
+                                            </label>
+                                        </li>`);
             });
 
+            sidebarClasses.remove('loading');
             object.loadRegionsFromOrganizationForDashboard();
         });
     }

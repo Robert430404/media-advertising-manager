@@ -12,6 +12,8 @@ class ActionHelpers {
      * @return void
      */
     constructor() {
+        this.AjaxHelpers = new AjaxHelpers();
+
         this.confirmAction();
     }
 
@@ -50,65 +52,60 @@ class ActionHelpers {
      * @param close
      * @param form
      * @param endpoint
-     * @return void
+     * @return {Promise}
      */
     loadDashboardModal(overlay, button, close, form, endpoint) {
-        const object  = this;
+        const object = this;
 
-        button.onclick = function () {
+        button.onclick = () => {
             overlay.style.display = 'block';
         };
 
-        close.onclick = function () {
+        close.onclick = () => {
             overlay.style.display = 'none';
         };
 
-        form.onsubmit = function (submitted) {
+        form.onsubmit = (submitted) => {
             submitted.preventDefault();
 
             const data = AjaxHelpers.serialize(form);
 
-            object.AjaxHelpers.postCall(endpoint, data).then(function (resp) {
+            object.AjaxHelpers.postCall(endpoint, data).then((resp) => {
                 const formClasses = form.classList;
 
                 if (resp.success == true) {
                     form.reset();
                     formClasses.add('successful');
-                    object.refreshOrganizations();
-
-                    setTimeout( function () {
+                    object.timeout(1500).then(() => {
                         formClasses.remove('successful');
-                    }, 1000);
+                    });
                 } else {
-                    formClasses.add('failure');
-
-                    setTimeout( function () {
-                        formClasses.remove('failure');
-                    }, 1000);
+                    if (resp.error == 'duplicate') {
+                        formClasses.add('duplicate');
+                        object.timeout(1500).then(() => {
+                            formClasses.remove('duplicate');
+                        });
+                    } else {
+                        formClasses.add('failure');
+                        object.timeout(1500).then(() => {
+                            formClasses.remove('failure');
+                        });
+                    }
                 }
             });
         };
     }
 
     /**
-     * This checks the type of fields being sent and if it meets a certain
-     * criteria. A boolean value is returned, use in the serialize function
+     * Promise Based Timeout Function
      *
-     * @param field
-     * @returns {boolean}
+     * @param duration
+     * @returns {Promise}
      */
-    static fieldTypeCheck(field) {
-        let type = false;
-
-        if (field.name &&
-            !field.disabled &&
-            field.type != 'file' &&
-            field.type != 'reset' &&
-            field.type != 'submit' &&
-            field.type != 'button') {
-            type = true;
-        }
-
-        return type;
+    timeout(duration) {
+        return new Promise((resolve, reject) => {
+            setTimeout(resolve, duration);
+        });
     }
 }
+

@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Api\V1;
 
 use Carbon\Carbon;
 use AppBundle\Entity\Organizations;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -67,8 +68,17 @@ class OrganizationsController extends Controller
             return $this->json($response);
         }
 
-        $orm->persist($organization);
-        $orm->flush();
+        try {
+            $orm->persist($organization);
+            $orm->flush();
+        } catch (UniqueConstraintViolationException $e) {
+            $response = [
+                'success' => false,
+                'error'   => 'duplicate'
+            ];
+
+            return $this->json($response);
+        }
 
         $response = [
             'success' => true,

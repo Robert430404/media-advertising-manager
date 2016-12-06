@@ -177,6 +177,8 @@ var ActionHelpers = function () {
     function ActionHelpers() {
         _classCallCheck(this, ActionHelpers);
 
+        this.AjaxHelpers = new AjaxHelpers();
+
         this.confirmAction();
     }
 
@@ -219,7 +221,7 @@ var ActionHelpers = function () {
          * @param close
          * @param form
          * @param endpoint
-         * @return void
+         * @return {Promise}
          */
 
     }, {
@@ -246,45 +248,45 @@ var ActionHelpers = function () {
                     if (resp.success == true) {
                         form.reset();
                         formClasses.add('successful');
-                        object.refreshOrganizations();
-
-                        setTimeout(function () {
+                        object.timeout(1500).then(function () {
                             formClasses.remove('successful');
-                        }, 1000);
+                        });
                     } else {
-                        formClasses.add('failure');
-
-                        setTimeout(function () {
-                            formClasses.remove('failure');
-                        }, 1000);
+                        if (resp.error == 'duplicate') {
+                            formClasses.add('duplicate');
+                            object.timeout(1500).then(function () {
+                                formClasses.remove('duplicate');
+                            });
+                        } else {
+                            formClasses.add('failure');
+                            object.timeout(1500).then(function () {
+                                formClasses.remove('failure');
+                            });
+                        }
                     }
                 });
             };
         }
 
         /**
-         * This checks the type of fields being sent and if it meets a certain
-         * criteria. A boolean value is returned, use in the serialize function
+         * Promise Based Timeout Function
          *
-         * @param field
-         * @returns {boolean}
+         * @param duration
+         * @returns {Promise}
          */
 
-    }], [{
-        key: 'fieldTypeCheck',
-        value: function fieldTypeCheck(field) {
-            var type = false;
-
-            if (field.name && !field.disabled && field.type != 'file' && field.type != 'reset' && field.type != 'submit' && field.type != 'button') {
-                type = true;
-            }
-
-            return type;
+    }, {
+        key: 'timeout',
+        value: function timeout(duration) {
+            return new Promise(function (resolve, reject) {
+                setTimeout(resolve, duration);
+            });
         }
     }]);
 
     return ActionHelpers;
 }();
+
 /**
  * AjaxHelpers Class
  *
@@ -301,8 +303,6 @@ var AjaxHelpers = function () {
      */
     function AjaxHelpers() {
         _classCallCheck(this, AjaxHelpers);
-
-        this.ActionHelpers = new ActionHelpers();
     }
 
     /**
@@ -391,7 +391,7 @@ var AjaxHelpers = function () {
 
                 for (var i = 0; i < length; i++) {
                     field = form.elements[i];
-                    var fieldCheck = ActionHelpers.fieldTypeCheck(field);
+                    var fieldCheck = AjaxHelpers.fieldTypeCheck(field);
 
                     if (fieldCheck) {
                         if (field.type == 'select-multiple') {
@@ -411,9 +411,114 @@ var AjaxHelpers = function () {
 
             return value.join('&').replace(/%20/g, '+');
         }
+
+        /**
+         * This checks the type of fields being sent and if it meets a certain
+         * criteria. A boolean value is returned, use in the serialize function
+         *
+         * @param field
+         * @returns {boolean}
+         */
+
+    }, {
+        key: 'fieldTypeCheck',
+        value: function fieldTypeCheck(field) {
+            var type = false;
+
+            if (field.name && !field.disabled && field.type != 'file' && field.type != 'reset' && field.type != 'submit' && field.type != 'button') {
+                type = true;
+            }
+
+            return type;
+        }
     }]);
 
     return AjaxHelpers;
+}();
+/**
+ * This is the DomHelpers class
+ *
+ * This contains methods that allow me to manipulate the DOM
+ * easily
+ */
+
+
+var DomHelpers = function () {
+    /**
+     * Constructs the DomHelpers class and registers all
+     * dependencies
+     *
+     * @return void
+     */
+    function DomHelpers() {
+        var container = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'na';
+
+        _classCallCheck(this, DomHelpers);
+
+        this.DomContainer = container;
+    }
+
+    /**
+     * Sets the container element
+     *
+     * @param container
+     */
+
+
+    _createClass(DomHelpers, [{
+        key: 'setContainer',
+        value: function setContainer(container) {
+            this.DomContainer = container;
+
+            return new DomHelpers(container);
+        }
+
+        /**
+         * This empties the container
+         *
+         * @return {DomHelpers}
+         */
+
+    }, {
+        key: 'clear',
+        value: function clear() {
+            this.DomContainer.innerHTML = '';
+
+            return this;
+        }
+
+        /**
+         * Replaces the containers innerHTML with a template string
+         *
+         * @param template
+         * @returns {DomHelpers}
+         */
+
+    }, {
+        key: 'replace',
+        value: function replace(template) {
+            this.DomContainer.innerHTML = template;
+
+            return this;
+        }
+
+        /**
+         * Appends a template string to the provided container
+         *
+         * @param template
+         * @returns {DomHelpers}
+         */
+
+    }, {
+        key: 'append',
+        value: function append(template) {
+            this.DomContainer.innerHTML = this.DomContainer.innerHTML + template;
+
+            return this;
+        }
+    }]);
+
+    return DomHelpers;
 }();
 /**
  * View Class
@@ -474,6 +579,7 @@ var ViewCampaigns = function () {
         this.AjaxHelpers = new AjaxHelpers();
         this.ActionHelpers = new ActionHelpers();
         this.CampaignsController = new CampaignsController();
+        this.DomHelpers = new DomHelpers();
         this.CampOverlay = document.querySelector('.campaigns-overlay');
 
         this.loadRegionsFromOrganizationForCampaign();
@@ -507,18 +613,19 @@ var ViewCampaigns = function () {
 
             if (target) {
                 target.onchange = function () {
-                    var value = this.value;
+                    var dropDown = object.DomHelpers.setContainer(container),
+                        value = this.value;
 
-                    container.innerHTML = '<option value="">Select Organization</option>';
+                    dropDown.replace('<option value="">Select Organization</option>');
 
                     if (value !== '') {
-                        container.innerHTML = '';
+                        dropDown.clear();
 
                         object.CampaignsController.loadRegionsFromOrganization(value).then(function (regions) {
-                            container.innerHTML = container.innerHTML + '<option value="">Select A Region</option>';
+                            dropDown.append('<option value="">Select A Region</option>');
 
                             regions.forEach(function (region) {
-                                container.innerHTML = container.innerHTML + '<option value="' + region.id + '">' + region.name + '</option>';
+                                dropDown.append('<option value="' + region.id + '">' + region.name + '</option>');
                             });
                         });
                     }
@@ -545,8 +652,7 @@ var ViewCampaigns = function () {
          * @return void
          */
         value: function setFlightWeeks() {
-            var object = this,
-                start = document.querySelector('#flight-start'),
+            var start = document.querySelector('#flight-start'),
                 end = document.querySelector('#flight-end'),
                 display = document.querySelector('#flight-length');
 
@@ -608,26 +714,29 @@ var ViewCampaigns = function () {
     }, {
         key: 'loadRegionsForCampaignEdit',
         value: function loadRegionsForCampaignEdit() {
+            var _this = this;
+
             var object = this,
                 target = document.querySelector('.campaign-edit');
 
-            if (target !== null) {
+            if (target) {
                 (function () {
                     var selector = document.querySelector('#campaign-organization'),
                         container = document.querySelector('#campaign-region'),
-                        value = selector.value;
+                        value = selector.value,
+                        dropDown = _this.DomHelpers.setContainer(container);
 
-                    container.innerHTML = '<option value="">Select Organization</option>';
+                    dropDown.replace('<option value="">Select Organization</option>');
 
                     if (value !== '') {
-                        container.innerHTML = container.innerHTML + '<option value="">Select Region</option>';
+                        dropDown.append('<option value="">Select Region</option>');
 
                         object.CampaignsController.loadRegionsFromOrganization(value).then(function (regions) {
                             regions.forEach(function (region) {
                                 if (value == region.id) {
-                                    container.innerHTML = container.innerHTML + '<option value="' + region.id + '" selected="selected">' + region.name + '</option>';
+                                    dropDown.append('<option value="' + region.id + '" selected="selected">' + region.name + '</option>');
                                 } else {
-                                    container.innerHTML = container.innerHTML + '<option value="' + region.id + '">' + region.name + '</option>';
+                                    dropDown.append('<option value="' + region.id + '">' + region.name + '</option>');
                                 }
                             });
                         });
@@ -676,11 +785,12 @@ var ViewInvoices = function () {
     function ViewInvoices() {
         _classCallCheck(this, ViewInvoices);
 
+        this.CampaignsController = new CampaignsController();
+        this.ActionHelpers = new ActionHelpers();
+        this.DomHelpers = new DomHelpers();
+
         this.setRegionForInvoiceImporter();
         this.setInvoiceCampaigns();
-        // this.addMoreInvoices();
-
-        this.CampaignsController = new CampaignsController();
     }
 
     /**
@@ -700,20 +810,21 @@ var ViewInvoices = function () {
 
             if (target) {
                 target.onchange = function () {
-                    var value = this.value;
+                    var value = target.value,
+                        regionDropDown = object.DomHelpers.setContainer(container);
 
-                    container.innerHTML = '<option value="">Select Organization</option>';
+                    regionDropDown.replace('<option value="">Select Organization</option>');
 
                     if (value !== '') {
                         object.CampaignsController.loadRegionsFromOrganization(value).then(function (regions) {
-                            container.innerHTML = '<option value="">Select Region</option>';
+                            regionDropDown.replace('<option value="">Select Region</option>');
 
                             regions.forEach(function (region) {
-                                container.innerHTML = container.innerHTML + '<option value="' + region.id + '">' + region.name + '</option>';
+                                regionDropDown.append('<option value="' + region.id + '">' + region.name + '</option>');
                             });
 
                             if (regions.length == 0) {
-                                container.innerHTML = container.innerHTML + '<option value="">No Available Regions</option>';
+                                regionDropDown.append('<option value="">No Available Regions</option>');
                             }
                         });
                     }
@@ -737,49 +848,27 @@ var ViewInvoices = function () {
 
             if (target) {
                 target.onchange = function () {
-                    var value = this.value;
+                    var value = target.value,
+                        campCon = object.DomHelpers.setContainer(container);
 
-                    container.innerHTML = '<option value="">Select Region</option>';
+                    campCon.replace('<option value="">Select Region</option>');
 
                     if (value !== '') {
                         object.CampaignsController.loadCampaignsFromRegion(value).then(function (campaigns) {
-                            container.innerHTML = '<option value="">Select Campaign</option>';
+                            campCon.replace('<option value="">Select Campaign</option>');
 
                             campaigns.forEach(function (campaign) {
-                                container.innerHTML = container.innerHTML + '<option value="' + campaign.id + '">' + campaign.name + '</option>';
+                                campCon.append('<option value="' + campaign.id + '">' + campaign.name + '</option>');
                             });
 
                             if (campaigns.length == 0) {
-                                container.innerHTML = container.innerHTML + '<option value="">No Available Campaigns</option>';
+                                campCon.append('<option value="">No Available Campaigns</option>');
                             }
                         });
                     }
                 };
             }
         }
-
-        /**
-         * Function that allows you to add more files to the invoice processor
-         * so you can process multiple invoices as once.
-         *
-         * Currently not in use
-         *
-         * @return void
-         */
-        // addMoreInvoices() {
-        //     var inputs = document.querySelectorAll('.file-inputs');
-        //
-        //     $('.add-more-invoices').click(function () {
-        //         var lastInput = inputs.find('.columns:last-child').find('input');
-        //         var currentId = lastInput.attr('data-id');
-        //         var newId     = Number(currentId) + 1;
-        //
-        //         inputs.append('<div class="columns large-4 medium-4 small-12">' +
-        //                            '<input type="file" class="form-control" name="invoices-' + newId + '" data-id="' + newId + '" />' +
-        //                       '</div>');
-        //     });
-        // }
-
     }]);
 
     return ViewInvoices;
@@ -843,18 +932,28 @@ var ViewOrganizations = function () {
      * @return void
      */
     function ViewOrganizations() {
+        var _this2 = this;
+
         _classCallCheck(this, ViewOrganizations);
 
         this.AjaxHelpers = new AjaxHelpers();
         this.ActionHelpers = new ActionHelpers();
+        this.DomHelpers = new DomHelpers();
+
         this.OrgList = document.querySelectorAll('.organization-list li label');
         this.OrgOverlay = document.querySelector('.organizations-overlay');
+        this.OrgRefresh = document.querySelector('.refresh-button');
 
         if (this.OrgList) {
             this.loadRegionsFromOrganizationForDashboard();
         }
         if (this.OrgOverlay) {
             this.createOrganizationFromDashboard();
+        }
+        if (this.OrgRefresh) {
+            this.OrgRefresh.onclick = function () {
+                _this2.refreshOrganizations();
+            };
         }
     }
 
@@ -879,24 +978,26 @@ var ViewOrganizations = function () {
             targets.forEach(function (target) {
                 target.onclick = function () {
                     var orgId = target.dataset.id,
-                        orgName = this.dataset.name,
-                        endpoint = '/api/v1/regions/' + orgId;
+                        orgName = target.dataset.name,
+                        endpoint = '/api/v1/regions/' + orgId,
+                        regionInfo = object.DomHelpers.setContainer(container);
 
                     object.AjaxHelpers.getCall(endpoint).then(function (regions) {
-                        container.innerHTML = '<h1 class="content-title">' + orgName + ' Regions</h1>';
-                        container.innerHTML = container.innerHTML + '<ul class="region-list"></ul>';
+                        regionInfo.replace('<h1 class="content-title">' + orgName + ' Regions</h1>');
+                        regionInfo.append('<ul class="region-list"></ul>');
+                        regionInfo.append('<div class="region-campaigns"></div>');
 
                         if (regions.length > 0) {
                             regions.forEach(function (region) {
-                                var list = container.querySelector('.region-list');
+                                var regionList = container.querySelector('.region-list'),
+                                    list = object.DomHelpers.setContainer(regionList);
 
-                                list.innerHTML = list.innerHTML + '<li class="region-selector region-selector-' + region.id + '" data-id="' + region.id + '">' + region.name + '</li>';
+                                list.append('<li class="region-selector region-selector-' + region.id + '" data-id="' + region.id + '">\n                                            ' + region.name + '\n                                        </li>');
                             });
                         } else {
-                            container.innerHTML = container.innerHTML + '<p class="align-center">There Are No Regions</p>';
+                            regionInfo.append('<p class="align-center">There Are No Regions</p>');
                         }
 
-                        container.innerHTML = container.innerHTML + '<div class="region-campaigns"></div>';
                         object.loadCampaignsFromRegion();
                     });
                 };
@@ -924,24 +1025,24 @@ var ViewOrganizations = function () {
                     var id = region.dataset.id,
                         endpoint = '/api/v1/campaigns/' + id,
                         container = document.querySelector('.region-campaigns'),
-                        regionName = region.innerHTML;
+                        regionName = region.innerHTML,
+                        regionCamp = object.DomHelpers.setContainer(container);
 
                     object.AjaxHelpers.getCall(endpoint).then(function (campaigns) {
-                        container.innerHTML = '<p class="align-center">There Are No Campaigns For This Region</p>';
+                        regionCamp.replace('<p class="align-center">There Are No Campaigns For This Region</p>');
 
                         if (campaigns.length > 0) {
-                            container.innerHTML = '<h1 class="campaigns-title">' + regionName + ' Campaigns</h1>';
-                            container.innerHTML = container.innerHTML + '<ul class="campaign-list"></ul>';
+                            (function () {
+                                regionCamp.replace('<h1 class="campaigns-title">' + regionName + ' Campaigns</h1>');
+                                regionCamp.append('<ul class="campaign-list"></ul>');
 
-                            campaigns.forEach(function (campaign) {
-                                var list = container.querySelector('.campaign-list');
+                                var campList = container.querySelector('.campaign-list'),
+                                    list = object.DomHelpers.setContainer(campList);
 
-                                list.innerHTML = list.innerHTML + '<li class="campaign-selector campaign-selector-' + campaign.id + '" data-id="' + campaign.id + '">' + campaign.name + '</li>';
-
-                                var button = list.querySelector('.campaign-selector-' + campaign.id);
-
-                                button.innerHTML = button.innerHTML + '<div class="actions">' + '<a href="/campaigns/worksheets/' + campaign.id + '">Worksheets</a>' + '<a href="/reports/station-order/' + campaign.id + '" target="_blank">Station Order</a>' + '</div>';
-                            });
+                                campaigns.forEach(function (campaign) {
+                                    list.append('<li class="campaign-selector campaign-selector-' + campaign.id + '" data-id="' + campaign.id + '">\n                                            ' + campaign.name + '\n                                            <div class="actions">\n                                                <a href="/campaigns/worksheets/' + campaign.id + '">Worksheets</a>\n                                                <a href="/reports/station-order/' + campaign.id + '" target="_blank">Station Order</a>\n                                            </div>\n                                        </li>');
+                                });
+                            })();
                         }
                     });
                 };
@@ -984,16 +1085,21 @@ var ViewOrganizations = function () {
         key: 'refreshOrganizations',
         value: function refreshOrganizations() {
             var object = this,
-                sidebar = document.querySelector('.sidebar .organization-list'),
+                container = document.querySelector('.sidebar .organization-list'),
+                organizationList = this.DomHelpers.setContainer(container),
+                sidebarClasses = container.classList,
                 endpoint = '/api/v1/organizations';
 
+            sidebarClasses.add('loading');
+
             object.AjaxHelpers.getCall(endpoint).then(function (organizations) {
-                sidebar.innerHTML = '';
+                organizationList.clear();
 
                 organizations.forEach(function (organization) {
-                    sidebar.innerHTML = sidebar.innerHTML + '<li>' + '<label data-id="' + organization.id + '" data-name="' + organization.name + '">' + organization.name + '<i class="fa fa-chevron-right"></i>' + '</label>' + '</li>';
+                    organizationList.append('<li>\n                                            <label data-id="' + organization.id + '" data-name="' + organization.name + '">\n                                                ' + organization.name + '\n                                                <i class="fa fa-chevron-right"></i>\n                                            </label>\n                                        </li>');
                 });
 
+                sidebarClasses.remove('loading');
                 object.loadRegionsFromOrganizationForDashboard();
             });
         }

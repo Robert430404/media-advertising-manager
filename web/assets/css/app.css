@@ -164,56 +164,73 @@ div {
         border: 1px solid #cbcbcb;
         overflow: hidden; }
         .current-worksheets ul li .week-information .info-inner.loading:before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          z-index: 9999;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.35); }
+        .current-worksheets ul li .week-information .info-inner.loading:after {
           content: 'Sending Save Request';
           position: absolute;
-          top: 15%;
-          left: 15%;
-          padding: 4%;
-          width: 66%;
-          height: 66%;
-          display: block;
-          text-align: center;
-          background: rgba(0, 0, 0, 0.35);
-          color: #FFF;
+          top: 50%;
+          left: 50%;
           z-index: 99999;
+          text-align: center;
+          display: block;
+          color: #FFF;
           font-size: 32px;
           text-transform: uppercase;
-          border-radius: 4px;
-          box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.35); }
+          transform: translateY(-50%) translateX(-50%); }
         .current-worksheets ul li .week-information .info-inner.success:before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(201, 255, 189, 0.56);
+          z-index: 99999; }
+        .current-worksheets ul li .week-information .info-inner.success:after {
           content: 'Save Successful';
           position: absolute;
-          top: 15%;
-          left: 15%;
-          padding: 4%;
-          width: 66%;
-          height: 66%;
+          top: 50%;
+          left: 50%;
+          z-index: 99999;
           text-align: center;
           display: block;
-          background: rgba(201, 255, 189, 0.56);
+          color: #000;
+          font-size: 32px;
+          text-transform: uppercase;
+          transform: translateY(-50%) translateX(-50%); }
+        .current-worksheets ul li .week-information .info-inner.failure:before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(255, 201, 189, 0.8);
           color: #000;
           z-index: 99999;
           font-size: 32px;
           text-transform: uppercase;
           border-radius: 4px;
           box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.35); }
-        .current-worksheets ul li .week-information .info-inner.failure:before {
+        .current-worksheets ul li .week-information .info-inner.failure:after {
           content: 'Save Failed';
           position: absolute;
-          top: 15%;
-          left: 15%;
-          padding: 4%;
-          width: 66%;
-          height: 66%;
+          top: 50%;
+          left: 50%;
+          z-index: 99999;
           text-align: center;
           display: block;
-          background: #FFC9BD;
           color: #000;
-          z-index: 99999;
           font-size: 32px;
           text-transform: uppercase;
-          border-radius: 4px;
-          box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.35); }
+          transform: translateY(-50%) translateX(-50%); }
         .current-worksheets ul li .week-information .info-inner .outer-scrollable {
           overflow-x: scroll; }
         .current-worksheets ul li .week-information .info-inner .spot-count {
@@ -529,43 +546,86 @@ div {
         .overlay .form-wrapper .form-title .close:hover {
           opacity: .5; }
   .overlay form.campaign-form.successful, .overlay form.organization-form.successful, .overlay form.spot-type-form.successful, .overlay form.region-form.successful {
-    position: relative; }
+    position: relative;
+    padding-bottom: 15px;
+    margin-bottom: -15px; }
     .overlay form.campaign-form.successful:before, .overlay form.organization-form.successful:before, .overlay form.spot-type-form.successful:before, .overlay form.region-form.successful:before {
-      content: 'Save Successful';
+      content: '';
       position: absolute;
-      top: 15%;
-      left: 15%;
-      padding: 6%;
-      width: 66%;
-      height: 66%;
-      text-align: center;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       display: block;
       background: rgba(201, 255, 189, 0.56);
-      color: #000;
-      z-index: 99999;
-      font-size: 32px;
-      text-transform: uppercase;
-      border-radius: 4px;
-      box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.35); }
-  .overlay form.campaign-form.failure, .overlay form.organization-form.failure, .overlay form.spot-type-form.failure, .overlay form.region-form.failure {
-    position: relative; }
-    .overlay form.campaign-form.failure:before, .overlay form.organization-form.failure:before, .overlay form.spot-type-form.failure:before, .overlay form.region-form.failure:before {
-      content: 'Please Fill Out All Information';
+      z-index: 99999; }
+    .overlay form.campaign-form.successful:after, .overlay form.organization-form.successful:after, .overlay form.spot-type-form.successful:after, .overlay form.region-form.successful:after {
+      content: "Information Saved Successfully";
       position: absolute;
-      top: 15%;
-      left: 15%;
-      padding: 6% 1%;
-      width: 66%;
-      height: 66%;
+      top: 50%;
+      left: 50%;
+      width: 100%;
       text-align: center;
-      display: block;
-      background: #FFC9BD;
-      color: #000;
-      z-index: 99999;
+      padding: 20px;
       font-size: 32px;
       text-transform: uppercase;
-      border-radius: 4px;
-      box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.35); }
+      color: #000;
+      z-index: 999999;
+      transform: translateX(-50%) translateY(-50%); }
+  .overlay form.campaign-form.failure, .overlay form.organization-form.failure, .overlay form.spot-type-form.failure, .overlay form.region-form.failure {
+    position: relative;
+    padding-bottom: 15px;
+    margin-bottom: -15px; }
+    .overlay form.campaign-form.failure:before, .overlay form.organization-form.failure:before, .overlay form.spot-type-form.failure:before, .overlay form.region-form.failure:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      background: rgba(255, 201, 189, 0.8);
+      z-index: 99999; }
+    .overlay form.campaign-form.failure:after, .overlay form.organization-form.failure:after, .overlay form.spot-type-form.failure:after, .overlay form.region-form.failure:after {
+      content: "Please Fill Out All Information";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      text-align: center;
+      padding: 20px;
+      font-size: 32px;
+      text-transform: uppercase;
+      color: #000;
+      z-index: 999999;
+      transform: translateX(-50%) translateY(-50%); }
+  .overlay form.campaign-form.duplicate, .overlay form.organization-form.duplicate, .overlay form.spot-type-form.duplicate, .overlay form.region-form.duplicate {
+    position: relative;
+    padding-bottom: 15px;
+    margin-bottom: -15px; }
+    .overlay form.campaign-form.duplicate:before, .overlay form.organization-form.duplicate:before, .overlay form.spot-type-form.duplicate:before, .overlay form.region-form.duplicate:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      background: rgba(255, 201, 189, 0.8);
+      z-index: 99999; }
+    .overlay form.campaign-form.duplicate:after, .overlay form.organization-form.duplicate:after, .overlay form.spot-type-form.duplicate:after, .overlay form.region-form.duplicate:after {
+      content: "This Name Already Exists";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      text-align: center;
+      padding: 20px;
+      font-size: 32px;
+      text-transform: uppercase;
+      color: #000;
+      z-index: 999999;
+      transform: translateX(-50%) translateY(-50%); }
   .overlay form.organization-form.successful:before, .overlay form.spot-type-form.successful:before, .overlay form.region-form.successful:before {
     padding: 3.5%; }
   .overlay form.organization-form.failure, .overlay form.spot-type-form.failure, .overlay form.region-form.failure {
@@ -951,6 +1011,21 @@ div {
   color: #FFF;
   margin: -15px -15px 15px;
   padding: 15px; }
+  .sidebar .sidebar-title .refresh-button {
+    float: right;
+    display: block;
+    background: rgba(0, 0, 0, 0.35);
+    border: 2px solid rgba(0, 0, 0, 0.35);
+    border-radius: 4px;
+    padding: 10px 12px;
+    font-size: 20px;
+    margin: -8px;
+    cursor: pointer; }
+    .sidebar .sidebar-title .refresh-button i {
+      transform: rotate(0deg);
+      transition: all .5s; }
+    .sidebar .sidebar-title .refresh-button:hover i {
+      transform: rotate(180deg); }
 
 .sidebar .organization-list {
   list-style: none;
@@ -961,10 +1036,31 @@ div {
   overflow: hidden;
   border: 1px solid #9b9b9b;
   border-radius: 4px; }
+  .sidebar .organization-list.loading {
+    position: relative; }
+    .sidebar .organization-list.loading:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.85);
+      display: block; }
+    .sidebar .organization-list.loading:after {
+      content: "Loading Organiations...";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      padding: 20px;
+      text-align: center;
+      font-size: 18px;
+      display: block;
+      transform: translateX(-50%) translateY(-50%); }
   .sidebar .organization-list li label {
     margin: 0;
     padding: 15px;
-    line-height: 1;
     background: #ECEDEE;
     color: #000;
     cursor: pointer;

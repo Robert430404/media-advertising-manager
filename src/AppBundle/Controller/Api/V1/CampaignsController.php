@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Api\V1;
 
 use Carbon\Carbon;
 use AppBundle\Entity\Campaigns;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -78,11 +79,20 @@ class CampaignsController extends Controller
             return $this->json($response);
         }
 
-        $orm->persist($campaign);
-        $orm->flush();
+        try {
+            $orm->persist($campaign);
+            $orm->flush();
+        } catch (UniqueConstraintViolationException $e) {
+            $response = [
+                'success' => false,
+                'error'   => 'duplicate'
+            ];
+
+            return $this->json($response);
+        }
 
         $response = [
-            'success' => true,
+            'success' => true
         ];
 
         return $this->json($response);

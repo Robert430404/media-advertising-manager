@@ -19,6 +19,7 @@
     "font-awesome": "fontawesome#^4.6.3",
     "jsrender": "^0.9.81",
     "moment": "^2.15.1",
-    "formatter.js": "formatter#^0.1.5"
+    "formatter.js": "formatter#^0.1.5",
+    "babel-polyfill": "^0.0.1"
   }
 }

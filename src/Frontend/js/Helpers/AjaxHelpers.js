@@ -11,7 +11,6 @@ class AjaxHelpers {
      * @return void
      */
     constructor() {
-        this.ActionHelpers = new ActionHelpers();
     }
 
     /**
@@ -22,7 +21,7 @@ class AjaxHelpers {
      * @returns {Promise}
      */
     getCall(url) {
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
             let request = new XMLHttpRequest();
 
             request.open('GET', url);
@@ -53,7 +52,7 @@ class AjaxHelpers {
      * @returns {Promise}
      */
     postCall(url, data) {
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
             let request = new XMLHttpRequest();
 
             request.open('POST', url, true);
@@ -92,7 +91,7 @@ class AjaxHelpers {
 
             for (let i = 0; i < length; i++) {
                 field = form.elements[i];
-                const fieldCheck = ActionHelpers.fieldTypeCheck(field);
+                const fieldCheck = AjaxHelpers.fieldTypeCheck(field);
 
                 if (fieldCheck) {
                     if (field.type == 'select-multiple') {
@@ -117,5 +116,27 @@ class AjaxHelpers {
         }
 
         return value.join('&').replace(/%20/g, '+');
+    }
+
+    /**
+     * This checks the type of fields being sent and if it meets a certain
+     * criteria. A boolean value is returned, use in the serialize function
+     *
+     * @param field
+     * @returns {boolean}
+     */
+    static fieldTypeCheck(field) {
+        let type = false;
+
+        if (field.name &&
+            !field.disabled &&
+            field.type != 'file' &&
+            field.type != 'reset' &&
+            field.type != 'submit' &&
+            field.type != 'button') {
+            type = true;
+        }
+
+        return type;
     }
 }

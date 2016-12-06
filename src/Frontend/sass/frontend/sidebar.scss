@@ -17,6 +17,26 @@
     color: $white;
     margin: -15px -15px 15px;
     padding: 15px;
+    .refresh-button {
+      float: right;
+      display: block;
+      background: $alpha-black;
+      border: 2px solid $alpha-black;
+      border-radius: 4px;
+      padding: 10px 12px;
+      font-size: 20px;
+      margin: -8px;
+      cursor: pointer;
+      i {
+        transform: rotate(0deg);
+        transition: all .5s;
+      }
+      &:hover {
+        i {
+          transform: rotate(180deg);
+        }
+      }
+    }
   }
   .organization-list {
     list-style: none;
@@ -27,11 +47,35 @@
     overflow: hidden;
     border: 1px solid $grey;
     border-radius: $border-radius;
+    &.loading {
+      position: relative;
+      &:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: $alpha-white;
+        display: block;
+      }
+      &:after {
+        content: "Loading Organiations...";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        padding: 20px;
+        text-align: center;
+        font-size: 18px;
+        display: block;
+        transform: translateX(-50%) translateY(-50%);
+      }
+    }
     li {
       label {
         margin: 0;
         padding: 15px;
-        line-height: 1;
         background: $off-white;
         color: $black;
         cursor: pointer;

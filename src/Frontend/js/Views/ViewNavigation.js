@@ -23,7 +23,7 @@ class ViewNavigation {
     navigationToggle() {
         const hamburger = document.querySelector('.hamburger');
 
-        hamburger.onclick = function () {
+        hamburger.onclick = () => {
             const masthead  = document.querySelector('.masthead'),
                   classList = masthead.classList;
 
