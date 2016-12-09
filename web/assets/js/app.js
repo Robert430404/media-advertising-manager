@@ -462,6 +462,7 @@ var DomHelpers = function () {
      * Sets the container element
      *
      * @param container
+     * @return {DomHelpers}
      */
 
 

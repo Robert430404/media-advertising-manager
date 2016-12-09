@@ -19,6 +19,7 @@ class DomHelpers {
      * Sets the container element
      *
      * @param container
+     * @return {DomHelpers}
      */
     setContainer(container) {
         this.DomContainer = container;
@@ -60,6 +61,4 @@ class DomHelpers {
 
         return this;
     }
-
-
 }
