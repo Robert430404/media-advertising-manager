@@ -102,7 +102,7 @@ class CampaignsController extends Controller
      * Edits the selected campaign from the database
      *
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return \Symfony\Component\HttpFoundation\Response
      *
      * @Route("/campaigns/edit/{campaignId}", name="campaign-edit")
      * @Method({"GET"})
