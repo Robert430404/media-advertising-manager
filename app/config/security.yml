@@ -22,6 +22,8 @@ security:
                 path:   /logout
                 target: /login
             form_login:
+                default_target_path: dashboard
+                always_use_default_target_path: true
                 csrf_token_generator: security.csrf.token_manager
                 login_path: /login
                 check_path: /login

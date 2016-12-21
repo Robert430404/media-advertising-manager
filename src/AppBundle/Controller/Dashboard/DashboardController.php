@@ -15,24 +15,51 @@ class DashboardController extends Controller
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      *
-     * @Route("/", name="dashboard")
+     * @Route("/", name="stub")
      * @Method({"GET"})
      */
-    public function indexAction(Request $request)
+    public function stubIndexAction(Request $request)
     {
         $organizations = $this->getDoctrine()->getRepository('AppBundle:Organizations')->findAll();
-        $spotTypes     = $this->getDoctrine()->getRepository('AppBundle:SpotTypes')->findAll();
-        $regions       = [];
+        $spotTypes = $this->getDoctrine()->getRepository('AppBundle:SpotTypes')->findAll();
+        $regions = [];
 
         foreach ($organizations as $key => $organization) {
-            $orgId         = $organization->getId();
+            $orgId = $organization->getId();
             $regions[$key] = $this->getDoctrine()->getRepository('AppBundle:Regions')->findByOrganizationId($orgId);
         }
 
         return $this->render('dashboard/index.html.twig', [
             'organizations' => $organizations,
-            'regions'       => $regions,
-            'types'         => $spotTypes,
+            'regions' => $regions,
+            'types' => $spotTypes,
+        ]);
+    }
+
+    /**
+     * This shows the applications dashboard
+     *
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/dashboard", name="dashboard")
+     * @Method({"GET"})
+     */
+    public function indexAction(Request $request)
+    {
+        $organizations = $this->getDoctrine()->getRepository('AppBundle:Organizations')->findAll();
+        $spotTypes = $this->getDoctrine()->getRepository('AppBundle:SpotTypes')->findAll();
+        $regions = [];
+
+        foreach ($organizations as $key => $organization) {
+            $orgId = $organization->getId();
+            $regions[$key] = $this->getDoctrine()->getRepository('AppBundle:Regions')->findByOrganizationId($orgId);
+        }
+
+        return $this->render('dashboard/index.html.twig', [
+            'organizations' => $organizations,
+            'regions' => $regions,
+            'types' => $spotTypes,
         ]);
     }
 }
