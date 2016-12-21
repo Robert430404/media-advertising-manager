@@ -1,27 +1,27 @@
 <?php
-//
-//use Symfony\Component\HttpFoundation\Request;
-//
-///**
-// * @var Composer\Autoload\ClassLoader
-// */
-//$loader = require __DIR__.'/../app/autoload.php';
-//include_once __DIR__.'/../var/bootstrap.php.cache';
-//
-//$kernel = new AppKernel('prod', false);
-//$kernel->loadClassCache();
-////$kernel = new AppCache($kernel);
-//
-//// When using the HttpCache, you need to call the method in your front controller instead of relying on the configuration parameter
-////Request::enableHttpMethodParameterOverride();
-//$request = Request::createFromGlobals();
-//$response = $kernel->handle($request);
-//$response->send();
-//$kernel->terminate($request, $response);
-//
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Debug\Debug;
+
+/**
+ * @var Composer\Autoload\ClassLoader
+ */
+$loader = require __DIR__.'/../app/autoload.php';
+include_once __DIR__.'/../var/bootstrap.php.cache';
+
+$kernel = new AppKernel('prod', false);
+$kernel->loadClassCache();
+//$kernel = new AppCache($kernel);
+
+// When using the HttpCache, you need to call the method in your front controller instead of relying on the configuration parameter
+//Request::enableHttpMethodParameterOverride();
+$request = Request::createFromGlobals();
+$response = $kernel->handle($request);
+$response->send();
+$kernel->terminate($request, $response);
+
+
+//use Symfony\Component\HttpFoundation\Request;
+//use Symfony\Component\Debug\Debug;
 
 // If you don't want to setup permissions the proper way, just uncomment the following PHP line
 // read http://symfony.com/doc/current/book/installation.html#checking-symfony-application-configuration-and-setup
@@ -38,15 +38,16 @@ use Symfony\Component\Debug\Debug;
 //    exit('You are not allowed to access this file. Check '.basename(__FILE__).' for more information.');
 //}
 
-/**
- * @var Composer\Autoload\ClassLoader $loader
- */
-$loader = require __DIR__.'/../app/autoload.php';
-// Debug::enable();
-
-$kernel = new AppKernel('dev', true);
-$kernel->loadClassCache();
-$request = Request::createFromGlobals();
-$response = $kernel->handle($request);
-$response->send();
-$kernel->terminate($request, $response);
+///**
+// * @var Composer\Autoload\ClassLoader $loader
+// */
+//$loader = require __DIR__.'/../app/autoload.php';
+//// Debug::enable();
+//
+//$kernel = new AppKernel('dev', true);
+//$kernel->loadClassCache();
+//
+//$request = Request::createFromGlobals();
+//$response = $kernel->handle($request);
+//$response->send();
+//$kernel->terminate($request, $response);
