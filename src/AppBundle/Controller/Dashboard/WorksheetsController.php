@@ -150,6 +150,6 @@ class WorksheetsController extends Controller
 
         $orm->flush();
 
-        return $this->redirect('/campaigns/worksheets/' . $campaignId . '/edit/' . $worksheetId);
+        return $this->redirect('/campaigns/worksheets/' . $campaignId);
     }
 }

@@ -128,11 +128,11 @@ div {
         background: #FFF; }
 
 .current-worksheets {
-  margin: 0;
+  margin: 15px 0 0;
   padding: 0; }
   .current-worksheets ul {
     list-style: none;
-    margin: -15px 0 15px; }
+    margin: 0 0 -15px; }
     .current-worksheets ul li .identifier-bar {
       padding: 10px 15px;
       margin: 0 -15px;
@@ -355,13 +355,15 @@ div {
       float: right;
       background: #cbcbcb;
       margin: 0 10px; }
+    .current-worksheets ul li:first-child .identifier-bar {
+      border-top: 1px solid #cbcbcb; }
 
 .current-programs {
-  margin: 0;
+  margin: 15px 0 0;
   padding: 0; }
   .current-programs ul {
     list-style: none;
-    margin: -15px 0 15px; }
+    margin: 0 0 -15px; }
     .current-programs ul li {
       padding: 10px 15px;
       margin: 0 -15px;
@@ -481,6 +483,7 @@ div {
           color: #0E690F;
           font-size: 14px; }
       .current-programs ul li.headings {
+        border-top: 1px solid #cbcbcb;
         background: #C9FFBD; }
         .current-programs ul li.headings .info {
           margin-bottom: 0;

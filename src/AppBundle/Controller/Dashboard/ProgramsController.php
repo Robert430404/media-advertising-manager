@@ -231,6 +231,6 @@ class ProgramsController extends Controller
 
         $orm->flush();
 
-        return $this->redirect('/campaigns/worksheets/programs/' . $worksheetId . '/edit/' . $programId);
+        return $this->redirect('/campaigns/worksheets/programs/' . $worksheetId);
     }
 }

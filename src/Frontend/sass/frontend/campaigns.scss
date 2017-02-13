@@ -63,11 +63,11 @@
 }
 
 .current-worksheets {
-  margin: 0;
+  margin: 15px 0 0;
   padding: 0;
   ul {
     list-style: none;
-    margin: -15px 0 15px;
+    margin: 0 0 -15px;
     li {
       .identifier-bar {
         padding: 10px 15px;
@@ -336,16 +336,21 @@
         background: $lighter-grey;
         margin: 0 10px;
       }
+      &:first-child {
+        .identifier-bar {
+          border-top: 1px solid $lighter-grey;
+        }
+      }
     }
   }
 }
 
 .current-programs {
-  margin: 0;
+  margin: 15px 0 0;
   padding: 0;
   ul {
     list-style: none;
-    margin: -15px 0 15px;
+    margin: 0 0 -15px;
     li {
       padding: 10px 15px;
       margin: 0 -15px;
@@ -496,6 +501,7 @@
         }
       }
       &.headings {
+        border-top: 1px solid $lighter-grey;
         background: $highlight-light;
         .info {
           margin-bottom: 0;
