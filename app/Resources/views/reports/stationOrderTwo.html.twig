@@ -197,7 +197,7 @@
 {% block body %}
 
     {% for worksheet in worksheets %}
-        <div class="page page-{% if worksheet.programs is not empty %}{{ worksheet.programs.0.station }}{% endif %}" data-id="{% if worksheet.programs is not empty %}{{ worksheet.programs.0.station }}{% endif %}">
+        <div class="page page-{% if worksheet.programs is not empty %}{{ worksheet.programs.0.station|replace({' ':''}) }}{% endif %}" data-id="{% if worksheet.programs is not empty %}{{ worksheet.programs.0.station|replace({' ':''}) }}{% endif %}">
             <div class="heading">
                 <div class="left">
                     <p>Client: {{ worksheet.orgName }}</p>
