@@ -4,40 +4,38 @@ namespace AppBundle\Controller\Dashboard;
 
 use Carbon\Carbon;
 use AppBundle\Entity\Worksheets;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class WorksheetsController
+ *
+ * @package AppBundle\Controller\Dashboard
+ */
 class WorksheetsController extends Controller
 {
     /**
      * @param Request $request
      * @param $campaignId
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      *
      * @Route("/campaigns/worksheets/{campaignId}", name="campaign-worksheets")
      * @Method({"GET"})
      */
-    public function indexAction(Request $request, $campaignId)
+    public function indexAction(Request $request, int $campaignId): Response
     {
-        $worksheets = $this->getDoctrine()->getRepository('AppBundle:Worksheets')->findAllWorksheetsWithData($campaignId);
-        $campaign   = $this->getDoctrine()->getRepository('AppBundle:Campaigns')->find($campaignId);
-        $spotTypes  = $this->getDoctrine()->getRepository('AppBundle:SpotTypes')->findAll();
-
-        foreach ($worksheets as $key => $worksheet) {
-            $programs  = $this->getDoctrine()->getRepository('AppBundle:Programs')->findByWorksheetId($worksheet['id']);
-            $startDate = Carbon::createFromTimestamp($worksheet['flightStartDate']->format('U'));
-
-            $worksheets[$key]['programs'] = $programs;
-            $worksheets[$key]['weekInfo'] = json_decode($worksheet['weekInfo']);
-
-            if ($startDate->format('D') !== 'Mon') {
-                $startDate = Carbon::createFromTimestamp(strtotime('previous monday', strtotime($startDate)));
-            }
-
-            $worksheets[$key]['flightStartDate'] = $startDate;
-        }
+        $orm           = $this->getDoctrine();
+        $worksheetRepo = $orm->getRepository('AppBundle:Worksheets');
+        $campaignRepo  = $orm->getRepository('AppBundle:Campaigns');
+        $spotTypesRepo = $orm->getRepository('AppBundle:SpotTypes');
+        $worksheets    = $worksheetRepo->findAllWorksheetsWithData($campaignId);
+        $campaign      = $campaignRepo->find($campaignId);
+        $spotTypes     = $spotTypesRepo->findAll();
+        $worksheets    = $worksheetRepo->formatWorksheetData($worksheets);
 
         return $this->render('dashboard/worksheets/index.html.twig', [
             'worksheets' => $worksheets,
@@ -49,25 +47,15 @@ class WorksheetsController extends Controller
     /**
      * @param Request $request
      * @param $campaignId
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      *
      * @Route("/campaigns/worksheets/{campaignId}/add", name="campaign-worksheets-add")
      * @Method({"POST"})
      */
-    public function insertAction(Request $request, $campaignId)
+    public function insertAction(Request $request, int $campaignId): Response
     {
-        $data      = $request->request->all();
-        $worksheet = new Worksheets();
+        $worksheet = $this->get('app.factories.worksheets')->create($request, new Worksheets());
         $orm       = $this->get('doctrine')->getManager();
-
-        $worksheet->setName($data['worksheet_name']);
-        $worksheet->setCampaignId($campaignId);
-        $worksheet->setOrganizationId($data['worksheet_organization']);
-        $worksheet->setRegionId($data['worksheet_region']);
-        $worksheet->setSpotTypeId($data['worksheet_spot_type']);
-        $worksheet->setWeekInformation('none available');
-        $worksheet->setCreatedAt(Carbon::now());
-        $worksheet->setUpdatedAt(Carbon::now());
 
         $orm->persist($worksheet);
         $orm->flush();
@@ -78,15 +66,14 @@ class WorksheetsController extends Controller
     /**
      * Deletes the selected campaign from the database
      *
-     * @param Request $request
      * @param $worksheetId
      * @param $campaignId
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      *
      * @Route("/campaigns/worksheets/{campaignId}/delete/{worksheetId}", name="worksheet-delete")
      * @Method({"GET"})
      */
-    public function deleteAction(Request $request, $worksheetId, $campaignId)
+    public function deleteAction(int $worksheetId, int $campaignId): RedirectResponse
     {
         $worksheet = $this->getDoctrine()->getRepository('AppBundle:Worksheets')->find($worksheetId);
         $programs  = $this->getDoctrine()->getRepository('AppBundle:Programs')->findByWorksheetId($worksheetId);
@@ -106,15 +93,14 @@ class WorksheetsController extends Controller
     /**
      * Brings up the selected campaign from the database for editing
      *
-     * @param Request $request
      * @param $worksheetId
      * @param $campaignId
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return Response
      *
      * @Route("/campaigns/worksheets/{campaignId}/edit/{worksheetId}", name="worksheet-edit")
      * @Method({"GET"})
      */
-    public function editAction(Request $request, $worksheetId, $campaignId)
+    public function editAction(int $worksheetId, int $campaignId): Response
     {
         $worksheet = $this->getDoctrine()->getRepository('AppBundle:Worksheets')->find($worksheetId);
         $campaign  = $this->getDoctrine()->getRepository('AppBundle:Campaigns')->find($campaignId);
@@ -133,12 +119,12 @@ class WorksheetsController extends Controller
      * @param Request $request
      * @param $worksheetId
      * @param $campaignId
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      *
      * @Route("/campaigns/worksheets/{campaignId}/update/{worksheetId}", name="worksheet-update")
      * @Method({"POST"})
      */
-    public function updateAction(Request $request, $worksheetId, $campaignId)
+    public function updateAction(Request $request, int $worksheetId, int $campaignId): RedirectResponse
     {
         $data      = $request->request->all();
         $orm       = $this->getDoctrine()->getManager();

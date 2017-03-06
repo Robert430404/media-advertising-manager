@@ -13,3 +13,6 @@ services:
   app.invoice_helpers:
     class:     AppBundle\Helpers\InvoiceHelpers
     arguments: ['@app.invoice_data_helpers', '@doctrine.orm.default_entity_manager']
+
+  app.factories.worksheets:
+    class: AppBundle\Services\Factories\WorksheetsFactory

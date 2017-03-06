@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository;
 
+use Carbon\Carbon;
 use \Doctrine\ORM\EntityRepository;
 
 /**
@@ -13,10 +14,12 @@ use \Doctrine\ORM\EntityRepository;
 class WorksheetsRepository extends EntityRepository
 {
     /**
+     * Retrives all worksheet data inside of the DB joining it in.
+     *
      * @param $campaignId
      * @return array
      */
-    public function findAllWorksheetsWithData($campaignId)
+    public function findAllWorksheetsWithData(int $campaignId): array
     {
         $query = $this->getEntityManager()
             ->createQuery('SELECT w.id as id, ' .
@@ -43,5 +46,33 @@ class WorksheetsRepository extends EntityRepository
         $data = $query->getResult();
 
         return $data;
+    }
+
+    /**
+     * Formats the worksheet data for display on the front end
+     *
+     * @param $worksheets
+     * @return array
+     */
+    public function formatWorksheetData(array $worksheets): array
+    {
+        foreach ($worksheets as $key => $worksheet) {
+            $programs  = $this
+                ->getEntityManager()
+                ->getRepository('AppBundle:Programs')
+                ->findByWorksheetId($worksheet['id']);
+            $startDate = Carbon::createFromTimestamp($worksheet['flightStartDate']->format('U'));
+
+            $worksheets[$key]['programs'] = $programs;
+            $worksheets[$key]['weekInfo'] = json_decode($worksheet['weekInfo']);
+
+            if ($startDate->format('D') !== 'Mon') {
+                $startDate = Carbon::createFromTimestamp(strtotime('previous monday', strtotime($startDate)));
+            }
+
+            $worksheets[$key]['flightStartDate'] = $startDate;
+        }
+
+        return $worksheets;
     }
 }
