@@ -286,6 +286,7 @@ div {
               text-transform: capitalize;
               color: #6b6b6b; }
             .current-worksheets ul li .week-information .info-inner .spot-date-total .spot-info-wrapper span.extra-detail {
+              display: block;
               font-weight: 300; }
           .current-worksheets ul li .week-information .info-inner .spot-date-total .spot-info-wrapper .detail-wrapper {
             display: none;

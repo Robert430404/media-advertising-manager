@@ -100,6 +100,9 @@
                                                                             <strong>End:</strong> {{ program.timeSlotEnd.format('h:i a') }}
                                                                         </span>
                                                                         <span class="extra-detail">
+                                                                            <strong>Price:</strong> {{ program.spotRate }}
+                                                                        </span>
+                                                                        <span class="extra-detail">
                                                                             <strong>Days:</strong> <span class="days">
                                                                             {% if program.Monday != 0 %} M {% endif %}
                                                                                 {% if program.Tuesday != 0 %} T {% endif %}
