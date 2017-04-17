@@ -547,6 +547,37 @@
                 singlePage.find('.breakdown-row.footer-row .spot-total').empty().append(Math.round(breakdownSpotTotal));
                 singlePage.find('.breakdown-row.footer-row .gross-total').empty().append('$' + accounting.formatNumber(totalRate, 2));
             });
+
+            /**
+             * Compile The Totals
+             */
+            pageIds.forEach(function (id) {
+                var singlePage   = $('.page-' + id);
+                var totalRows    = singlePage.find('.spot-column .spot-date-total').length;
+                var totalColumns = singlePage.find('.spot-date-column').length;
+                var rowCount     = totalRows / totalColumns;
+                var headings     = singlePage.find('.week-date-heading .month');
+                var row          = 1;
+                var totalRate    = 0;
+                var months       = [];
+
+                headings.each(function () {
+                    if (months.indexOf($(this).html()) === -1) {
+                        months.push($(this).html());
+                    }
+                });
+
+                console.log(months);
+
+                while (row <= rowCount) {
+                    var rawValue = singlePage.find('.spot-total-' + row).html();
+                    var rowValue = Number(rawValue.replace(/,/g, ''));
+
+                    console.log(rowValue);
+
+                    row++;
+                }
+            });
         });
     </script>
 
