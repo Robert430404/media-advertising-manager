@@ -660,20 +660,12 @@
                     value.valueSpotTotal.forEach((subvalue, subindex) => {
                         var spotRate     = spotsWithValue[subindex].rate;
 
-                        console.log(subindex);
-                        console.log(index);
-                        console.log(subvalue.count);
-                        console.log(spotRate);
-                        console.log(Number(subvalue.count) * Number(spotRate));
-
                         monthCount[index].valueSpotTotal[subindex].stationGross = Number(subvalue.count) * Number(spotRate);
                         monthCount[index].stationGross = (Number(subvalue.count) *
                                                          Number(spotRate)) +
                                                          (isNaN(monthCount[index].stationGross) ? 0 : monthCount[index].stationGross);
                     });
                 });
-
-                console.log(monthCount);
 
                 // Insert Breakdown Data
                 var breakDownRows = $('.breakdown-info-row');
